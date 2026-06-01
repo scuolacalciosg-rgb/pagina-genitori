@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASD San Giovanni — Portale Genitori</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-base:    #0a0a0a;
+  --bg-panel:   #111111;
+  --bg-card:    #161616;
+  --bg-hover:   #1e1010;
+  --red:        #cc1f1f;
+  --red-bright: #e53030;
+  --red-glow:   rgba(204,31,31,0.18);
+  --red-dim:    rgba(204,31,31,0.08);
+  --red-border: rgba(204,31,31,0.35);
+  --gold:       #c9933a;
+  --gold-dim:   rgba(201,147,58,0.12);
+  --text-hi:    #f0e8e8;
+  --text-md:    #a09090;
+  --text-lo:    #5a4a4a;
+  --border:     rgba(255,255,255,0.06);
+  --border-red: rgba(204,31,31,0.3);
+}
+
+* { box-sizing:border-box; margin:0; padding:0; }
+
+body {
+  font-family: 'Barlow', sans-serif;
+  background: var(--bg-base);
+  color: var(--text-hi);
+  min-height: 100vh;
+  /* subtle radial red glow top-left like original */
+  background-image: radial-gradient(ellipse 60% 50% at 15% 0%, rgba(140,10,10,0.22) 0%, transparent 70%);
+}
+
+/* ═══════ HEADER ═══════ */
+header {
+  background: rgba(10,10,10,0.95);
+  border-bottom: 1px solid var(--border-red);
+  position: sticky; top:0; z-index:100;
+  backdrop-filter: blur(8px);
+}
+.header-inner {
+  max-width: 1100px; margin:0 auto;
+  padding: 0 1.5rem;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem;
+}
+.logo-wrap { display:flex; align-items:center; gap:12px; }
+.logo-shield {
+  width:38px; height:38px;
+  background: radial-gradient(circle at 40% 35%, #8b1010, #3a0808);
+  border: 1px solid var(--red-border);
+  border-radius: 6px 6px 14px 14px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px; flex-shrink:0;
+  box-shadow: 0 0 12px rgba(204,31,31,0.3);
+}
+.logo-text {
+  font-family:'Rajdhani',sans-serif;
+  font-size:18px; font-weight:700;
+  letter-spacing:1.5px;
+  color: var(--text-hi);
+  text-transform:uppercase;
+  line-height:1.1;
+}
+.logo-sub {
+  font-size:10px; font-weight:400;
+  color: var(--red); letter-spacing:2px;
+  text-transform:uppercase; display:block;
+}
+.header-badge {
+  font-family:'Rajdhani',sans-serif;
+  font-size:12px; letter-spacing:1px; font-weight:600;
+  padding:3px 10px;
+  border:1px solid var(--red-border);
+  border-radius:3px;
+  color: var(--red);
+  background: var(--red-dim);
+  text-transform:uppercase;
+}
+
+/* ═══════ NAV ═══════ */
+nav {
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width:1100px; margin:0 auto; padding:0 1.5rem;
+  display:flex; overflow-x:auto; scrollbar-width:none;
+  gap:2px;
+}
+.nav-inner::-webkit-scrollbar { display:none; }
+.tab {
+  padding:0 18px; height:44px;
+  display:flex; align-items:center; gap:7px;
+  font-family:'Rajdhani',sans-serif;
+  font-size:13px; font-weight:600;
+  letter-spacing:1px; text-transform:uppercase;
+  color: var(--text-md);
+  cursor:pointer; white-space:nowrap;
+  border-bottom:2px solid transparent;
+  margin-bottom:-1px;
+  transition: color .2s, border-color .2s, background .2s;
+  user-select:none;
+  border-radius: 0;
+}
+.tab:hover { color: var(--text-hi); background: var(--red-dim); }
+.tab.active { color: var(--red-bright); border-bottom-color: var(--red-bright); }
+.tab-icon { font-size:15px; }
+
+/* ═══════ LAYOUT ═══════ */
+main { max-width:1100px; margin:0 auto; padding:1.5rem 1.5rem 4rem; }
+.section { display:none; }
+.section.active { display:block; animation: fadeIn .2s ease; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
+
+/* ═══════ SECTION TITLE ═══════ */
+.sec-title {
+  font-family:'Rajdhani',sans-serif;
+  font-size:11px; font-weight:600;
+  letter-spacing:3px; text-transform:uppercase;
+  color: var(--red);
+  margin-bottom:1rem;
+  padding-bottom:8px;
+  border-bottom:1px solid var(--border-red);
+  display:flex; align-items:center; gap:8px;
+}
+.sec-title::before {
+  content:'';
+  width:3px; height:14px;
+  background: var(--red);
+  border-radius:2px;
+  display:inline-block;
+}
+
+/* ═══════ CARD ═══════ */
+.card {
+  background: var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:1.1rem 1.25rem;
+  margin-bottom:.75rem;
+  transition: border-color .2s, background .2s;
+}
+.card:hover { border-color: var(--border-red); background: var(--bg-hover); }
+.card-header { display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; margin-bottom:.5rem; }
+.card-title { font-family:'Rajdhani',sans-serif; font-size:16px; font-weight:600; letter-spacing:.5px; color:var(--text-hi); }
+.card-date { font-size:11px; color:var(--text-lo); white-space:nowrap; flex-shrink:0; letter-spacing:.5px; margin-top:2px; }
+.card-body { font-size:13.5px; color:var(--text-md); line-height:1.7; }
+
+/* ═══════ BADGES ═══════ */
+.badge {
+  display:inline-block;
+  font-family:'Rajdhani',sans-serif;
+  font-size:10px; font-weight:700;
+  letter-spacing:1.5px; text-transform:uppercase;
+  padding:2px 8px; border-radius:2px;
+}
+.badge-red    { background:var(--red-dim);  border:1px solid var(--red-border);  color:var(--red-bright); }
+.badge-gold   { background:var(--gold-dim); border:1px solid rgba(201,147,58,.3); color:var(--gold); }
+.badge-gray   { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); color:var(--text-md); }
+.badge-green  { background:rgba(30,120,60,.12); border:1px solid rgba(30,120,60,.3); color:#4caf7a; }
+
+/* ═══════ HOME — HERO ═══════ */
+.hero {
+  background: var(--bg-card);
+  border:1px solid var(--border-red);
+  border-radius:4px;
+  padding:1.75rem 2rem;
+  margin-bottom:1.25rem;
+  position:relative; overflow:hidden;
+}
+.hero::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; bottom:0;
+  background: radial-gradient(ellipse 80% 100% at 0% 50%, rgba(180,10,10,0.12), transparent 70%);
+  pointer-events:none;
+}
+.hero::after {
+  content:'⚽';
+  position:absolute; right:2rem; top:50%;
+  transform:translateY(-50%);
+  font-size:90px; opacity:.07;
+}
+.hero-tag {
+  font-family:'Rajdhani',sans-serif;
+  font-size:10px; letter-spacing:3px; font-weight:600;
+  color:var(--red); text-transform:uppercase; margin-bottom:6px;
+}
+.hero-title {
+  font-family:'Rajdhani',sans-serif;
+  font-size:38px; font-weight:700;
+  letter-spacing:2px; text-transform:uppercase;
+  color:var(--text-hi); line-height:1; margin-bottom:16px;
+}
+.hero-title span { color:var(--red); }
+.hero-stats { display:flex; gap:2rem; flex-wrap:wrap; }
+.stat-item {}
+.stat-num {
+  font-family:'Rajdhani',sans-serif;
+  font-size:32px; font-weight:700;
+  color:var(--red-bright); line-height:1;
+}
+.stat-lbl { font-size:11px; color:var(--text-lo); letter-spacing:1px; text-transform:uppercase; }
+
+/* NEXT MATCH */
+.next-match {
+  background: var(--bg-card);
+  border:1px solid var(--border-red);
+  border-left:3px solid var(--red);
+  border-radius:4px;
+  padding:1rem 1.25rem;
+  margin-bottom:1.25rem;
+  display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap;
+}
+.nm-label {
+  font-family:'Rajdhani',sans-serif;
+  font-size:10px; letter-spacing:2.5px; font-weight:700;
+  color:var(--red); text-transform:uppercase; margin-bottom:4px;
+}
+.nm-title {
+  font-family:'Rajdhani',sans-serif;
+  font-size:19px; font-weight:700; letter-spacing:.5px;
+  color:var(--text-hi);
+}
+.nm-meta { font-size:12.5px; color:var(--text-md); display:flex; gap:14px; flex-wrap:wrap; margin-top:5px; }
+.nm-countdown {
+  margin-left:auto;
+  text-align:center; flex-shrink:0;
+}
+.countdown-num {
+  font-family:'Rajdhani',sans-serif;
+  font-size:36px; font-weight:700; color:var(--red-bright); line-height:1;
+}
+.countdown-lbl { font-size:10px; color:var(--text-lo); letter-spacing:1.5px; text-transform:uppercase; }
+
+/* QUICK GRID */
+.quick-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:8px; margin-bottom:1.25rem; }
+.quick-item {
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:1rem .75rem;
+  text-align:center;
+  cursor:pointer;
+  transition: border-color .2s, background .2s;
+}
+.quick-item:hover { border-color:var(--red-border); background:var(--bg-hover); }
+.quick-icon { font-size:26px; margin-bottom:6px; }
+.quick-lbl {
+  font-family:'Rajdhani',sans-serif;
+  font-size:12px; font-weight:600; letter-spacing:1px;
+  text-transform:uppercase; color:var(--text-md);
+}
+
+/* ═══════ CONVOCAZIONI ═══════ */
+.conv-block {
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:4px;
+  overflow:hidden; margin-bottom:1.25rem;
+  transition: border-color .2s;
+}
+.conv-block:hover { border-color:var(--border-red); }
+.conv-head {
+  background: linear-gradient(90deg, rgba(140,10,10,0.5) 0%, rgba(20,10,10,0.3) 100%);
+  border-bottom:1px solid var(--border-red);
+  padding:.9rem 1.25rem;
+  display:flex; align-items:center; justify-content:space-between; gap:1rem;
+}
+.conv-match-name {
+  font-family:'Rajdhani',sans-serif;
+  font-size:17px; font-weight:700; letter-spacing:.5px; color:var(--text-hi);
+}
+.conv-match-sub { font-size:12px; color:var(--text-md); margin-top:2px; }
+.players-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(125px,1fr));
+  gap:6px; padding:1rem 1.25rem;
+}
+.player-chip {
+  display:flex; align-items:center; gap:8px;
+  padding:7px 9px;
+  background: rgba(204,31,31,0.06);
+  border:1px solid rgba(204,31,31,0.15);
+  border-radius:3px;
+}
+.player-num {
+  width:22px; height:22px;
+  background:var(--red);
+  border-radius:50%;
+  font-family:'Rajdhani',sans-serif;
+  font-size:11px; font-weight:700;
+  color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.player-name { font-size:13px; font-weight:500; color:var(--text-hi); line-height:1.2; }
+.conv-footer {
+  padding:.7rem 1.25rem;
+  background:rgba(0,0,0,.2);
+  border-top:1px solid var(--border);
+  font-size:12.5px; color:var(--text-md);
+  display:flex; gap:1.5rem; flex-wrap:wrap;
+}
+
+/* ═══════ CALENDARIO ═══════ */
+.cal-list { display:grid; gap:8px; }
+.cal-row {
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:4px;
+  display:flex; overflow:hidden;
+  transition: border-color .2s;
+}
+.cal-row:hover { border-color:var(--border-red); }
+.cal-date-box {
+  min-width:68px;
+  background:rgba(204,31,31,0.15);
+  border-right:1px solid var(--border-red);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding:12px 8px;
+}
+.cal-row.torneo .cal-date-box { background:rgba(201,147,58,0.12); border-right-color:rgba(201,147,58,0.3); }
+.cal-row.amichevole .cal-date-box { background:rgba(255,255,255,0.04); border-right-color:var(--border); }
+.cal-day { font-family:'Rajdhani',sans-serif; font-size:30px; font-weight:700; line-height:1; color:var(--red-bright); }
+.cal-row.torneo .cal-day { color:var(--gold); }
+.cal-row.amichevole .cal-day { color:var(--text-md); }
+.cal-mon { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--text-lo); margin-top:1px; }
+.cal-body { padding:12px 16px; flex:1; }
+.cal-title { font-family:'Rajdhani',sans-serif; font-size:15px; font-weight:600; color:var(--text-hi); margin-bottom:4px; }
+.cal-meta { font-size:12px; color:var(--text-md); display:flex; gap:12px; flex-wrap:wrap; }
+.cal-result {
+  padding:12px 16px;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  min-width:72px; border-left:1px solid var(--border);
+}
+.res-score { font-family:'Rajdhani',sans-serif; font-size:21px; font-weight:700; color:var(--red-bright); line-height:1; }
+.res-lbl { font-size:9px; text-transform:uppercase; letter-spacing:1px; color:var(--text-lo); margin-top:2px; }
+.res-lbl.win { color:#4caf7a; }
+.res-lbl.draw { color:var(--gold); }
+.res-lbl.loss { color:var(--red); }
+
+/* ═══════ GALLERIA ═══════ */
+.album-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:10px; margin-bottom:1.5rem; }
+.album-card {
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:4px; overflow:hidden;
+  cursor:pointer;
+  transition: border-color .2s, transform .15s;
+}
+.album-card:hover { border-color:var(--border-red); transform:translateY(-2px); }
+.album-thumb {
+  height:110px; position:relative;
+  display:flex; align-items:center; justify-content:center; overflow:hidden;
+}
+.album-thumb svg { width:100%; height:100%; }
+.album-count-badge {
+  position:absolute; bottom:7px; right:7px;
+  background:rgba(0,0,0,.6); border:1px solid rgba(255,255,255,.1);
+  color:#fff; font-size:10px;
+  padding:2px 7px; border-radius:2px; letter-spacing:.5px;
+}
+.album-info { padding:9px 12px; border-top:1px solid var(--border); }
+.album-title { font-family:'Rajdhani',sans-serif; font-size:14px; font-weight:600; color:var(--text-hi); margin-bottom:2px; }
+.album-date { font-size:11px; color:var(--text-lo); }
+
+.photo-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(155px,1fr)); gap:6px; }
+.photo-item { border-radius:3px; overflow:hidden; aspect-ratio:4/3; background:var(--bg-panel); cursor:pointer; border:1px solid var(--border); transition: border-color .15s; }
+.photo-item:hover { border-color:var(--border-red); }
+.photo-item svg { width:100%; height:100%; display:block; }
+.back-btn {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:7px 14px;
+  background:var(--bg-card);
+  border:1px solid var(--border-red);
+  border-radius:3px;
+  font-family:'Rajdhani',sans-serif;
+  font-size:13px; font-weight:600; letter-spacing:1px; text-transform:uppercase;
+  cursor:pointer; color:var(--red);
+  margin-bottom:1rem;
+  transition:background .15s;
+}
+.back-btn:hover { background:var(--bg-hover); }
+
+/* ═══════ DIVIDER ═══════ */
+.divider { border:none; border-top:1px solid var(--border); margin:1.25rem 0; }
+
+/* ═══════ FOOTER ═══════ */
+footer {
+  text-align:center;
+  padding:1.5rem;
+  font-size:11px; letter-spacing:.5px;
+  color:var(--text-lo);
+  border-top:1px solid var(--border);
+}
+
+/* ═══════ RESPONSIVE ═══════ */
+@media (max-width:560px) {
+  .tab { padding:0 12px; font-size:12px; }
+  .hero-title { font-size:28px; }
+  .nm-countdown { display:none; }
+  .players-grid { grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-wrap">
+      <div class="logo-shield">⚽</div>
+      <div class="logo-text">
+        ASD San Giovanni
+        <span class="logo-sub">Portale Genitori · 2025/26</span>
+      </div>
+    </div>
+    <div class="header-badge">Under 13</div>
+  </div>
+</header>
+
+<nav>
+  <div class="nav-inner">
+    <div class="tab active" onclick="showTab('home')" data-tab="home">
+      <span class="tab-icon">⊞</span> Home
+    </div>
+    <div class="tab" onclick="showTab('comunicazioni')" data-tab="comunicazioni">
+      <span class="tab-icon">◈</span> Comunicazioni
+    </div>
+    <div class="tab" onclick="showTab('convocazioni')" data-tab="convocazioni">
+      <span class="tab-icon">◉</span> Convocazioni
+    </div>
+    <div class="tab" onclick="showTab('calendario')" data-tab="calendario">
+      <span class="tab-icon">◷</span> Calendario
+    </div>
+    <div class="tab" onclick="showTab('galleria')" data-tab="galleria">
+      <span class="tab-icon">◫</span> Galleria
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<!-- ══════════ HOME ══════════ -->
+<section id="home" class="section active">
+
+  <div class="hero">
+    <div class="hero-tag">Stagione 2025/26 — ASD San Giovanni</div>
+    <div class="hero-title">Forza <span>Ragazzi</span></div>
+    <div class="hero-stats">
+      <div class="stat-item"><div class="stat-num">8</div><div class="stat-lbl">Vittorie</div></div>
+      <div class="stat-item"><div class="stat-num">3</div><div class="stat-lbl">Pareggi</div></div>
+      <div class="stat-item"><div class="stat-num">2</div><div class="stat-lbl">Sconfitte</div></div>
+      <div class="stat-item"><div class="stat-num">27</div><div class="stat-lbl">Gol</div></div>
+      <div class="stat-item"><div class="stat-num">11</div><div class="stat-lbl">Giocatori</div></div>
+    </div>
+  </div>
+
+  <div class="next-match">
+    <div>
+      <div class="nm-label">⚡ Prossima partita</div>
+      <div class="nm-title">ASD San Giovanni vs FC Riviera</div>
+      <div class="nm-meta">
+        <span>📅 Dom 8 Giu 2025</span>
+        <span>🕙 Ore 10:30</span>
+        <span>📍 Campo Municipale, Via Roma 12</span>
+      </div>
+    </div>
+    <div class="nm-countdown">
+      <div class="countdown-num" id="days-left">7</div>
+      <div class="countdown-lbl">Giorni</div>
+    </div>
+  </div>
+
+  <div class="quick-grid">
+    <div class="quick-item" onclick="showTab('comunicazioni')">
+      <div class="quick-icon">📢</div>
+      <div class="quick-lbl">Comunicazioni</div>
+    </div>
+    <div class="quick-item" onclick="showTab('convocazioni')">
+      <div class="quick-icon">📋</div>
+      <div class="quick-lbl">Convocazioni</div>
+    </div>
+    <div class="quick-item" onclick="showTab('calendario')">
+      <div class="quick-icon">📅</div>
+      <div class="quick-lbl">Calendario</div>
+    </div>
+    <div class="quick-item" onclick="showTab('galleria')">
+      <div class="quick-icon">📸</div>
+      <div class="quick-lbl">Galleria</div>
+    </div>
+  </div>
+
+  <div class="sec-title">Ultime comunicazioni</div>
+
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">43ª Coppa Altipiano — 6/6/2026</div>
+        <div style="margin-top:5px"><span class="badge badge-gold">Torneo</span></div>
+      </div>
+      <div class="card-date">30/05/2026</div>
+    </div>
+    <div class="card-body">Confermata la partecipazione alla 43ª Coppa Altipiano. Dettagli orari e logistica a seguire nella sezione Comunicazioni.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">✅ Convocazione disponibile — 8 Giugno</div>
+      <div class="card-date">30/05/2025</div>
+    </div>
+    <div class="card-body">La lista dei convocati per domenica è disponibile. Controllate la sezione Convocazioni.</div>
+  </div>
+
+</section>
+
+<!-- ══════════ COMUNICAZIONI ══════════ -->
+<section id="comunicazioni" class="section">
+  <div class="sec-title">Comunicazioni</div>
+
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">43ª Coppa Altipiano — 6 Giugno 2026</div>
+        <div style="margin-top:5px"><span class="badge badge-gold">Torneo</span></div>
+      </div>
+      <div class="card-date">30/05/2026</div>
+    </div>
+    <div class="card-body">Siamo ufficialmente iscritti alla 43ª Coppa Altipiano. La gara si svolgerà il <strong style="color:var(--text-hi)">6 giugno 2026</strong>. Ulteriori dettagli su ritrovo, orari e trasporti verranno comunicati a breve. I ragazzi stanno lavorando duramente — siamo pronti!</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Cambio orario allenamento — Giugno</div>
+        <div style="margin-top:5px"><span class="badge badge-red">Urgente</span></div>
+      </div>
+      <div class="card-date">02/06/2025</div>
+    </div>
+    <div class="card-body">A partire da lunedì 9 giugno, gli allenamenti del martedì si sposteranno alle ore <strong style="color:var(--text-hi)">18:00</strong> anziché 17:30 per manutenzione del campo. Ci scusiamo per il disagio.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Nuovo materiale tecnico disponibile</div>
+        <div style="margin-top:5px"><span class="badge badge-gray">Info</span></div>
+      </div>
+      <div class="card-date">20/05/2025</div>
+    </div>
+    <div class="card-body">Le nuove divise da gara sono disponibili in segreteria. Costo totale: <strong style="color:var(--text-hi)">€45</strong> (maglia, pantaloncini, calzettoni). Pagamento in contanti o bonifico.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Cerimonia fine stagione — 27 Giugno</div>
+        <div style="margin-top:5px"><span class="badge badge-gold">Evento</span></div>
+      </div>
+      <div class="card-date">15/05/2025</div>
+    </div>
+    <div class="card-body">Venerdì 27 giugno, ore 20:00, Sala Polivalente del Comune. Premiazioni, video stagione e cena sociale. Tutti i genitori sono invitati!</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Visite mediche stagione 2025/26 — Prenotazioni aperte</div>
+        <div style="margin-top:5px"><span class="badge badge-gray">Stagione 2025/26</span></div>
+      </div>
+      <div class="card-date">05/05/2025</div>
+    </div>
+    <div class="card-body">Il medico sociale riceve ogni mercoledì di giugno dalle 17:00 alle 19:00 presso la sede. Portare libretto sanitario e fotocopia della tessera.</div>
+  </div>
+</section>
+
+<!-- ══════════ CONVOCAZIONI ══════════ -->
+<section id="convocazioni" class="section">
+  <div class="sec-title">Convocazioni</div>
+
+  <div class="conv-block">
+    <div class="conv-head">
+      <div>
+        <div class="conv-match-name">ASD San Giovanni vs FC Riviera</div>
+        <div class="conv-match-sub">Campionato · Giornata 13</div>
+      </div>
+      <span class="badge badge-gold">Prossima</span>
+    </div>
+    <div class="players-grid">
+      <div class="player-chip"><div class="player-num">1</div><div class="player-name">Marco B.</div></div>
+      <div class="player-chip"><div class="player-num">2</div><div class="player-name">Luca F.</div></div>
+      <div class="player-chip"><div class="player-num">3</div><div class="player-name">Davide M.</div></div>
+      <div class="player-chip"><div class="player-num">4</div><div class="player-name">Andrea P.</div></div>
+      <div class="player-chip"><div class="player-num">5</div><div class="player-name">Stefano R.</div></div>
+      <div class="player-chip"><div class="player-num">6</div><div class="player-name">Nicolò S.</div></div>
+      <div class="player-chip"><div class="player-num">7</div><div class="player-name">Matteo C.</div></div>
+      <div class="player-chip"><div class="player-num">8</div><div class="player-name">Filippo T.</div></div>
+      <div class="player-chip"><div class="player-num">9</div><div class="player-name">Lorenzo G.</div></div>
+      <div class="player-chip"><div class="player-num">10</div><div class="player-name">Riccardo V.</div></div>
+      <div class="player-chip"><div class="player-num">11</div><div class="player-name">Jacopo L.</div></div>
+      <div class="player-chip"><div class="player-num">12</div><div class="player-name">Simone B.</div></div>
+      <div class="player-chip"><div class="player-num">13</div><div class="player-name">Edoardo N.</div></div>
+      <div class="player-chip"><div class="player-num">14</div><div class="player-name">Pietro M.</div></div>
+    </div>
+    <div class="conv-footer">
+      <span>📅 Dom 8 Giugno · ore 10:30</span>
+      <span>📍 Campo Municipale, Via Roma 12</span>
+      <span>🕙 Ritrovo ore 10:00</span>
+    </div>
+  </div>
+
+  <div class="conv-block">
+    <div class="conv-head">
+      <div>
+        <div class="conv-match-name">ASD Monteforte vs ASD San Giovanni</div>
+        <div class="conv-match-sub">Campionato · Giornata 12</div>
+      </div>
+      <span class="badge badge-green">✓ 3–1</span>
+    </div>
+    <div class="players-grid">
+      <div class="player-chip"><div class="player-num">1</div><div class="player-name">Marco B.</div></div>
+      <div class="player-chip"><div class="player-num">2</div><div class="player-name">Luca F.</div></div>
+      <div class="player-chip"><div class="player-num">4</div><div class="player-name">Andrea P.</div></div>
+      <div class="player-chip"><div class="player-num">5</div><div class="player-name">Stefano R.</div></div>
+      <div class="player-chip"><div class="player-num">7</div><div class="player-name">Matteo C.</div></div>
+      <div class="player-chip"><div class="player-num">8</div><div class="player-name">Filippo T.</div></div>
+      <div class="player-chip"><div class="player-num">9</div><div class="player-name">Lorenzo G.</div></div>
+      <div class="player-chip"><div class="player-num">10</div><div class="player-name">Riccardo V.</div></div>
+      <div class="player-chip"><div class="player-num">11</div><div class="player-name">Jacopo L.</div></div>
+      <div class="player-chip"><div class="player-num">12</div><div class="player-name">Simone B.</div></div>
+      <div class="player-chip"><div class="player-num">13</div><div class="player-name">Edoardo N.</div></div>
+    </div>
+    <div class="conv-footer">
+      <span>📅 Dom 25 Maggio · ore 11:00</span>
+      <span>📍 Campo Sportivo Monteforte</span>
+      <span style="color:#4caf7a; font-weight:600">Vittoria 3–1 ✓</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ CALENDARIO ══════════ -->
+<section id="calendario" class="section">
+  <div class="sec-title">Calendario</div>
+  <div style="display:flex; gap:8px; margin-bottom:1rem; flex-wrap:wrap;">
+    <span class="badge badge-red">⚽ Campionato</span>
+    <span class="badge badge-gold">🏆 Torneo</span>
+    <span class="badge badge-gray">🤝 Amichevole</span>
+  </div>
+
+  <div class="cal-list">
+
+    <div class="cal-row torneo">
+      <div class="cal-date-box"><div class="cal-day">06</div><div class="cal-mon">Giu</div></div>
+      <div class="cal-body">
+        <div class="cal-title">🏆 43ª Coppa Altipiano</div>
+        <div class="cal-meta"><span>🏆 Torneo</span><span>📍 Da definire</span></div>
+      </div>
+      <div class="cal-result"><div style="font-size:20px">🔜</div><div class="res-lbl">attesa</div></div>
+    </div>
+
+    <div class="cal-row">
+      <div class="cal-date-box"><div class="cal-day">08</div><div class="cal-mon">Giu</div></div>
+      <div class="cal-body">
+        <div class="cal-title">ASD San Giovanni vs FC Riviera</div>
+        <div class="cal-meta"><span>⚽ Camp. G.13</span><span>🕙 10:30</span><span>📍 Campo Municipale</span></div>
+      </div>
+      <div class="cal-result"><div style="font-size:20px">🔜</div><div class="res-lbl">attesa</div></div>
+    </div>
+
+    <div class="cal-row torneo">
+      <div class="cal-date-box"><div class="cal-day">15</div><div class="cal-mon">Giu</div></div>
+      <div class="cal-body">
+        <div class="cal-title">🏆 Torneo Primavera — Giorno 1</div>
+        <div class="cal-meta"><span>🏆 Torneo</span><span>🕙 9:00</span><span>📍 Stadio Comunale</span></div>
+      </div>
+      <div class="cal-result"><div style="font-size:20px">🔜</div><div class="res-lbl">attesa</div></div>
+    </div>
+
+    <div class="cal-row torneo">
+      <div class="cal-date-box"><div class="cal-day">16</div><div class="cal-mon">Giu</div></div>
+      <div class="cal-body">
+        <div class="cal-title">🏆 Torneo Primavera — Giorno 2</div>
+        <div class="cal-meta"><span>🏆 Torneo</span><span>🕙 9:00</span><span>📍 Stadio Comunale</span></div>
+      </div>
+      <div class="cal-result"><div style="font-size:20px">🔜</div><div class="res-lbl">attesa</div></div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="cal-row">
+      <div class="cal-date-box"><div class="cal-day">25</div><div class="cal-mon">Mag</div></div>
+      <div class="cal-body">
+        <div class="cal-title">ASD Monteforte vs ASD San Giovanni</div>
+        <div class="cal-meta"><span>⚽ Camp. G.12</span><span>🕙 11:00</span><span>📍 Campo Monteforte</span></div>
+      </div>
+      <div class="cal-result">
+        <div class="res-score">3-1</div>
+        <div class="res-lbl win">vittoria</div>
+      </div>
+    </div>
+
+    <div class="cal-row">
+      <div class="cal-date-box"><div class="cal-day">18</div><div class="cal-mon">Mag</div></div>
+      <div class="cal-body">
+        <div class="cal-title">ASD San Giovanni vs Sporting Valle</div>
+        <div class="cal-meta"><span>⚽ Camp. G.11</span><span>🕙 10:00</span><span>📍 Campo Municipale</span></div>
+      </div>
+      <div class="cal-result">
+        <div class="res-score">2-2</div>
+        <div class="res-lbl draw">pareggio</div>
+      </div>
+    </div>
+
+    <div class="cal-row amichevole">
+      <div class="cal-date-box"><div class="cal-day">10</div><div class="cal-mon">Mag</div></div>
+      <div class="cal-body">
+        <div class="cal-title">ASD San Giovanni vs Polisportiva Ovest</div>
+        <div class="cal-meta"><span>🤝 Amichevole</span><span>🕙 15:00</span><span>📍 Campo Municipale</span></div>
+      </div>
+      <div class="cal-result">
+        <div class="res-score">4-1</div>
+        <div class="res-lbl win">vittoria</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════ GALLERIA ══════════ -->
+<section id="galleria" class="section">
+  <div class="sec-title">Galleria Foto</div>
+
+  <div id="albums-view">
+    <div class="album-grid">
+
+      <div class="album-card" onclick="openAlbum('monteforte')">
+        <div class="album-thumb">
+          <svg viewBox="0 0 210 110" xmlns="http://www.w3.org/2000/svg">
+            <rect width="210" height="110" fill="#1a0505"/>
+            <rect width="210" height="110" fill="url(#g1)"/>
+            <defs><radialGradient id="g1" cx="30%" cy="50%"><stop offset="0%" stop-color="#8b1010" stop-opacity=".5"/><stop offset="100%" stop-color="transparent"/></radialGradient></defs>
+            <text x="105" y="52" text-anchor="middle" fill="rgba(230,80,80,0.9)" font-size="20" font-family="Rajdhani,sans-serif" font-weight="700" letter-spacing="2">3 – 1</text>
+            <text x="105" y="70" text-anchor="middle" fill="rgba(160,100,100,0.6)" font-size="8" font-family="Barlow,sans-serif" letter-spacing="1">vs ASD MONTEFORTE</text>
+          </svg>
+          <div class="album-count-badge">12 foto</div>
+        </div>
+        <div class="album-info">
+          <div class="album-title">vs ASD Monteforte</div>
+          <div class="album-date">25 Maggio 2025 · Vittoria 3-1</div>
+        </div>
+      </div>
+
+      <div class="album-card" onclick="openAlbum('valle')">
+        <div class="album-thumb">
+          <svg viewBox="0 0 210 110" xmlns="http://www.w3.org/2000/svg">
+            <rect width="210" height="110" fill="#0d0d05"/>
+            <defs><radialGradient id="g2" cx="70%" cy="50%"><stop offset="0%" stop-color="#7a6010" stop-opacity=".4"/><stop offset="100%" stop-color="transparent"/></radialGradient></defs>
+            <rect width="210" height="110" fill="url(#g2)"/>
+            <text x="105" y="52" text-anchor="middle" fill="rgba(210,175,80,0.9)" font-size="20" font-family="Rajdhani,sans-serif" font-weight="700" letter-spacing="2">2 – 2</text>
+            <text x="105" y="70" text-anchor="middle" fill="rgba(160,140,80,0.6)" font-size="8" font-family="Barlow,sans-serif" letter-spacing="1">vs SPORTING VALLE</text>
+          </svg>
+          <div class="album-count-badge">8 foto</div>
+        </div>
+        <div class="album-info">
+          <div class="album-title">vs Sporting Valle</div>
+          <div class="album-date">18 Maggio 2025 · Pareggio 2-2</div>
+        </div>
+      </div>
+
+      <div class="album-card" onclick="openAlbum('amichevole')">
+        <div class="album-thumb">
+          <svg viewBox="0 0 210 110" xmlns="http://www.w3.org/2000/svg">
+            <rect width="210" height="110" fill="#0a0a0a"/>
+            <defs><radialGradient id="g3" cx="50%" cy="50%"><stop offset="0%" stop-color="#333" stop-opacity=".5"/><stop offset="100%" stop-color="transparent"/></radialGradient></defs>
+            <rect width="210" height="110" fill="url(#g3)"/>
+            <text x="105" y="52" text-anchor="middle" fill="rgba(190,190,190,0.9)" font-size="20" font-family="Rajdhani,sans-serif" font-weight="700" letter-spacing="2">4 – 1</text>
+            <text x="105" y="70" text-anchor="middle" fill="rgba(130,130,130,0.6)" font-size="8" font-family="Barlow,sans-serif" letter-spacing="1">AMICHEVOLE</text>
+          </svg>
+          <div class="album-count-badge">16 foto</div>
+        </div>
+        <div class="album-info">
+          <div class="album-title">Amichevole vs Pol. Ovest</div>
+          <div class="album-date">10 Maggio 2025</div>
+        </div>
+      </div>
+
+      <div class="album-card" onclick="openAlbum('allenamento')">
+        <div class="album-thumb">
+          <svg viewBox="0 0 210 110" xmlns="http://www.w3.org/2000/svg">
+            <rect width="210" height="110" fill="#050d08"/>
+            <defs><radialGradient id="g4" cx="40%" cy="50%"><stop offset="0%" stop-color="#0f5020" stop-opacity=".5"/><stop offset="100%" stop-color="transparent"/></radialGradient></defs>
+            <rect width="210" height="110" fill="url(#g4)"/>
+            <text x="105" y="58" text-anchor="middle" font-size="30">🏋️</text>
+            <text x="105" y="80" text-anchor="middle" fill="rgba(80,160,100,0.6)" font-size="8" font-family="Barlow,sans-serif" letter-spacing="1">ALLENAMENTI MAGGIO</text>
+          </svg>
+          <div class="album-count-badge">20 foto</div>
+        </div>
+        <div class="album-info">
+          <div class="album-title">Allenamenti — Maggio</div>
+          <div class="album-date">Varie date · Maggio 2025</div>
+        </div>
+      </div>
+
+    </div>
+    <p style="font-size:12px; color:var(--text-lo); text-align:center; letter-spacing:.5px;">CLICCA SU UN ALBUM PER VEDERE LE FOTO</p>
+  </div>
+
+  <div id="photos-view" style="display:none">
+    <button class="back-btn" onclick="closeAlbum()">← Torna agli album</button>
+    <div id="album-title-ph" class="sec-title" style="font-size:11px"></div>
+    <div class="photo-grid" id="photo-grid-ph"></div>
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  ASD SAN GIOVANNI · PORTALE GENITORI · STAGIONE 2025/26<br>
+  <span style="color:var(--red); letter-spacing:1px;">staff@asdsangiovanni.it</span>
+</footer>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelector('[data-tab="'+id+'"]').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// countdown to next match
+(function(){
+  var target = new Date('2025-06-08');
+  var now = new Date();
+  var diff = Math.ceil((target - now) / (1000*60*60*24));
+  var el = document.getElementById('days-left');
+  if(el) el.textContent = diff > 0 ? diff : '0';
+})();
+
+var albumData = {
+  monteforte: { title:'vs ASD Monteforte · 25 Mag 2025', count:12, colors:['#1a0505','#2a0808','#1a0505','#350a0a','#200606','#180404','#2a0808','#1a0505','#350a0a','#200606','#180404','#2a0808'], emojis:['⚽','🥅','🤸','👟','🙌','💪','🎯','🔥','⚡','🏃','🤾','🌟'] },
+  valle:       { title:'vs Sporting Valle · 18 Mag 2025', count:8,  colors:['#0d0d05','#1a1a08','#0d0d05','#252510','#141408','#0d0d05','#1a1a08','#252510'], emojis:['⚽','🥅','🤝','👟','🏃','💪','🎯','🤸'] },
+  amichevole:  { title:'Amichevole vs Pol. Ovest · 10 Mag 2025', count:16, colors:['#0a0a0a','#121212','#0a0a0a','#181818','#101010','#0a0a0a','#121212','#181818','#0a0a0a','#101010','#121212','#0a0a0a','#181818','#101010','#0a0a0a','#121212'], emojis:['⚽','🥅','🤸','👟','🙌','💪','🎯','🔥','⚡','🏃','🤾','🌟','🏆','🎉','👊','🤩'] },
+  allenamento: { title:'Allenamenti — Maggio 2025', count:20, colors:['#050d08','#081508','#050d08','#0a1a0a','#061008','#050d08','#081508','#0a1a0a','#050d08','#061008','#081508','#050d08','#0a1a0a','#061008','#050d08','#081508','#0a1a0a','#050d08','#061008','#081508'], emojis:['🏋️','🏃','⚽','🎯','💪','🤸','👟','⚡','🔥','🌟','🏆','💦','🤾','🥅','🎉','👊','🤩','🏅','⚙️','🧤'] }
+};
+
+function openAlbum(id) {
+  var a = albumData[id];
+  document.getElementById('albums-view').style.display='none';
+  document.getElementById('photos-view').style.display='block';
+  document.getElementById('album-title-ph').textContent = '📸 ' + a.title;
+  var grid = document.getElementById('photo-grid-ph');
+  grid.innerHTML='';
+  for(var i=0;i<a.count;i++){
+    var d=document.createElement('div');
+    d.className='photo-item';
+    var c=a.colors[i%a.colors.length];
+    var e=a.emojis[i%a.emojis.length];
+    d.innerHTML='<svg viewBox="0 0 155 116" xmlns="http://www.w3.org/2000/svg"><rect width="155" height="116" fill="'+c+'"/><text x="77" y="62" text-anchor="middle" font-size="32">'+e+'</text><text x="77" y="90" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="9" font-family="Rajdhani,sans-serif" letter-spacing="1">FOTO '+(i+1)+'</text></svg>';
+    grid.appendChild(d);
+  }
+}
+function closeAlbum() {
+  document.getElementById('photos-view').style.display='none';
+  document.getElementById('albums-view').style.display='block';
+}
+</script>
+</body>
+</html>
