@@ -3,407 +3,1165 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SS San Giovanni — Portale Genitori</title>
+<title>SS San Giovanni – Portale Genitori</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg-base:    #0a0a0a;
-  --bg-panel:   #111111;
-  --bg-card:    #161616;
-  --bg-hover:   #1e1010;
-  --red:        #cc1f1f;
-  --red-bright: #e53030;
-  --red-dim:    rgba(204,31,31,0.08);
-  --red-border: rgba(204,31,31,0.35);
-  --gold:       #c9933a;
-  --gold-dim:   rgba(201,147,58,0.12);
-  --text-hi:    #f0e8e8;
-  --text-md:    #a09090;
-  --text-lo:    #5a4a4a;
-  --border:     rgba(255,255,255,0.06);
-  --border-red: rgba(204,31,31,0.3);
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0d0d;--bg2:#151515;--bg3:#1c1c1c;--bg4:#222;
+  --red:#e8271a;--red2:#c01f14;--red-dim:rgba(232,39,26,0.15);
+  --text:#f0f0f0;--text2:#aaa;--text3:#666;
+  --border:#2a2a2a;--border2:#333;
+  --green:#27c27a;--amber:#e8a020;--blue:#3a9fd4;
 }
-* { box-sizing:border-box; margin:0; padding:0; }
-body {
-  font-family:'Barlow',sans-serif;
-  background:var(--bg-base);
-  color:var(--text-hi);
-  min-height:100vh;
-  background-image:radial-gradient(ellipse 60% 50% at 15% 0%, rgba(140,10,10,0.22) 0%, transparent 70%);
+html{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:15px}
+body{min-height:100vh}
+
+/* ---- TOPBAR ---- */
+.topbar{
+  display:flex;align-items:center;gap:14px;
+  padding:0 24px;height:52px;
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:100;
+}
+.logo-mark{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--red);display:flex;align-items:center;justify-content:center;
+  font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;color:#fff;
+  flex-shrink:0;
+}
+.logo-text{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:.5px}
+.logo-sub{font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:1px}
+.topbar-nav{display:flex;gap:2px;margin-left:16px}
+.topbar-nav a{
+  font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:13px;
+  letter-spacing:1px;text-transform:uppercase;text-decoration:none;
+  color:var(--text2);padding:6px 14px;border-radius:3px;
+  transition:.15s;cursor:pointer;
+}
+.topbar-nav a:hover{color:var(--text)}
+.topbar-nav a.active{color:var(--red);border-bottom:2px solid var(--red)}
+.topbar-right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.btn-admin{
+  font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:12px;
+  letter-spacing:.8px;text-transform:uppercase;
+  background:transparent;border:1px solid var(--border2);
+  color:var(--text3);padding:5px 12px;border-radius:3px;cursor:pointer;
+  transition:.15s;
+}
+.btn-admin:hover{color:var(--red);border-color:var(--red)}
+.btn-admin.active{color:var(--red);border-color:var(--red);background:var(--red-dim)}
+
+/* ---- PAGES ---- */
+.page{display:none;padding:0 24px 40px;max-width:1100px;margin:0 auto}
+.page.active{display:block}
+
+/* ---- HOME HERO ---- */
+.hero{
+  background:linear-gradient(135deg,#1a0505 0%,#0d0d0d 60%);
+  border:1px solid var(--border);border-radius:4px;
+  padding:32px 36px;margin:24px 0 20px;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;right:-20px;top:-20px;
+  width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(232,39,26,.18) 0%,transparent 70%);
+}
+.hero-sub{
+  font-family:'Barlow Condensed',sans-serif;font-weight:600;
+  font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--red);margin-bottom:8px;
+}
+.hero-title{
+  font-family:'Barlow Condensed',sans-serif;font-weight:800;
+  font-size:48px;letter-spacing:1px;line-height:1;margin-bottom:20px;
+}
+.hero-title span{color:var(--red)}
+.hero-stats{display:flex;gap:32px}
+.stat-item{}
+.stat-num{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:36px;color:var(--red);line-height:1;
+}
+.stat-lbl{font-size:10px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
+
+/* ---- QUICK TILES ---- */
+.quick-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+.tile{
+  background:var(--bg2);border:1px solid var(--border);border-radius:4px;
+  padding:16px;cursor:pointer;transition:.15s;text-align:center;
+}
+.tile:hover{border-color:var(--red);background:var(--bg3)}
+.tile-icon{font-size:28px;margin-bottom:8px}
+.tile-label{
+  font-family:'Barlow Condensed',sans-serif;font-weight:600;
+  font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);
 }
 
-/* HEADER */
-header { background:rgba(10,10,10,0.95); border-bottom:1px solid var(--border-red); position:sticky; top:0; z-index:100; backdrop-filter:blur(8px); }
-.header-inner { max-width:100%; margin:0 auto; padding:0 2rem; height:66px; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
-.logo-wrap { display:flex; align-items:center; gap:12px; }
-.logo-shield { width:44px; height:44px; background:radial-gradient(circle at 40% 35%, #8b1010, #3a0808); border:1px solid var(--red-border); border-radius:6px 6px 14px 14px; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; box-shadow:0 0 12px rgba(204,31,31,0.3); }
-.logo-text { font-family:'Rajdhani',sans-serif; font-size:22px; font-weight:700; letter-spacing:1.5px; color:var(--text-hi); text-transform:uppercase; line-height:1.1; }
-.logo-sub { font-size:11px; font-weight:400; color:var(--red); letter-spacing:2px; text-transform:uppercase; display:block; }
+/* ---- SECTION HEADER ---- */
+.sec-hdr{
+  display:flex;align-items:center;gap:10px;
+  margin:24px 0 14px;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--red);
+}
+.sec-hdr::after{content:'';flex:1;height:1px;background:var(--border)}
 
-/* SETTINGS PANEL */
-.settings-btn { background:none; border:1px solid var(--border-red); border-radius:3px; color:var(--red); font-family:'Rajdhani',sans-serif; font-size:12px; font-weight:600; letter-spacing:1px; padding:4px 10px; cursor:pointer; text-transform:uppercase; transition:background .2s; }
-.settings-btn:hover { background:var(--red-dim); }
-.settings-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:200; align-items:center; justify-content:center; }
-.settings-overlay.open { display:flex; }
-.settings-modal { background:#1a1010; border:1px solid var(--border-red); border-radius:6px; padding:1.5rem; width:320px; max-width:90vw; }
-.settings-title { font-family:'Rajdhani',sans-serif; font-size:16px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--red); margin-bottom:1.25rem; }
-.settings-field { margin-bottom:1rem; }
-.settings-label { font-family:'Rajdhani',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--text-md); margin-bottom:6px; display:block; }
-.settings-input, .settings-select { width:100%; background:#0d0d0d; border:1px solid var(--border-red); border-radius:3px; color:var(--text-hi); font-family:'Barlow',sans-serif; font-size:14px; padding:8px 10px; outline:none; }
-.settings-input:focus, .settings-select:focus { border-color:var(--red-bright); }
-.settings-select option { background:#1a1010; }
-.settings-actions { display:flex; gap:8px; margin-top:1.25rem; }
-.btn-save { flex:1; background:var(--red); border:none; border-radius:3px; color:#fff; font-family:'Rajdhani',sans-serif; font-size:13px; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:9px; cursor:pointer; transition:background .2s; }
-.btn-save:hover { background:var(--red-bright); }
-.btn-cancel { flex:1; background:none; border:1px solid var(--border); border-radius:3px; color:var(--text-md); font-family:'Rajdhani',sans-serif; font-size:13px; font-weight:600; letter-spacing:1px; text-transform:uppercase; padding:9px; cursor:pointer; transition:background .2s; }
-.btn-cancel:hover { background:rgba(255,255,255,0.04); }
+/* ---- PAGE HEADER ---- */
+.page-hdr{
+  padding:28px 0 20px;
+  font-family:'Barlow Condensed',sans-serif;font-weight:800;
+  font-size:36px;letter-spacing:1px;color:var(--text);
+}
+.page-hdr span{color:var(--red)}
 
-/* NAV */
-nav { background:var(--bg-panel); border-bottom:1px solid var(--border); }
-.nav-inner { max-width:100%; margin:0 auto; padding:0 2rem; display:flex; overflow-x:auto; scrollbar-width:none; gap:2px; }
-.nav-inner::-webkit-scrollbar { display:none; }
-.tab { padding:0 22px; height:48px; display:flex; align-items:center; gap:7px; font-family:'Rajdhani',sans-serif; font-size:15px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--text-md); cursor:pointer; white-space:nowrap; border-bottom:2px solid transparent; margin-bottom:-1px; transition:color .2s, border-color .2s, background .2s; user-select:none; }
-.tab:hover { color:var(--text-hi); background:var(--red-dim); }
-.tab.active { color:var(--red-bright); border-bottom-color:var(--red-bright); }
+/* ---- CARDS ---- */
+.card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:4px;
+  margin-bottom:10px;
+}
+.card-body{padding:16px 20px}
+.card-title{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:16px;letter-spacing:.3px;color:var(--text);margin-bottom:4px;
+}
+.card-meta{font-size:12px;color:var(--text3);display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.card-meta span{display:flex;align-items:center;gap:4px}
+.card-text{font-size:14px;color:var(--text2);line-height:1.6}
+.card-tag{
+  display:inline-block;font-size:10px;font-weight:500;letter-spacing:.8px;
+  text-transform:uppercase;padding:2px 8px;border-radius:2px;margin-right:6px;
+}
+.tag-red{background:var(--red-dim);color:var(--red);border:1px solid rgba(232,39,26,.3)}
+.tag-amber{background:rgba(232,160,32,.12);color:var(--amber);border:1px solid rgba(232,160,32,.3)}
+.tag-blue{background:rgba(58,159,212,.12);color:var(--blue);border:1px solid rgba(58,159,212,.3)}
+.tag-green{background:rgba(39,194,122,.12);color:var(--green);border:1px solid rgba(39,194,122,.3)}
 
-/* LAYOUT */
-main { max-width:100%; margin:0 auto; padding:2rem 2rem 4rem; }
-.section { display:none; }
-.section.active { display:block; animation:fadeIn .2s ease; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
+/* ---- CONVOCATI ---- */
+.conv-match-info{
+  background:var(--bg3);border-bottom:1px solid var(--border);
+  padding:14px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+}
+.conv-vs{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:20px;flex:1;
+}
+.conv-vs em{color:var(--red);font-style:normal}
+.conv-detail{font-size:12px;color:var(--text3);display:flex;align-items:center;gap:4px}
+.players-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:8px;padding:16px 20px;
+}
+.player-row{
+  display:flex;align-items:center;gap:10px;
+  background:var(--bg3);border:1px solid var(--border);border-radius:3px;
+  padding:8px 12px;
+}
+.p-num{
+  width:26px;height:26px;border-radius:50%;
+  background:var(--red);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;
+  flex-shrink:0;
+}
+.p-name{font-size:13px;font-weight:500;color:var(--text)}
+.p-role{font-size:11px;color:var(--text3);margin-top:1px}
 
-/* SECTION TITLE */
-.sec-title { font-family:'Rajdhani',sans-serif; font-size:14px; font-weight:600; letter-spacing:4px; text-transform:uppercase; color:var(--red); margin-bottom:1.25rem; padding-bottom:10px; border-bottom:1px solid var(--border-red); display:flex; align-items:center; justify-content:center; gap:10px; }
-.sec-title::before { content:''; width:3px; height:14px; background:var(--red); border-radius:2px; display:inline-block; }
+/* ---- CALENDAR ---- */
+.cal-event{
+  display:flex;gap:0;background:var(--bg2);border:1px solid var(--border);
+  border-radius:4px;margin-bottom:8px;overflow:hidden;
+}
+.cal-date{
+  width:62px;flex-shrink:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:12px 8px;
+}
+.cal-date.tipo-partita{background:var(--red-dim);border-right:2px solid var(--red)}
+.cal-date.tipo-torneo{background:rgba(232,160,32,.1);border-right:2px solid var(--amber)}
+.cal-date.tipo-allenamento{background:rgba(58,159,212,.08);border-right:2px solid var(--blue)}
+.cal-date.tipo-evento{background:rgba(39,194,122,.08);border-right:2px solid var(--green)}
+.cal-dd{
+  font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:28px;line-height:1;
+}
+.cal-date.tipo-partita .cal-dd{color:var(--red)}
+.cal-date.tipo-torneo .cal-dd{color:var(--amber)}
+.cal-date.tipo-allenamento .cal-dd{color:var(--blue)}
+.cal-date.tipo-evento .cal-dd{color:var(--green)}
+.cal-mm{
+  font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-top:2px;
+}
+.cal-info{padding:12px 16px;flex:1}
+.cal-info-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:4px}
+.cal-info-meta{font-size:12px;color:var(--text3);display:flex;gap:12px;flex-wrap:wrap}
 
-/* EMPTY STATE */
-.empty-state { text-align:center; padding:5rem 1rem; color:var(--text-lo); }
-.empty-state-icon { font-size:52px; margin-bottom:16px; opacity:.35; }
-.empty-state-text { font-family:'Rajdhani',sans-serif; font-size:15px; letter-spacing:3px; text-transform:uppercase; }
+/* ---- GALLERY ---- */
+.gallery-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:10px;margin-top:4px;
+}
+.photo-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:4px;
+  overflow:hidden;cursor:pointer;transition:.2s;
+}
+.photo-card:hover{border-color:var(--red);transform:translateY(-2px)}
+.photo-thumb{
+  width:100%;aspect-ratio:4/3;
+  background:var(--bg3);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;position:relative;
+}
+.photo-thumb img{width:100%;height:100%;object-fit:cover}
+.photo-thumb-placeholder{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;color:var(--text3);
+}
+.photo-thumb-placeholder .ph-icon{font-size:32px}
+.photo-thumb-placeholder .ph-label{font-size:11px;letter-spacing:.5px}
+.photo-cap{
+  padding:10px 12px;
+  font-size:12px;color:var(--text2);font-weight:500;
+}
+.photo-cap-sub{font-size:11px;color:var(--text3);margin-top:2px}
 
-/* CARD */
-.card { background:var(--bg-card); border:1px solid var(--border); border-radius:6px; padding:1.75rem 2rem; margin-bottom:1rem; transition:border-color .2s, background .2s; }
-.card:hover { border-color:var(--border-red); background:var(--bg-hover); }
-.card-header { display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; margin-bottom:.75rem; }
-.card-title { font-family:'Rajdhani',sans-serif; font-size:22px; font-weight:600; letter-spacing:.5px; color:var(--text-hi); }
-.card-date { font-size:14px; color:var(--text-lo); white-space:nowrap; flex-shrink:0; letter-spacing:.5px; margin-top:4px; }
-.card-body { font-size:16px; color:var(--text-md); line-height:1.8; }
+/* ---- LIGHTBOX ---- */
+.lightbox{
+  display:none;position:fixed;inset:0;z-index:1000;
+  background:rgba(0,0,0,.92);
+  align-items:center;justify-content:center;
+  flex-direction:column;
+}
+.lightbox.open{display:flex}
+.lightbox img{max-width:90vw;max-height:80vh;border-radius:3px;object-fit:contain}
+.lightbox-cap{color:var(--text2);font-size:14px;margin-top:12px;text-align:center}
+.lightbox-close{
+  position:absolute;top:20px;right:24px;
+  background:none;border:none;color:var(--text3);font-size:28px;cursor:pointer;
+}
+.lightbox-close:hover{color:var(--text)}
 
-/* BADGES */
-.badge { display:inline-block; font-family:'Rajdhani',sans-serif; font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; padding:2px 8px; border-radius:2px; }
-.badge-red  { background:var(--red-dim); border:1px solid var(--border-red); color:var(--red-bright); }
-.badge-gold { background:var(--gold-dim); border:1px solid rgba(201,147,58,.3); color:var(--gold); }
-.badge-gray { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); color:var(--text-md); }
-.badge-green { background:rgba(30,120,60,.12); border:1px solid rgba(30,120,60,.3); color:#4caf7a; }
+/* ---- ADMIN PANEL ---- */
+.admin-bar{
+  background:var(--bg2);border-bottom:1px solid var(--red);
+  padding:8px 24px;display:none;align-items:center;gap:6px;flex-wrap:wrap;
+}
+.admin-bar.open{display:flex}
+.admin-bar-label{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--red);
+  margin-right:8px;
+}
+.admin-tab{
+  font-family:'Barlow Condensed',sans-serif;font-weight:600;
+  font-size:12px;letter-spacing:.8px;text-transform:uppercase;
+  background:transparent;border:1px solid var(--border2);color:var(--text3);
+  padding:4px 12px;border-radius:2px;cursor:pointer;transition:.15s;
+}
+.admin-tab:hover{color:var(--text);border-color:var(--text3)}
+.admin-tab.active{background:var(--red-dim);color:var(--red);border-color:rgba(232,39,26,.4)}
 
-/* HERO */
-.hero { background:var(--bg-card); border:1px solid var(--border-red); border-radius:6px; padding:3.5rem 2rem 3rem; margin-bottom:1.5rem; position:relative; overflow:hidden; text-align:center; }
-.hero::before { content:''; position:absolute; top:0; left:0; right:0; bottom:0; background:radial-gradient(ellipse 80% 100% at 50% 50%, rgba(180,10,10,0.13), transparent 70%); pointer-events:none; }
-.hero::after { content:'⚽'; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); font-size:280px; opacity:.04; pointer-events:none; }
-.hero-tag { font-family:'Rajdhani',sans-serif; font-size:13px; letter-spacing:4px; font-weight:600; color:var(--red); text-transform:uppercase; margin-bottom:12px; }
-.hero-title { font-family:'Rajdhani',sans-serif; font-size:100px; font-weight:700; letter-spacing:6px; text-transform:uppercase; color:var(--text-hi); line-height:1; margin-bottom:32px; }
-.hero-title span { color:var(--red); }
-.hero-stats { display:flex; gap:4rem; flex-wrap:wrap; justify-content:center; }
-.stat-num { font-family:'Rajdhani',sans-serif; font-size:56px; font-weight:700; color:var(--red-bright); line-height:1; }
-.stat-lbl { font-size:13px; color:var(--text-lo); letter-spacing:1.5px; text-transform:uppercase; margin-top:4px; }
+/* ---- MODAL ---- */
+.modal-bg{
+  display:none;position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,.75);align-items:center;justify-content:center;
+}
+.modal-bg.open{display:flex}
+.modal{
+  background:var(--bg2);border:1px solid var(--border2);border-radius:4px;
+  width:min(560px,95vw);max-height:90vh;overflow-y:auto;
+}
+.modal-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;border-bottom:1px solid var(--border);
+}
+.modal-hdr-title{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:18px;
+  letter-spacing:.3px;color:var(--text);
+}
+.modal-close{background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;line-height:1}
+.modal-close:hover{color:var(--text)}
+.modal-body{padding:20px}
+.form-row{margin-bottom:14px}
+.form-label{
+  display:block;font-size:11px;letter-spacing:1px;text-transform:uppercase;
+  color:var(--text3);margin-bottom:6px;font-weight:500;
+}
+.form-input,.form-select,.form-textarea{
+  width:100%;background:var(--bg3);border:1px solid var(--border2);
+  color:var(--text);padding:8px 12px;border-radius:3px;font-size:14px;
+  font-family:'Barlow',sans-serif;transition:.15s;
+}
+.form-input:focus,.form-select:focus,.form-textarea:focus{
+  outline:none;border-color:var(--red);
+}
+.form-textarea{min-height:80px;resize:vertical}
+.form-select option{background:var(--bg3)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
+.btn{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;
+  letter-spacing:1px;text-transform:uppercase;
+  padding:8px 20px;border-radius:3px;cursor:pointer;border:none;transition:.15s;
+}
+.btn-primary{background:var(--red);color:#fff}
+.btn-primary:hover{background:var(--red2)}
+.btn-secondary{background:var(--bg3);color:var(--text2);border:1px solid var(--border2)}
+.btn-secondary:hover{color:var(--text);border-color:var(--text3)}
+.btn-danger{background:rgba(232,39,26,.15);color:var(--red);border:1px solid rgba(232,39,26,.3)}
+.btn-danger:hover{background:var(--red);color:#fff}
+.btn-sm{padding:4px 10px;font-size:11px}
 
-/* QUICK GRID */
-.quick-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:1.5rem; }
-.quick-item { background:var(--bg-card); border:1px solid var(--border); border-radius:6px; padding:1.5rem 1rem; text-align:center; cursor:pointer; transition:border-color .2s, background .2s; }
-.quick-item:hover { border-color:var(--red-border); background:var(--bg-hover); }
-.quick-icon { font-size:34px; margin-bottom:10px; }
-.quick-lbl { font-family:'Rajdhani',sans-serif; font-size:15px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-md); }
+/* ---- ADMIN LIST ITEM ---- */
+.admin-item{
+  display:flex;align-items:center;gap:10px;
+  background:var(--bg2);border:1px solid var(--border);border-radius:3px;
+  padding:10px 14px;margin-bottom:8px;
+}
+.admin-item-text{flex:1;min-width:0}
+.admin-item-title{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.admin-item-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.admin-item-actions{display:flex;gap:6px;flex-shrink:0}
 
-/* CONVOCAZIONI */
-.conv-block { background:var(--bg-card); border:1px solid var(--border); border-radius:6px; overflow:hidden; margin-bottom:1.5rem; transition:border-color .2s; }
-.conv-block:hover { border-color:var(--border-red); }
-.conv-head { background:linear-gradient(90deg, rgba(140,10,10,0.5) 0%, rgba(20,10,10,0.3) 100%); border-bottom:1px solid var(--border-red); padding:1.1rem 1.75rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
-.conv-match-name { font-family:'Rajdhani',sans-serif; font-size:22px; font-weight:700; letter-spacing:.5px; color:var(--text-hi); }
-.conv-match-sub { font-size:14px; color:var(--text-md); margin-top:3px; }
-.players-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:8px; padding:1.25rem 1.75rem; }
-.player-chip { display:flex; align-items:center; gap:10px; padding:10px 12px; background:rgba(204,31,31,0.06); border:1px solid rgba(204,31,31,0.15); border-radius:4px; }
-.player-num { width:28px; height:28px; background:var(--red); border-radius:50%; font-family:'Rajdhani',sans-serif; font-size:13px; font-weight:700; color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.player-name { font-size:15px; font-weight:500; color:var(--text-hi); line-height:1.2; }
-.conv-footer { padding:.9rem 1.75rem; background:rgba(0,0,0,.2); border-top:1px solid var(--border); font-size:14px; color:var(--text-md); display:flex; gap:2rem; flex-wrap:wrap; }
+/* ---- EMPTY STATE ---- */
+.empty{
+  text-align:center;padding:40px 20px;color:var(--text3);
+}
+.empty-icon{font-size:36px;margin-bottom:10px;opacity:.4}
+.empty-text{font-size:13px;letter-spacing:.3px}
 
-/* CALENDARIO */
-.cal-list { display:grid; gap:10px; }
-.cal-row { background:var(--bg-card); border:1px solid var(--border); border-radius:6px; display:flex; overflow:hidden; transition:border-color .2s; }
-.cal-row:hover { border-color:var(--border-red); }
-.cal-date-box { min-width:84px; background:rgba(204,31,31,0.15); border-right:1px solid var(--border-red); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:16px 10px; }
-.cal-row.torneo .cal-date-box { background:rgba(201,147,58,0.12); border-right-color:rgba(201,147,58,0.3); }
-.cal-row.amichevole .cal-date-box { background:rgba(255,255,255,0.04); border-right-color:var(--border); }
-.cal-day { font-family:'Rajdhani',sans-serif; font-size:40px; font-weight:700; line-height:1; color:var(--red-bright); }
-.cal-row.torneo .cal-day { color:var(--gold); }
-.cal-row.amichevole .cal-day { color:var(--text-md); }
-.cal-mon { font-size:12px; text-transform:uppercase; letter-spacing:1px; color:var(--text-lo); margin-top:2px; }
-.cal-body { padding:16px 22px; flex:1; }
-.cal-title { font-family:'Rajdhani',sans-serif; font-size:19px; font-weight:600; color:var(--text-hi); margin-bottom:6px; }
-.cal-meta { font-size:14px; color:var(--text-md); display:flex; gap:16px; flex-wrap:wrap; }
-.cal-result { padding:16px 20px; display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:90px; border-left:1px solid var(--border); }
-.res-score { font-family:'Rajdhani',sans-serif; font-size:28px; font-weight:700; color:var(--red-bright); line-height:1; }
-.res-lbl { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-lo); margin-top:4px; }
-.res-lbl.win { color:#4caf7a; }
-.res-lbl.draw { color:var(--gold); }
-.res-lbl.loss { color:var(--red); }
+/* ---- ADD FAB ---- */
+.add-btn{
+  display:flex;align-items:center;gap:8px;
+  background:var(--red);color:#fff;
+  border:none;border-radius:3px;cursor:pointer;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:12px;letter-spacing:1px;text-transform:uppercase;
+  padding:8px 16px;transition:.15s;margin-bottom:16px;
+}
+.add-btn:hover{background:var(--red2)}
 
-/* GALLERIA */
-.album-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; margin-bottom:1.5rem; }
-.album-card { background:var(--bg-card); border:1px solid var(--border); border-radius:6px; overflow:hidden; cursor:pointer; transition:border-color .2s, transform .15s; }
-.album-card:hover { border-color:var(--border-red); transform:translateY(-3px); }
-.album-thumb { height:150px; position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden; background:#111; }
-.album-empty-thumb { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:44px; opacity:.3; }
-.album-count-badge { position:absolute; bottom:9px; right:9px; background:rgba(0,0,0,.6); border:1px solid rgba(255,255,255,.1); color:#fff; font-size:12px; padding:3px 9px; border-radius:3px; letter-spacing:.5px; }
-.album-info { padding:12px 16px; border-top:1px solid var(--border); }
-.album-title { font-family:'Rajdhani',sans-serif; font-size:17px; font-weight:600; color:var(--text-hi); margin-bottom:3px; }
-.album-date { font-size:13px; color:var(--text-lo); }
-.photo-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:8px; }
-.photo-item { border-radius:3px; overflow:hidden; aspect-ratio:4/3; background:var(--bg-panel); border:1px solid var(--border); transition:border-color .15s; }
-.photo-item:hover { border-color:var(--border-red); }
-.photo-item img { width:100%; height:100%; object-fit:cover; display:block; }
-.back-btn { display:inline-flex; align-items:center; gap:6px; padding:7px 14px; background:var(--bg-card); border:1px solid var(--border-red); border-radius:3px; font-family:'Rajdhani',sans-serif; font-size:13px; font-weight:600; letter-spacing:1px; text-transform:uppercase; cursor:pointer; color:var(--red); margin-bottom:1rem; transition:background .15s; }
-.back-btn:hover { background:var(--bg-hover); }
+/* ---- PLAYER TAGS in conv ---- */
+.tag-porta{background:rgba(232,160,32,.12);color:var(--amber)}
+.tag-dif{background:rgba(58,159,212,.12);color:var(--blue)}
+.tag-cen{background:rgba(39,194,122,.12);color:var(--green)}
+.tag-att{background:rgba(232,39,26,.12);color:var(--red)}
 
-footer { text-align:center; padding:2rem; font-size:13px; letter-spacing:1px; color:var(--text-lo); border-top:1px solid var(--border); }
+/* ---- FOOTER ---- */
+.footer{
+  text-align:center;padding:20px;
+  font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;
+  border-top:1px solid var(--border);margin-top:40px;
+}
 
-@media (max-width:700px) {
-  .tab { padding:0 12px; font-size:13px; }
-  .hero-title { font-size:54px; }
-  .quick-grid { grid-template-columns:repeat(2,1fr); }
-  .players-grid { grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); }
+/* ---- RESPONSIVE ---- */
+@media(max-width:600px){
+  .topbar-nav{display:none}
+  .quick-tiles{grid-template-columns:repeat(2,1fr)}
+  .hero-title{font-size:34px}
+  .form-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 
-<!-- SETTINGS OVERLAY -->
-<div class="settings-overlay" id="settingsOverlay">
-  <div class="settings-modal">
-    <div class="settings-title">⚙ Impostazioni</div>
-    <div class="settings-field">
-      <label class="settings-label">Nome Squadra</label>
-      <input class="settings-input" id="set-nome" type="text" placeholder="es. SS San Giovanni">
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo-mark">SS</div>
+  <div>
+    <div class="logo-text">SS SAN GIOVANNI</div>
+    <div class="logo-sub">Portale Genitori · 2026/27</div>
+  </div>
+  <nav class="topbar-nav">
+    <a class="active" onclick="showPage('home',this)">Home</a>
+    <a onclick="showPage('comunicazioni',this)">Comunicazioni</a>
+    <a onclick="showPage('convocazioni',this)">Convocazioni</a>
+    <a onclick="showPage('calendario',this)">Calendario</a>
+    <a onclick="showPage('galleria',this)">Galleria</a>
+  </nav>
+  <div class="topbar-right">
+    <button class="btn-admin" id="adminToggleBtn" onclick="toggleAdmin()">⚙ Impostazioni</button>
+  </div>
+</div>
+
+<!-- ADMIN BAR -->
+<div class="admin-bar" id="adminBar">
+  <span class="admin-bar-label">✦ Modalità Admin</span>
+  <button class="admin-tab active" onclick="showAdminTab('comunicazioni',this)">+ Comunicazione</button>
+  <button class="admin-tab" onclick="showAdminTab('convocazione',this)">+ Convocazione</button>
+  <button class="admin-tab" onclick="showAdminTab('evento',this)">+ Evento Calendario</button>
+  <button class="admin-tab" onclick="showAdminTab('foto',this)">+ Foto</button>
+  <button class="admin-tab" onclick="showAdminTab('statistiche',this)">Statistiche Squadra</button>
+</div>
+
+<!-- ===== PAGE: HOME ===== -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-sub">Stagione 2026/27 · SS San Giovanni · Primi Calci</div>
+    <div class="hero-title">FORZA <span>RAGAZZI</span></div>
+    <div class="hero-stats">
+      <div class="stat-item"><div class="stat-num" id="s-v">0</div><div class="stat-lbl">Vittorie</div></div>
+      <div class="stat-item"><div class="stat-num" id="s-p">0</div><div class="stat-lbl">Pareggi</div></div>
+      <div class="stat-item"><div class="stat-num" id="s-s">0</div><div class="stat-lbl">Sconfitte</div></div>
+      <div class="stat-item"><div class="stat-num" id="s-g">0</div><div class="stat-lbl">Gol</div></div>
     </div>
-    <div class="settings-field">
-      <label class="settings-label">Stagione</label>
-      <select class="settings-select" id="set-stagione">
-        <option>2024/25</option>
-        <option>2025/26</option>
-        <option selected>2026/27</option>
-        <option>2027/28</option>
-        <option>2028/29</option>
-        <option>2029/30</option>
-      </select>
+  </div>
+  <div class="quick-tiles">
+    <div class="tile" onclick="showPage('comunicazioni',null)">
+      <div class="tile-icon">📢</div>
+      <div class="tile-label">Comunicazioni</div>
     </div>
-    <div class="settings-field">
-      <label class="settings-label">Categoria</label>
-      <select class="settings-select" id="set-categoria">
-        <option>Primi Calci</option>
-        <option>Pulcini</option>
-        <option>Esordienti</option>
-        <option>Giovanissimi</option>
-        <option>Allievi</option>
-        <option>Juniores</option>
-        <option>Under 6</option>
-        <option>Under 7</option>
-        <option>Under 8</option>
-        <option>Under 9</option>
-        <option>Under 10</option>
-        <option>Under 11</option>
-        <option>Under 12</option>
-        <option>Under 13</option>
-        <option>Under 14</option>
-        <option>Under 15</option>
-        <option>Under 16</option>
-        <option>Under 17</option>
-        <option>Under 18</option>
-        <option>Under 19</option>
-      </select>
+    <div class="tile" onclick="showPage('convocazioni',null)">
+      <div class="tile-icon">📋</div>
+      <div class="tile-label">Convocazioni</div>
     </div>
-    <div class="settings-actions">
-      <button class="btn-cancel" onclick="closeSettings()">Annulla</button>
-      <button class="btn-save" onclick="saveSettings()">Salva</button>
+    <div class="tile" onclick="showPage('calendario',null)">
+      <div class="tile-icon">📅</div>
+      <div class="tile-label">Calendario</div>
+    </div>
+    <div class="tile" onclick="showPage('galleria',null)">
+      <div class="tile-icon">📷</div>
+      <div class="tile-label">Galleria</div>
+    </div>
+  </div>
+  <div class="sec-hdr">Ultime Comunicazioni</div>
+  <div id="home-comms"></div>
+</div>
+
+<!-- ===== PAGE: COMUNICAZIONI ===== -->
+<div id="page-comunicazioni" class="page">
+  <div class="page-hdr">COMUNI<span>CAZIONI</span></div>
+  <div id="list-comunicazioni"></div>
+</div>
+
+<!-- ===== PAGE: CONVOCAZIONI ===== -->
+<div id="page-convocazioni" class="page">
+  <div class="page-hdr">CONVO<span>CAZIONI</span></div>
+  <div id="list-convocazioni"></div>
+</div>
+
+<!-- ===== PAGE: CALENDARIO ===== -->
+<div id="page-calendario" class="page">
+  <div class="page-hdr">CALEN<span>DARIO</span></div>
+  <div id="list-calendario"></div>
+</div>
+
+<!-- ===== PAGE: GALLERIA ===== -->
+<div id="page-galleria" class="page">
+  <div class="page-hdr">GAL<span>LERIA</span></div>
+  <div class="gallery-grid" id="list-galleria"></div>
+</div>
+
+<!-- ===== LIGHTBOX ===== -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lb-img" src="" alt="">
+  <div class="lightbox-cap" id="lb-cap"></div>
+</div>
+
+<!-- ===== MODAL: COMUNICAZIONE ===== -->
+<div class="modal-bg" id="modal-comunicazioni">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <span class="modal-hdr-title" id="mc-title">Nuova Comunicazione</span>
+      <button class="modal-close" onclick="closeModal('comunicazioni')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="mc-id">
+      <div class="form-row">
+        <label class="form-label">Titolo</label>
+        <input class="form-input" id="mc-titolo" placeholder="Es: Allenamento annullato venerdì">
+      </div>
+      <div class="form-row">
+        <label class="form-label">Testo</label>
+        <textarea class="form-textarea" id="mc-testo" placeholder="Scrivi il messaggio per i genitori..."></textarea>
+      </div>
+      <div class="form-grid">
+        <div class="form-row">
+          <label class="form-label">Tipo</label>
+          <select class="form-select" id="mc-tipo">
+            <option value="info">📢 Comunicazione</option>
+            <option value="avviso">⚠️ Avviso</option>
+            <option value="urgente">🔴 Urgente</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label class="form-label">Data</label>
+          <input class="form-input" type="date" id="mc-data">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="closeModal('comunicazioni')">Annulla</button>
+        <button class="btn btn-primary" onclick="saveComunicazione()">Salva</button>
+      </div>
     </div>
   </div>
 </div>
 
-<header>
-  <div class="header-inner">
-    <div class="logo-wrap">
-      <div class="logo-shield">⚽</div>
-      <div class="logo-text">
-        <span id="hdr-nome">SS San Giovanni</span>
-        <span class="logo-sub" id="hdr-sub">Portale Genitori · 2026/27</span>
+<!-- ===== MODAL: CONVOCAZIONE ===== -->
+<div class="modal-bg" id="modal-convocazione">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <span class="modal-hdr-title" id="mcv-title">Nuova Convocazione</span>
+      <button class="modal-close" onclick="closeModal('convocazione')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="mcv-id">
+      <div class="form-grid">
+        <div class="form-row">
+          <label class="form-label">Squadra Casa</label>
+          <input class="form-input" id="mcv-casa" placeholder="SS San Giovanni">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Squadra Ospite</label>
+          <input class="form-input" id="mcv-ospite" placeholder="Avversario">
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-row">
+          <label class="form-label">Data Partita</label>
+          <input class="form-input" type="date" id="mcv-data">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Orario Ritrovo</label>
+          <input class="form-input" type="time" id="mcv-orario">
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-row">
+          <label class="form-label">Campo / Luogo</label>
+          <input class="form-input" id="mcv-luogo" placeholder="Campo principale">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Divisa</label>
+          <input class="form-input" id="mcv-divisa" placeholder="Es: Divisa rossa">
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">Note (opzionale)</label>
+        <input class="form-input" id="mcv-note" placeholder="Es: Portare borraccia, scarpe da calcio">
+      </div>
+      <div class="sec-hdr" style="margin-top:20px">Giocatori Convocati</div>
+      <div id="mcv-players-list"></div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <input class="form-input" id="mcv-p-num" placeholder="N°" style="width:60px">
+        <input class="form-input" id="mcv-p-nome" placeholder="Nome Cognome" style="flex:1">
+        <select class="form-select" id="mcv-p-ruolo" style="width:130px">
+          <option>Portiere</option>
+          <option>Difensore</option>
+          <option>Centrocampista</option>
+          <option>Attaccante</option>
+          <option>Riserva</option>
+        </select>
+        <button class="btn btn-secondary" onclick="addPlayer()">+</button>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="closeModal('convocazione')">Annulla</button>
+        <button class="btn btn-primary" onclick="saveConvocazione()">Salva Convocazione</button>
       </div>
     </div>
-    <button class="settings-btn" onclick="openSettings()">⚙ Impostazioni</button>
   </div>
-</header>
+</div>
 
-<nav>
-  <div class="nav-inner">
-    <div class="tab active" onclick="showTab('home')" data-tab="home">◈ Home</div>
-    <div class="tab" onclick="showTab('comunicazioni')" data-tab="comunicazioni">◈ Comunicazioni</div>
-    <div class="tab" onclick="showTab('convocazioni')" data-tab="convocazioni">◈ Convocazioni</div>
-    <div class="tab" onclick="showTab('calendario')" data-tab="calendario">◈ Calendario</div>
-    <div class="tab" onclick="showTab('galleria')" data-tab="galleria">◈ Galleria</div>
-  </div>
-</nav>
-
-<main>
-
-<!-- HOME -->
-<section id="home" class="section active">
-  <div class="hero">
-    <div class="hero-tag" id="hero-tag">Stagione 2026/27 — SS San Giovanni · Primi Calci</div>
-    <div class="hero-title">Forza <span>Ragazzi</span></div>
-    <div class="hero-stats">
-      <div class="stat-item"><div class="stat-num">0</div><div class="stat-lbl">Vittorie</div></div>
-      <div class="stat-item"><div class="stat-num">0</div><div class="stat-lbl">Pareggi</div></div>
-      <div class="stat-item"><div class="stat-num">0</div><div class="stat-lbl">Sconfitte</div></div>
-      <div class="stat-item"><div class="stat-num">0</div><div class="stat-lbl">Gol</div></div>
+<!-- ===== MODAL: EVENTO ===== -->
+<div class="modal-bg" id="modal-evento">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <span class="modal-hdr-title" id="mev-title">Nuovo Evento</span>
+      <button class="modal-close" onclick="closeModal('evento')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="mev-id">
+      <div class="form-row">
+        <label class="form-label">Tipo Evento</label>
+        <select class="form-select" id="mev-tipo">
+          <option value="partita">⚽ Partita</option>
+          <option value="torneo">🏆 Torneo</option>
+          <option value="allenamento">🏃 Allenamento</option>
+          <option value="evento">🎉 Evento</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label class="form-label">Titolo</label>
+        <input class="form-input" id="mev-titolo" placeholder="Es: Partita vs ASD Virtus">
+      </div>
+      <div class="form-grid">
+        <div class="form-row">
+          <label class="form-label">Data</label>
+          <input class="form-input" type="date" id="mev-data">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Orario</label>
+          <input class="form-input" type="time" id="mev-orario">
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-row">
+          <label class="form-label">Luogo</label>
+          <input class="form-input" id="mev-luogo" placeholder="Campo, indirizzo">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Fine Orario (opz.)</label>
+          <input class="form-input" type="time" id="mev-fine">
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">Note</label>
+        <input class="form-input" id="mev-note" placeholder="Info aggiuntive...">
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="closeModal('evento')">Annulla</button>
+        <button class="btn btn-primary" onclick="saveEvento()">Salva Evento</button>
+      </div>
     </div>
   </div>
+</div>
 
-  <div class="quick-grid">
-    <div class="quick-item" onclick="showTab('comunicazioni')">
-      <div class="quick-icon">📢</div>
-      <div class="quick-lbl">Comunicazioni</div>
+<!-- ===== MODAL: FOTO ===== -->
+<div class="modal-bg" id="modal-foto">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <span class="modal-hdr-title">Aggiungi Foto</span>
+      <button class="modal-close" onclick="closeModal('foto')">✕</button>
     </div>
-    <div class="quick-item" onclick="showTab('convocazioni')">
-      <div class="quick-icon">📋</div>
-      <div class="quick-lbl">Convocazioni</div>
-    </div>
-    <div class="quick-item" onclick="showTab('calendario')">
-      <div class="quick-icon">📅</div>
-      <div class="quick-lbl">Calendario</div>
-    </div>
-    <div class="quick-item" onclick="showTab('galleria')">
-      <div class="quick-icon">📸</div>
-      <div class="quick-lbl">Galleria</div>
-    </div>
-  </div>
-
-  <div class="sec-title">Ultime comunicazioni</div>
-  <div class="empty-state">
-    <div class="empty-state-icon">📢</div>
-    <div class="empty-state-text">Nessuna comunicazione recente</div>
-  </div>
-</section>
-
-<!-- COMUNICAZIONI -->
-<section id="comunicazioni" class="section">
-  <div class="sec-title">Comunicazioni</div>
-  <div class="empty-state">
-    <div class="empty-state-icon">📢</div>
-    <div class="empty-state-text">Nessuna comunicazione</div>
-  </div>
-</section>
-
-<!-- CONVOCAZIONI -->
-<section id="convocazioni" class="section">
-  <div class="sec-title">Convocazioni</div>
-  <div class="empty-state">
-    <div class="empty-state-icon">📋</div>
-    <div class="empty-state-text">Nessuna convocazione</div>
-  </div>
-</section>
-
-<!-- CALENDARIO -->
-<section id="calendario" class="section">
-  <div class="sec-title">Calendario</div>
-  <div style="display:flex; gap:8px; margin-bottom:1rem; flex-wrap:wrap;">
-    <span class="badge badge-red">⚽ Campionato</span>
-    <span class="badge badge-gold">🏆 Torneo</span>
-    <span class="badge badge-gray">🤝 Amichevole</span>
-  </div>
-  <div class="empty-state">
-    <div class="empty-state-icon">📅</div>
-    <div class="empty-state-text">Nessuna partita in calendario</div>
-  </div>
-</section>
-
-<!-- GALLERIA -->
-<section id="galleria" class="section">
-  <div class="sec-title">Galleria Foto</div>
-  <div id="albums-view">
-    <div class="empty-state">
-      <div class="empty-state-icon">📸</div>
-      <div class="empty-state-text">Nessun album presente</div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label class="form-label">Seleziona immagine</label>
+        <input class="form-input" type="file" id="foto-file" accept="image/*" onchange="previewFoto(this)">
+      </div>
+      <div id="foto-preview" style="margin:10px 0;display:none">
+        <img id="foto-prev-img" style="max-width:100%;max-height:200px;border-radius:3px;object-fit:cover">
+      </div>
+      <div class="form-row">
+        <label class="form-label">Didascalia</label>
+        <input class="form-input" id="foto-cap" placeholder="Es: Vittoria contro Cittadella — 25 Mag">
+      </div>
+      <div class="form-row">
+        <label class="form-label">Album / Evento</label>
+        <input class="form-input" id="foto-album" placeholder="Es: Partita 25 Maggio">
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="closeModal('foto')">Annulla</button>
+        <button class="btn btn-primary" onclick="saveFoto()">Aggiungi</button>
+      </div>
     </div>
   </div>
-  <div id="photos-view" style="display:none">
-    <button class="back-btn" onclick="closeAlbum()">← Torna agli album</button>
-    <div id="album-title-ph" class="sec-title" style="font-size:11px"></div>
-    <div class="photo-grid" id="photo-grid-ph"></div>
+</div>
+
+<!-- ===== MODAL: STATISTICHE ===== -->
+<div class="modal-bg" id="modal-statistiche">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <span class="modal-hdr-title">Statistiche Squadra</span>
+      <button class="modal-close" onclick="closeModal('statistiche')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-row">
+          <label class="form-label">Vittorie</label>
+          <input class="form-input" type="number" id="st-v" min="0">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Pareggi</label>
+          <input class="form-input" type="number" id="st-p" min="0">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Sconfitte</label>
+          <input class="form-input" type="number" id="st-s" min="0">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Gol Segnati</label>
+          <input class="form-input" type="number" id="st-g" min="0">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="closeModal('statistiche')">Annulla</button>
+        <button class="btn btn-primary" onclick="saveStats()">Aggiorna</button>
+      </div>
+    </div>
   </div>
-</section>
+</div>
 
-</main>
-
-<footer>
-  <span id="ftr-nome">SS SAN GIOVANNI</span> · PORTALE GENITORI · STAGIONE <span id="ftr-stagione">2026/27</span>
-</footer>
+<div class="footer">SS San Giovanni · Portale Genitori · Stagione 2026/27</div>
 
 <script>
-// DEFAULTS
-var config = {
-  nome: 'SS San Giovanni',
-  stagione: '2026/27',
-  categoria: 'Primi Calci'
+// ============================================================
+// DATA STORE (localStorage)
+// ============================================================
+const STORE = {
+  get(k){try{return JSON.parse(localStorage.getItem('ssg_'+k)||'null')}catch{return null}},
+  set(k,v){localStorage.setItem('ssg_'+k,JSON.stringify(v))},
 };
 
-function applyConfig() {
-  document.getElementById('hdr-nome').textContent = config.nome;
-  document.getElementById('hdr-sub').textContent = 'Portale Genitori · ' + config.stagione;
-  document.getElementById('hero-tag').textContent = 'Stagione ' + config.stagione + ' — ' + config.nome + ' · ' + config.categoria;
-  document.getElementById('ftr-nome').textContent = config.nome.toUpperCase();
-  document.getElementById('ftr-stagione').textContent = config.stagione;
-  document.title = config.nome + ' — Portale Genitori';
-  // update badge in header if present
-  var badge = document.getElementById('hdr-badge');
-  if(badge) badge.textContent = config.categoria;
+function getData(k,def){return STORE.get(k)||def}
+function setData(k,v){STORE.set(k,v)}
+
+let comunicazioni = getData('comunicazioni',[]);
+let convocazioni  = getData('convocazioni',[]);
+let calendario    = getData('calendario',[]);
+let galleria      = getData('galleria',[]);
+let stats         = getData('stats',{v:0,p:0,s:0,g:0});
+
+let editingPlayers = [];
+let adminOpen = false;
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showPage(id, el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.topbar-nav a').forEach(a=>a.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+  renderPage(id);
 }
 
-function openSettings() {
-  document.getElementById('set-nome').value = config.nome;
-  document.getElementById('set-stagione').value = config.stagione;
-  document.getElementById('set-categoria').value = config.categoria;
-  document.getElementById('settingsOverlay').classList.add('open');
+function renderPage(id){
+  if(id==='home') renderHome();
+  if(id==='comunicazioni') renderComunicazioni();
+  if(id==='convocazioni') renderConvocazioni();
+  if(id==='calendario') renderCalendario();
+  if(id==='galleria') renderGalleria();
 }
 
-function closeSettings() {
-  document.getElementById('settingsOverlay').classList.remove('open');
+// ============================================================
+// ADMIN
+// ============================================================
+function toggleAdmin(){
+  adminOpen=!adminOpen;
+  document.getElementById('adminBar').classList.toggle('open',adminOpen);
+  document.getElementById('adminToggleBtn').classList.toggle('active',adminOpen);
 }
 
-function saveSettings() {
-  config.nome = document.getElementById('set-nome').value.trim() || config.nome;
-  config.stagione = document.getElementById('set-stagione').value;
-  config.categoria = document.getElementById('set-categoria').value;
-  applyConfig();
-  closeSettings();
+function showAdminTab(tab, btn){
+  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  if(tab==='comunicazioni') openModal('comunicazioni','new');
+  if(tab==='convocazione')  openModal('convocazione','new');
+  if(tab==='evento')        openModal('evento','new');
+  if(tab==='foto')          openModal('foto','new');
+  if(tab==='statistiche')   openStatsModal();
 }
 
-// close overlay clicking outside
-document.getElementById('settingsOverlay').addEventListener('click', function(e){
-  if(e.target === this) closeSettings();
-});
-
-function showTab(id) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelector('[data-tab="'+id+'"]').classList.add('active');
-  window.scrollTo(0,0);
+// ============================================================
+// MODALS
+// ============================================================
+function openModal(type, mode, id){
+  const bg = document.getElementById('modal-'+type);
+  bg.classList.add('open');
+  if(mode==='new'){
+    clearForm(type);
+    if(type==='convocazione'){
+      editingPlayers=[];
+      renderPlayersList();
+    }
+  }
+  if(mode==='edit' && id!==undefined){
+    fillForm(type,id);
+  }
 }
 
-function closeAlbum() {
-  document.getElementById('photos-view').style.display='none';
-  document.getElementById('albums-view').style.display='block';
+function closeModal(type){
+  document.getElementById('modal-'+type).classList.remove('open');
 }
 
-applyConfig();
+function clearForm(type){
+  if(type==='comunicazioni'){
+    document.getElementById('mc-id').value='';
+    document.getElementById('mc-titolo').value='';
+    document.getElementById('mc-testo').value='';
+    document.getElementById('mc-tipo').value='info';
+    document.getElementById('mc-data').value=today();
+    document.getElementById('mc-title').textContent='Nuova Comunicazione';
+  }
+  if(type==='convocazione'){
+    document.getElementById('mcv-id').value='';
+    document.getElementById('mcv-casa').value='SS San Giovanni';
+    document.getElementById('mcv-ospite').value='';
+    document.getElementById('mcv-data').value=today();
+    document.getElementById('mcv-orario').value='09:00';
+    document.getElementById('mcv-luogo').value='';
+    document.getElementById('mcv-divisa').value='';
+    document.getElementById('mcv-note').value='';
+    editingPlayers=[];
+    document.getElementById('mcv-title').textContent='Nuova Convocazione';
+    renderPlayersList();
+  }
+  if(type==='evento'){
+    document.getElementById('mev-id').value='';
+    document.getElementById('mev-tipo').value='partita';
+    document.getElementById('mev-titolo').value='';
+    document.getElementById('mev-data').value=today();
+    document.getElementById('mev-orario').value='';
+    document.getElementById('mev-luogo').value='';
+    document.getElementById('mev-fine').value='';
+    document.getElementById('mev-note').value='';
+    document.getElementById('mev-title').textContent='Nuovo Evento';
+  }
+}
+
+function fillForm(type,id){
+  if(type==='comunicazioni'){
+    const c=comunicazioni.find(x=>x.id===id);
+    if(!c) return;
+    document.getElementById('mc-id').value=c.id;
+    document.getElementById('mc-titolo').value=c.titolo;
+    document.getElementById('mc-testo').value=c.testo;
+    document.getElementById('mc-tipo').value=c.tipo;
+    document.getElementById('mc-data').value=c.data;
+    document.getElementById('mc-title').textContent='Modifica Comunicazione';
+  }
+  if(type==='convocazione'){
+    const c=convocazioni.find(x=>x.id===id);
+    if(!c) return;
+    document.getElementById('mcv-id').value=c.id;
+    document.getElementById('mcv-casa').value=c.casa;
+    document.getElementById('mcv-ospite').value=c.ospite;
+    document.getElementById('mcv-data').value=c.data;
+    document.getElementById('mcv-orario').value=c.orario;
+    document.getElementById('mcv-luogo').value=c.luogo;
+    document.getElementById('mcv-divisa').value=c.divisa;
+    document.getElementById('mcv-note').value=c.note||'';
+    editingPlayers=[...c.players];
+    document.getElementById('mcv-title').textContent='Modifica Convocazione';
+    renderPlayersList();
+  }
+  if(type==='evento'){
+    const e=calendario.find(x=>x.id===id);
+    if(!e) return;
+    document.getElementById('mev-id').value=e.id;
+    document.getElementById('mev-tipo').value=e.tipo;
+    document.getElementById('mev-titolo').value=e.titolo;
+    document.getElementById('mev-data').value=e.data;
+    document.getElementById('mev-orario').value=e.orario||'';
+    document.getElementById('mev-luogo').value=e.luogo||'';
+    document.getElementById('mev-fine').value=e.fine||'';
+    document.getElementById('mev-note').value=e.note||'';
+    document.getElementById('mev-title').textContent='Modifica Evento';
+  }
+}
+
+// ============================================================
+// SAVE / DELETE
+// ============================================================
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
+function today(){return new Date().toISOString().slice(0,10)}
+
+function saveComunicazione(){
+  const id=document.getElementById('mc-id').value||uid();
+  const obj={
+    id, titolo:v('mc-titolo'), testo:v('mc-testo'),
+    tipo:v('mc-tipo'), data:v('mc-data'),
+    ts: Date.now()
+  };
+  comunicazioni=upsert(comunicazioni,obj);
+  setData('comunicazioni',comunicazioni);
+  closeModal('comunicazioni');
+  renderComunicazioni(); renderHome();
+}
+
+function deleteComunicazione(id){
+  if(!confirm('Eliminare questa comunicazione?')) return;
+  comunicazioni=comunicazioni.filter(x=>x.id!==id);
+  setData('comunicazioni',comunicazioni);
+  renderComunicazioni(); renderHome();
+}
+
+function saveConvocazione(){
+  const id=document.getElementById('mcv-id').value||uid();
+  const obj={
+    id,
+    casa:v('mcv-casa'), ospite:v('mcv-ospite'),
+    data:v('mcv-data'), orario:v('mcv-orario'),
+    luogo:v('mcv-luogo'), divisa:v('mcv-divisa'),
+    note:v('mcv-note'), players:[...editingPlayers],
+    ts: Date.now()
+  };
+  convocazioni=upsert(convocazioni,obj);
+  setData('convocazioni',convocazioni);
+  closeModal('convocazione');
+  renderConvocazioni();
+}
+
+function deleteConvocazione(id){
+  if(!confirm('Eliminare questa convocazione?')) return;
+  convocazioni=convocazioni.filter(x=>x.id!==id);
+  setData('convocazioni',convocazioni);
+  renderConvocazioni();
+}
+
+function saveEvento(){
+  const id=document.getElementById('mev-id').value||uid();
+  const obj={
+    id,tipo:v('mev-tipo'),titolo:v('mev-titolo'),
+    data:v('mev-data'),orario:v('mev-orario'),
+    luogo:v('mev-luogo'),fine:v('mev-fine'),note:v('mev-note'),
+    ts:Date.now()
+  };
+  calendario=upsert(calendario,obj);
+  setData('calendario',calendario);
+  closeModal('evento');
+  renderCalendario();
+}
+
+function deleteEvento(id){
+  if(!confirm('Eliminare questo evento?')) return;
+  calendario=calendario.filter(x=>x.id!==id);
+  setData('calendario',calendario);
+  renderCalendario();
+}
+
+function saveFoto(){
+  const file=document.getElementById('foto-file').files[0];
+  const cap=v('foto-cap');
+  const album=v('foto-album');
+  if(!file){alert('Seleziona un\'immagine');return;}
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const obj={id:uid(),src:e.target.result,cap,album,ts:Date.now()};
+    galleria=[...galleria,obj];
+    setData('galleria',galleria);
+    closeModal('foto');
+    renderGalleria();
+  };
+  reader.readAsDataURL(file);
+}
+
+function deleteFoto(id){
+  if(!confirm('Rimuovere questa foto?')) return;
+  galleria=galleria.filter(x=>x.id!==id);
+  setData('galleria',galleria);
+  renderGalleria();
+}
+
+function openStatsModal(){
+  document.getElementById('st-v').value=stats.v;
+  document.getElementById('st-p').value=stats.p;
+  document.getElementById('st-s').value=stats.s;
+  document.getElementById('st-g').value=stats.g;
+  document.getElementById('modal-statistiche').classList.add('open');
+}
+
+function saveStats(){
+  stats={v:+v('st-v'),p:+v('st-p'),s:+v('st-s'),g:+v('st-g')};
+  setData('stats',stats);
+  closeModal('statistiche');
+  renderHome();
+}
+
+// ============================================================
+// PLAYERS
+// ============================================================
+function addPlayer(){
+  const num=v('mcv-p-num');
+  const nome=v('mcv-p-nome');
+  const ruolo=v('mcv-p-ruolo');
+  if(!nome) return;
+  editingPlayers.push({num,nome,ruolo});
+  document.getElementById('mcv-p-num').value='';
+  document.getElementById('mcv-p-nome').value='';
+  renderPlayersList();
+}
+
+function removePlayer(i){
+  editingPlayers.splice(i,1);
+  renderPlayersList();
+}
+
+function renderPlayersList(){
+  const c=document.getElementById('mcv-players-list');
+  if(!editingPlayers.length){c.innerHTML='<div class="empty" style="padding:12px"><div class="empty-text">Nessun giocatore aggiunto</div></div>';return;}
+  c.innerHTML=editingPlayers.map((p,i)=>`
+    <div class="admin-item">
+      <div class="p-num">${p.num||'?'}</div>
+      <div class="admin-item-text">
+        <div class="admin-item-title">${p.nome}</div>
+        <div class="admin-item-sub">${p.ruolo}</div>
+      </div>
+      <button class="btn btn-danger btn-sm" onclick="removePlayer(${i})">✕</button>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// RENDER PAGES
+// ============================================================
+function renderHome(){
+  document.getElementById('s-v').textContent=stats.v;
+  document.getElementById('s-p').textContent=stats.p;
+  document.getElementById('s-s').textContent=stats.s;
+  document.getElementById('s-g').textContent=stats.g;
+  const sorted=[...comunicazioni].sort((a,b)=>b.ts-a.ts).slice(0,3);
+  const c=document.getElementById('home-comms');
+  if(!sorted.length){c.innerHTML=emptyState('📢','Nessuna comunicazione recente');return;}
+  c.innerHTML=sorted.map(x=>commCard(x,false)).join('');
+}
+
+function renderComunicazioni(){
+  const sorted=[...comunicazioni].sort((a,b)=>b.ts-a.ts);
+  const c=document.getElementById('list-comunicazioni');
+  const editBtn=adminOpen?`<div id="comm-admin-add" style="margin-bottom:12px"></div>`:'';
+  if(!sorted.length){
+    c.innerHTML=(adminOpen?`<button class="add-btn" onclick="openModal('comunicazioni','new')">+ Aggiungi Comunicazione</button>`:'')
+      +emptyState('📢','Nessuna comunicazione ancora');return;
+  }
+  c.innerHTML=(adminOpen?`<button class="add-btn" onclick="openModal('comunicazioni','new')">+ Aggiungi Comunicazione</button>`:'')
+    +sorted.map(x=>commCard(x,adminOpen)).join('');
+}
+
+function commCard(x,edit){
+  const icons={info:'📢',avviso:'⚠️',urgente:'🔴'};
+  const tags={info:'tag-blue',avviso:'tag-amber',urgente:'tag-red'};
+  const tipoLabel={info:'Comunicazione',avviso:'Avviso',urgente:'Urgente'};
+  return `<div class="card">
+    <div class="card-body">
+      <div style="margin-bottom:8px">
+        <span class="card-tag ${tags[x.tipo]||'tag-blue'}">${icons[x.tipo]||'📢'} ${tipoLabel[x.tipo]||'Info'}</span>
+      </div>
+      <div class="card-title">${esc(x.titolo)}</div>
+      <div class="card-meta"><span>📅 ${fmtDate(x.data)}</span></div>
+      <div class="card-text">${esc(x.testo)}</div>
+      ${edit?`<div style="display:flex;gap:8px;margin-top:12px">
+        <button class="btn btn-secondary btn-sm" onclick="openModal('comunicazioni','edit','${x.id}')">✏ Modifica</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteComunicazione('${x.id}')">🗑 Elimina</button>
+      </div>`:''}
+    </div>
+  </div>`;
+}
+
+function renderConvocazioni(){
+  const sorted=[...convocazioni].sort((a,b)=>b.ts-a.ts);
+  const c=document.getElementById('list-convocazioni');
+  if(!sorted.length){
+    c.innerHTML=(adminOpen?`<button class="add-btn" onclick="openModal('convocazione','new')">+ Aggiungi Convocazione</button>`:'')
+      +emptyState('📋','Nessuna convocazione ancora');return;
+  }
+  c.innerHTML=(adminOpen?`<button class="add-btn" onclick="openModal('convocazione','new')">+ Aggiungi Convocazione</button>`:'')
+    +sorted.map(x=>convCard(x,adminOpen)).join('');
+}
+
+function convCard(x,edit){
+  const roleColor={Portiere:'tag-amber',Difensore:'tag-blue',Centrocampista:'tag-green',Attaccante:'tag-red',Riserva:''};
+  const players=x.players||[];
+  return `<div class="card">
+    <div class="conv-match-info">
+      <div class="conv-vs">${esc(x.casa)} <em>vs</em> ${esc(x.ospite)}</div>
+      <div class="conv-detail">📅 ${fmtDate(x.data)}</div>
+      ${x.orario?`<div class="conv-detail">🕐 Ritrovo ${x.orario}</div>`:''}
+      ${x.luogo?`<div class="conv-detail">📍 ${esc(x.luogo)}</div>`:''}
+      ${x.divisa?`<div class="conv-detail">👕 ${esc(x.divisa)}</div>`:''}
+    </div>
+    ${x.note?`<div style="padding:8px 20px;font-size:12px;color:var(--text3);border-bottom:1px solid var(--border)">📌 ${esc(x.note)}</div>`:''}
+    ${players.length?`<div class="players-grid">
+      ${players.map(p=>`<div class="player-row">
+        <div class="p-num">${esc(p.num||'?')}</div>
+        <div><div class="p-name">${esc(p.nome)}</div><div class="p-role">${esc(p.ruolo)}</div></div>
+      </div>`).join('')}
+    </div>`:'<div style="padding:12px 20px;font-size:12px;color:var(--text3)">Nessun giocatore inserito</div>'}
+    ${edit?`<div style="display:flex;gap:8px;padding:12px 20px;border-top:1px solid var(--border)">
+      <button class="btn btn-secondary btn-sm" onclick="openModal('convocazione','edit','${x.id}')">✏ Modifica</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteConvocazione('${x.id}')">🗑 Elimina</button>
+    </div>`:''}
+  </div>`;
+}
+
+function renderCalendario(){
+  const sorted=[...calendario].sort((a,b)=>(a.data||'').localeCompare(b.data||''));
+  const c=document.getElementById('list-calendario');
+  if(!sorted.length){
+    c.innerHTML=(adminOpen?`<button class="add-btn" onclick="openModal('evento','new')">+ Aggiungi Evento</button>`:'')
+      +emptyState('📅','Nessun evento in programma');return;
+  }
+  c.innerHTML=(adminOpen?`<button class="add-btn" onclick="openModal('evento','new')">+ Aggiungi Evento</button>`:'')
+    +sorted.map(x=>calCard(x,adminOpen)).join('');
+}
+
+function calCard(x,edit){
+  const tipoIcons={partita:'⚽',torneo:'🏆',allenamento:'🏃',evento:'🎉'};
+  const tipoLabels={partita:'Partita',torneo:'Torneo',allenamento:'Allenamento',evento:'Evento'};
+  const tagC={partita:'tag-red',torneo:'tag-amber',allenamento:'tag-blue',evento:'tag-green'};
+  let dd='--',mm='---';
+  if(x.data){const d=new Date(x.data+'T12:00:00');dd=d.getDate();mm=d.toLocaleString('it',{month:'short'}).toUpperCase();}
+  const oraStr=[x.orario,x.fine].filter(Boolean).join('–');
+  return `<div class="cal-event">
+    <div class="cal-date tipo-${x.tipo||'evento'}">
+      <div class="cal-dd">${dd}</div>
+      <div class="cal-mm">${mm}</div>
+    </div>
+    <div class="cal-info">
+      <span class="card-tag ${tagC[x.tipo]||'tag-blue'}">${tipoIcons[x.tipo]||'📅'} ${tipoLabels[x.tipo]||'Evento'}</span>
+      <div class="cal-info-title">${esc(x.titolo)}</div>
+      <div class="cal-info-meta">
+        ${oraStr?`<span>🕐 ${oraStr}</span>`:''}
+        ${x.luogo?`<span>📍 ${esc(x.luogo)}</span>`:''}
+        ${x.note?`<span>📌 ${esc(x.note)}</span>`:''}
+      </div>
+      ${edit?`<div style="display:flex;gap:8px;margin-top:10px">
+        <button class="btn btn-secondary btn-sm" onclick="openModal('evento','edit','${x.id}')">✏ Modifica</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteEvento('${x.id}')">🗑 Elimina</button>
+      </div>`:''}
+    </div>
+  </div>`;
+}
+
+function renderGalleria(){
+  const c=document.getElementById('list-galleria');
+  if(!galleria.length){
+    c.innerHTML=(adminOpen?`<button class="add-btn" onclick="openModal('foto','new')">+ Aggiungi Foto</button>`:'')
+      +emptyState('📷','Nessuna foto ancora');return;
+  }
+  const sorted=[...galleria].sort((a,b)=>b.ts-a.ts);
+  c.innerHTML=(adminOpen?`<div style="grid-column:1/-1"><button class="add-btn" onclick="openModal('foto','new')">+ Aggiungi Foto</button></div>`:'')
+    +sorted.map(x=>`
+      <div class="photo-card">
+        <div class="photo-thumb" onclick="openLightbox('${x.id}')">
+          <img src="${x.src}" alt="${esc(x.cap)}" loading="lazy">
+        </div>
+        <div class="photo-cap">
+          ${x.cap?esc(x.cap):''}
+          ${x.album?`<div class="photo-cap-sub">${esc(x.album)}</div>`:''}
+          ${adminOpen?`<button class="btn btn-danger btn-sm" style="margin-top:6px" onclick="deleteFoto('${x.id}')">🗑 Rimuovi</button>`:''}
+        </div>
+      </div>
+    `).join('');
+}
+
+// ============================================================
+// LIGHTBOX
+// ============================================================
+function openLightbox(id){
+  const f=galleria.find(x=>x.id===id);
+  if(!f) return;
+  document.getElementById('lb-img').src=f.src;
+  document.getElementById('lb-cap').textContent=f.cap+(f.album?' — '+f.album:'');
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('open')}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function v(id){return document.getElementById(id).value.trim()}
+function esc(s){if(!s)return '';const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function upsert(arr,obj){const i=arr.findIndex(x=>x.id===obj.id);if(i>=0){arr[i]=obj;return[...arr];}return[...arr,obj];}
+function emptyState(icon,txt){return`<div class="empty"><div class="empty-icon">${icon}</div><div class="empty-text">${txt}</div></div>`}
+function fmtDate(d){if(!d)return '';try{const dt=new Date(d+'T12:00:00');return dt.toLocaleDateString('it-IT',{day:'2-digit',month:'long',year:'numeric'})}catch{return d}}
+function previewFoto(input){
+  const f=input.files[0];
+  if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    document.getElementById('foto-prev-img').src=e.target.result;
+    document.getElementById('foto-preview').style.display='block';
+  };
+  r.readAsDataURL(f);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+renderHome();
 </script>
 </body>
 </html>
