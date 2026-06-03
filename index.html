@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SS San Giovanni – Portale Genitori</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -18,371 +17,106 @@
 html{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:15px}
 body{min-height:100vh}
 
-/* ---- TOPBAR ---- */
-.topbar{
-  display:flex;align-items:center;gap:14px;
-  padding:0 32px;height:58px;
-  background:var(--bg2);border-bottom:1px solid var(--border);
-  position:sticky;top:0;z-index:100;
-}
-.logo-mark{
-  width:32px;height:32px;border-radius:50%;
-  background:var(--red);display:flex;align-items:center;justify-content:center;
-  font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;color:#fff;
-  flex-shrink:0;
-}
+/* TOPBAR */
+.topbar{display:flex;align-items:center;gap:14px;padding:0 32px;height:58px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
 .logo-text{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;letter-spacing:.5px}
 .logo-sub{font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:1px}
 .topbar-nav{display:flex;gap:2px;margin-left:16px}
-.topbar-nav a{
-  font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:13px;
-  letter-spacing:1px;text-transform:uppercase;text-decoration:none;
-  color:var(--text2);padding:6px 14px;border-radius:3px;
-  transition:.15s;cursor:pointer;
-}
+.topbar-nav a{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:15px;letter-spacing:1px;text-transform:uppercase;text-decoration:none;color:var(--text2);padding:6px 18px;border-radius:3px;transition:.15s;cursor:pointer}
 .topbar-nav a:hover{color:var(--text)}
 .topbar-nav a.active{color:var(--red);border-bottom:2px solid var(--red)}
-.topbar-right{margin-left:auto;display:flex;gap:8px;align-items:center}
-.btn-admin{
-  font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:12px;
-  letter-spacing:.8px;text-transform:uppercase;
-  background:transparent;border:1px solid var(--border2);
-  color:var(--text3);padding:5px 12px;border-radius:3px;cursor:pointer;
-  transition:.15s;
-}
-.btn-admin:hover{color:var(--red);border-color:var(--red)}
-.btn-admin.active{color:var(--red);border-color:var(--red);background:var(--red-dim)}
+.topbar-right{margin-left:auto}
+.btn-stat{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:12px;letter-spacing:.8px;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--text3);padding:5px 12px;border-radius:3px;cursor:pointer;transition:.15s}
+.btn-stat:hover{color:var(--red);border-color:var(--red)}
 
-/* ---- PAGES ---- */
+/* PAGES */
 .page{display:none;padding:0 32px 40px;width:100%}
 .page.active{display:block}
 
-/* ---- HOME HERO ---- */
-.hero{
-  background:linear-gradient(135deg,#1a0505 0%,#0d0d0d 60%);
-  border:1px solid var(--border);border-radius:4px;
-  padding:40px 48px;margin:24px 0 20px;
-  position:relative;overflow:hidden;
-}
-.hero::before{
-  content:'';position:absolute;right:-20px;top:-20px;
-  width:220px;height:220px;border-radius:50%;
-  background:radial-gradient(circle,rgba(232,39,26,.18) 0%,transparent 70%);
-}
-.hero-sub{
-  font-family:'Barlow Condensed',sans-serif;font-weight:600;
-  font-size:11px;letter-spacing:2px;text-transform:uppercase;
-  color:var(--red);margin-bottom:8px;
-}
-.hero-title{
-  font-family:'Barlow Condensed',sans-serif;font-weight:800;
-  font-size:64px;letter-spacing:1px;line-height:1;margin-bottom:24px;
-}
+/* HERO */
+.hero{background:linear-gradient(135deg,#1a0505 0%,#0d0d0d 60%);border:1px solid var(--border);border-radius:4px;padding:40px 48px;margin:24px 0 20px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;right:-20px;top:-20px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(232,39,26,.18) 0%,transparent 70%)}
+.hero-sub{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:8px}
+.hero-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:64px;letter-spacing:1px;line-height:1;margin-bottom:24px}
 .hero-title span{color:var(--red)}
 .hero-stats{display:flex;gap:48px}
-.stat-item{}
-.stat-num{
-  font-family:'Barlow Condensed',sans-serif;font-weight:700;
-  font-size:52px;color:var(--red);line-height:1;
-}
+.stat-num{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:52px;color:var(--red);line-height:1}
 .stat-lbl{font-size:10px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
 
-/* ---- QUICK TILES ---- */
+/* TILES */
 .quick-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
-.tile{
-  background:var(--bg2);border:1px solid var(--border);border-radius:4px;
-  padding:16px;cursor:pointer;transition:.15s;text-align:center;
-}
+.tile{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:28px 16px;cursor:pointer;transition:.15s;text-align:center}
 .tile:hover{border-color:var(--red);background:var(--bg3)}
 .tile-icon{font-size:40px;margin-bottom:12px}
-.tile-label{
-  font-family:'Barlow Condensed',sans-serif;font-weight:600;
-  font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);
-}
+.tile-label{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2)}
 
-/* ---- SECTION HEADER ---- */
-.sec-hdr{
-  display:flex;align-items:center;gap:10px;
-  margin:24px 0 14px;
-  font-family:'Barlow Condensed',sans-serif;font-weight:700;
-  font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--red);
-}
-.sec-hdr::after{content:'';flex:1;height:1px;background:var(--border)}
-
-/* ---- PAGE HEADER ---- */
-.page-hdr{
-  padding:28px 0 20px;
-  font-family:'Barlow Condensed',sans-serif;font-weight:800;
-  font-size:36px;letter-spacing:1px;color:var(--text);
-}
+/* PAGE HEADER */
+.page-hdr{padding:32px 0 22px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:52px;letter-spacing:1px;color:var(--text)}
 .page-hdr span{color:var(--red)}
 
-/* ---- CARDS ---- */
-.card{
-  background:var(--bg2);border:1px solid var(--border);border-radius:4px;
-  margin-bottom:10px;
-}
+/* SECTION DIVIDER */
+.sec-hdr{display:flex;align-items:center;gap:10px;margin:28px 0 16px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;color:var(--red)}
+.sec-hdr::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ADD BUTTON */
+.add-btn{display:flex;align-items:center;gap:8px;background:var(--red);color:#fff;border:none;border-radius:3px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;padding:10px 20px;transition:.15s;margin-bottom:16px}
+.add-btn:hover{background:var(--red2)}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;margin-bottom:10px}
 .card-body{padding:20px 26px}
-.card-title{
-  font-family:'Barlow Condensed',sans-serif;font-weight:700;
-  font-size:16px;letter-spacing:.3px;color:var(--text);margin-bottom:4px;
-}
+.card-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:19px;letter-spacing:.3px;color:var(--text);margin-bottom:6px}
 .card-meta{font-size:12px;color:var(--text3);display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px}
-.card-meta span{display:flex;align-items:center;gap:4px}
 .card-text{font-size:15px;color:var(--text2);line-height:1.6}
-.card-tag{
-  display:inline-block;font-size:10px;font-weight:500;letter-spacing:.8px;
-  text-transform:uppercase;padding:2px 8px;border-radius:2px;margin-right:6px;
-}
+.card-tag{display:inline-block;font-size:10px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;padding:2px 8px;border-radius:2px;margin-right:6px}
 .tag-red{background:var(--red-dim);color:var(--red);border:1px solid rgba(232,39,26,.3)}
 .tag-amber{background:rgba(232,160,32,.12);color:var(--amber);border:1px solid rgba(232,160,32,.3)}
 .tag-blue{background:rgba(58,159,212,.12);color:var(--blue);border:1px solid rgba(58,159,212,.3)}
 .tag-green{background:rgba(39,194,122,.12);color:var(--green);border:1px solid rgba(39,194,122,.3)}
 
-/* ---- CONVOCATI ---- */
-.conv-match-info{
-  background:var(--bg3);border-bottom:1px solid var(--border);
-  padding:14px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
-}
-.conv-vs{
-  font-family:'Barlow Condensed',sans-serif;font-weight:700;
-  font-size:20px;flex:1;
-}
+/* CONVOCAZIONI */
+.conv-match-info{background:var(--bg3);border-bottom:1px solid var(--border);padding:18px 26px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.conv-vs{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:26px;flex:1}
 .conv-vs em{color:var(--red);font-style:normal}
 .conv-detail{font-size:12px;color:var(--text3);display:flex;align-items:center;gap:4px}
-.players-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-  gap:8px;padding:16px 20px;
-}
-.player-row{
-  display:flex;align-items:center;gap:10px;
-  background:var(--bg3);border:1px solid var(--border);border-radius:3px;
-  padding:8px 12px;
-}
-.p-num{
-  width:26px;height:26px;border-radius:50%;
-  background:var(--red);color:#fff;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;
-  flex-shrink:0;
-}
+.players-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;padding:20px 26px}
+.player-row{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:10px 14px}
+.p-num{width:32px;height:32px;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;flex-shrink:0}
 .p-name{font-size:14px;font-weight:500;color:var(--text)}
 .p-role{font-size:11px;color:var(--text3);margin-top:1px}
 
-/* ---- CALENDAR ---- */
-.cal-event{
-  display:flex;gap:0;background:var(--bg2);border:1px solid var(--border);
-  border-radius:4px;margin-bottom:8px;overflow:hidden;
-}
-.cal-date{
-  width:62px;flex-shrink:0;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:12px 8px;
-}
+/* CALENDAR */
+.cal-event{display:flex;background:var(--bg2);border:1px solid var(--border);border-radius:4px;margin-bottom:8px;overflow:hidden}
+.cal-date{width:76px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px}
 .cal-date.tipo-partita{background:var(--red-dim);border-right:2px solid var(--red)}
 .cal-date.tipo-torneo{background:rgba(232,160,32,.1);border-right:2px solid var(--amber)}
 .cal-date.tipo-allenamento{background:rgba(58,159,212,.08);border-right:2px solid var(--blue)}
 .cal-date.tipo-evento{background:rgba(39,194,122,.08);border-right:2px solid var(--green)}
-.cal-dd{
-  font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:28px;line-height:1;
-}
-.cal-date.tipo-partita .cal-dd{color:var(--red)}
-.cal-date.tipo-torneo .cal-dd{color:var(--amber)}
-.cal-date.tipo-allenamento .cal-dd{color:var(--blue)}
-.cal-date.tipo-evento .cal-dd{color:var(--green)}
-.cal-mm{
-  font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-top:2px;
-}
+.cal-dd{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:36px;line-height:1}
+.cal-date.tipo-partita .cal-dd,.cal-date.tipo-partita .cal-mm{color:var(--red)}
+.cal-date.tipo-torneo .cal-dd,.cal-date.tipo-torneo .cal-mm{color:var(--amber)}
+.cal-date.tipo-allenamento .cal-dd,.cal-date.tipo-allenamento .cal-mm{color:var(--blue)}
+.cal-date.tipo-evento .cal-dd,.cal-date.tipo-evento .cal-mm{color:var(--green)}
+.cal-mm{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-top:2px}
 .cal-info{padding:16px 20px;flex:1}
 .cal-info-title{font-size:16px;font-weight:500;color:var(--text);margin-bottom:6px}
 .cal-info-meta{font-size:13px;color:var(--text3);display:flex;gap:14px;flex-wrap:wrap}
 
-/* ---- GALLERY ---- */
-.gallery-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-  gap:10px;margin-top:4px;
-}
-.photo-card{
-  background:var(--bg2);border:1px solid var(--border);border-radius:4px;
-  overflow:hidden;cursor:pointer;transition:.2s;
-}
+/* GALLERY */
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-top:4px}
+.photo-card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer;transition:.2s}
 .photo-card:hover{border-color:var(--red);transform:translateY(-2px)}
-.photo-thumb{
-  width:100%;aspect-ratio:4/3;
-  background:var(--bg3);
-  display:flex;align-items:center;justify-content:center;
-  overflow:hidden;position:relative;
-}
+.photo-thumb{width:100%;aspect-ratio:4/3;background:var(--bg3);display:flex;align-items:center;justify-content:center;overflow:hidden}
 .photo-thumb img{width:100%;height:100%;object-fit:cover}
-.photo-thumb-placeholder{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:8px;color:var(--text3);
-}
-.photo-thumb-placeholder .ph-icon{font-size:32px}
-.photo-thumb-placeholder .ph-label{font-size:11px;letter-spacing:.5px}
-.photo-cap{
-  padding:10px 12px;
-  font-size:12px;color:var(--text2);font-weight:500;
-}
+.photo-cap{padding:10px 12px;font-size:12px;color:var(--text2);font-weight:500}
 .photo-cap-sub{font-size:11px;color:var(--text3);margin-top:2px}
 
-/* ---- LIGHTBOX ---- */
-.lightbox{
-  display:none;position:fixed;inset:0;z-index:1000;
-  background:rgba(0,0,0,.92);
-  align-items:center;justify-content:center;
-  flex-direction:column;
-}
-.lightbox.open{display:flex}
-.lightbox img{max-width:90vw;max-height:80vh;border-radius:3px;object-fit:contain}
-.lightbox-cap{color:var(--text2);font-size:14px;margin-top:12px;text-align:center}
-.lightbox-close{
-  position:absolute;top:20px;right:24px;
-  background:none;border:none;color:var(--text3);font-size:28px;cursor:pointer;
-}
-.lightbox-close:hover{color:var(--text)}
-
-/* ---- ADMIN PANEL ---- */
-.admin-bar{
-  background:var(--bg2);border-bottom:1px solid var(--red);
-  padding:8px 32px;display:none;align-items:center;gap:6px;flex-wrap:wrap;
-}
-.admin-bar.open{display:flex}
-.admin-bar-label{
-  font-family:'Barlow Condensed',sans-serif;font-weight:700;
-  font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--red);
-  margin-right:8px;
-}
-.admin-tab{
-  font-family:'Barlow Condensed',sans-serif;font-weight:600;
-  font-size:12px;letter-spacing:.8px;text-transform:uppercase;
-  background:transparent;border:1px solid var(--border2);color:var(--text3);
-  padding:4px 12px;border-radius:2px;cursor:pointer;transition:.15s;
-}
-.admin-tab:hover{color:var(--text);border-color:var(--text3)}
-.admin-tab.active{background:var(--red-dim);color:var(--red);border-color:rgba(232,39,26,.4)}
-
-/* ---- MODAL ---- */
-.modal-bg{
-  display:none;position:fixed;inset:0;z-index:500;
-  background:rgba(0,0,0,.75);align-items:center;justify-content:center;
-}
-.modal-bg.open{display:flex}
-.modal{
-  background:var(--bg2);border:1px solid var(--border2);border-radius:4px;
-  width:min(560px,95vw);max-height:90vh;overflow-y:auto;
-}
-.modal-hdr{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:16px 20px;border-bottom:1px solid var(--border);
-}
-.modal-hdr-title{
-  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:18px;
-  letter-spacing:.3px;color:var(--text);
-}
-.modal-close{background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;line-height:1}
-.modal-close:hover{color:var(--text)}
-.modal-body{padding:20px}
-.form-row{margin-bottom:14px}
-.form-label{
-  display:block;font-size:11px;letter-spacing:1px;text-transform:uppercase;
-  color:var(--text3);margin-bottom:6px;font-weight:500;
-}
-.form-input,.form-select,.form-textarea{
-  width:100%;background:var(--bg3);border:1px solid var(--border2);
-  color:var(--text);padding:8px 12px;border-radius:3px;font-size:14px;
-  font-family:'Barlow',sans-serif;transition:.15s;
-}
-.form-input:focus,.form-select:focus,.form-textarea:focus{
-  outline:none;border-color:var(--red);
-}
-.form-textarea{min-height:80px;resize:vertical}
-.form-select option{background:var(--bg3)}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.form-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
-.btn{
-  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;
-  letter-spacing:1px;text-transform:uppercase;
-  padding:8px 20px;border-radius:3px;cursor:pointer;border:none;transition:.15s;
-}
-.btn-primary{background:var(--red);color:#fff}
-.btn-primary:hover{background:var(--red2)}
-.btn-secondary{background:var(--bg3);color:var(--text2);border:1px solid var(--border2)}
-.btn-secondary:hover{color:var(--text);border-color:var(--text3)}
-.btn-danger{background:rgba(232,39,26,.15);color:var(--red);border:1px solid rgba(232,39,26,.3)}
-.btn-danger:hover{background:var(--red);color:#fff}
-.btn-sm{padding:4px 10px;font-size:11px}
-
-/* ---- ADMIN LIST ITEM ---- */
-.admin-item{
-  display:flex;align-items:center;gap:10px;
-  background:var(--bg2);border:1px solid var(--border);border-radius:3px;
-  padding:10px 14px;margin-bottom:8px;
-}
-.admin-item-text{flex:1;min-width:0}
-.admin-item-title{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.admin-item-sub{font-size:11px;color:var(--text3);margin-top:2px}
-.admin-item-actions{display:flex;gap:6px;flex-shrink:0}
-
-/* ---- EMPTY STATE ---- */
-.empty{
-  text-align:center;padding:40px 20px;color:var(--text3);
-}
-.empty-icon{font-size:36px;margin-bottom:10px;opacity:.4}
-.empty-text{font-size:13px;letter-spacing:.3px}
-
-/* ---- ADD FAB ---- */
-.add-btn{
-  display:flex;align-items:center;gap:8px;
-  background:var(--red);color:#fff;
-  border:none;border-radius:3px;cursor:pointer;
-  font-family:'Barlow Condensed',sans-serif;font-weight:700;
-  font-size:12px;letter-spacing:1px;text-transform:uppercase;
-  padding:8px 16px;transition:.15s;margin-bottom:16px;
-}
-.add-btn:hover{background:var(--red2)}
-
-/* ---- PLAYER TAGS in conv ---- */
-.tag-porta{background:rgba(232,160,32,.12);color:var(--amber)}
-.tag-dif{background:rgba(58,159,212,.12);color:var(--blue)}
-.tag-cen{background:rgba(39,194,122,.12);color:var(--green)}
-.tag-att{background:rgba(232,39,26,.12);color:var(--red)}
-
-/* ---- FOOTER ---- */
-.footer{
-  text-align:center;padding:20px;
-  font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;
-  border-top:1px solid var(--border);margin-top:40px;
-}
-
-/* ---- RESPONSIVE ---- */
-@media(max-width:600px){
-  .topbar-nav{display:none}
-  .quick-tiles{grid-template-columns:repeat(2,1fr)}
-  .hero-title{font-size:34px}
-  .form-grid{grid-template-columns:1fr}
-}
-
-/* ---- ROSA ---- */
-.rosa-ruolo-hdr{
-  font-family:'Barlow Condensed',sans-serif;font-weight:700;
-  font-size:11px;letter-spacing:2px;text-transform:uppercase;
-  color:var(--text3);padding:10px 0 6px;margin-top:8px;
-  border-bottom:1px solid var(--border);margin-bottom:8px;
-}
-.rosa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-bottom:18px}
-.rosa-card{
-  background:var(--bg2);border:1px solid var(--border);border-radius:4px;
-  padding:12px 14px;display:flex;align-items:center;gap:12px;
-  transition:.15s;
-}
+/* ROSA */
+.rosa-ruolo-hdr{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);padding:10px 0 6px;margin-top:8px;border-bottom:1px solid var(--border);margin-bottom:8px}
+.rosa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-bottom:16px}
+.rosa-card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:16px 18px;display:flex;align-items:center;gap:14px;transition:.15s}
 .rosa-card:hover{border-color:var(--border2)}
-.r-num{
-  width:34px;height:34px;border-radius:50%;
-  background:var(--red);color:#fff;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;
-}
+.r-num{width:42px;height:42px;border-radius:50%;color:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:19px}
 .r-num.porta{background:rgba(232,160,32,.9)}
 .r-num.dif{background:rgba(58,159,212,.9)}
 .r-num.cen{background:rgba(39,194,122,.9)}
@@ -392,22 +126,63 @@ body{min-height:100vh}
 .r-sub{font-size:11px;color:var(--text3);margin-top:2px}
 .r-actions{display:flex;gap:4px;flex-shrink:0}
 
-/* ---- CONV CHECKBOX GRID ---- */
-.conv-select-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-  gap:6px;padding:12px 0;
-}
-.conv-chk-item{
-  display:flex;align-items:center;gap:8px;
-  background:var(--bg3);border:1px solid var(--border);border-radius:3px;
-  padding:7px 10px;cursor:pointer;transition:.15s;
-}
+/* CONV CHECKBOX */
+.conv-select-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px;padding:12px 0}
+.conv-chk-item{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:7px 10px;cursor:pointer;transition:.15s}
 .conv-chk-item:hover{border-color:var(--border2)}
 .conv-chk-item.selected{background:var(--red-dim);border-color:rgba(232,39,26,.4)}
 .conv-chk-item input[type=checkbox]{accent-color:var(--red);width:14px;height:14px}
 .conv-chk-name{font-size:13px;color:var(--text)}
 .conv-chk-sub{font-size:11px;color:var(--text3)}
 
+/* LIGHTBOX */
+.lightbox{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.92);align-items:center;justify-content:center;flex-direction:column}
+.lightbox.open{display:flex}
+.lightbox img{max-width:90vw;max-height:80vh;border-radius:3px;object-fit:contain}
+.lightbox-cap{color:var(--text2);font-size:14px;margin-top:12px;text-align:center}
+.lightbox-close{position:absolute;top:20px;right:24px;background:none;border:none;color:var(--text3);font-size:28px;cursor:pointer}
+.lightbox-close:hover{color:var(--text)}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.75);align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:4px;width:min(560px,95vw);max-height:90vh;overflow-y:auto}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
+.modal-hdr-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:18px;color:var(--text)}
+.modal-close{background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;line-height:1}
+.modal-close:hover{color:var(--text)}
+.modal-body{padding:20px}
+.form-row{margin-bottom:14px}
+.form-label{display:block;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;font-weight:500}
+.form-input,.form-select,.form-textarea{width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:8px 12px;border-radius:3px;font-size:14px;font-family:'Barlow',sans-serif;transition:.15s}
+.form-input:focus,.form-select:focus,.form-textarea:focus{outline:none;border-color:var(--red)}
+.form-textarea{min-height:80px;resize:vertical}
+.form-select option{background:var(--bg3)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
+.btn{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;padding:8px 20px;border-radius:3px;cursor:pointer;border:none;transition:.15s}
+.btn-primary{background:var(--red);color:#fff}
+.btn-primary:hover{background:var(--red2)}
+.btn-secondary{background:var(--bg3);color:var(--text2);border:1px solid var(--border2)}
+.btn-secondary:hover{color:var(--text);border-color:var(--text3)}
+.btn-danger{background:rgba(232,39,26,.15);color:var(--red);border:1px solid rgba(232,39,26,.3)}
+.btn-danger:hover{background:var(--red);color:#fff}
+.btn-sm{padding:4px 10px;font-size:11px}
+
+/* EMPTY */
+.empty{text-align:center;padding:40px 20px;color:var(--text3)}
+.empty-icon{font-size:36px;margin-bottom:10px;opacity:.4}
+.empty-text{font-size:13px;letter-spacing:.3px}
+
+/* FOOTER */
+.footer{text-align:center;padding:20px;font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;border-top:1px solid var(--border);margin-top:40px}
+
+@media(max-width:600px){
+  .topbar-nav{display:none}
+  .quick-tiles{grid-template-columns:repeat(2,1fr)}
+  .hero-title{font-size:34px}
+  .form-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -428,87 +203,70 @@ body{min-height:100vh}
     <a onclick="showPage('rosa',this)">Rosa</a>
   </nav>
   <div class="topbar-right">
-    <button class="btn-admin" id="adminToggleBtn" onclick="openStatsModal()" title="Aggiorna statistiche squadra">⚙ Statistiche</button>
+    <button class="btn-stat" onclick="openModal('statistiche','new')">⚙ Statistiche</button>
   </div>
 </div>
 
-<!-- ADMIN BAR -->
-<div class="admin-bar" id="adminBar">
-  <span class="admin-bar-label">✦ Modalità Admin</span>
-  <button class="admin-tab active" onclick="showAdminTab('comunicazioni',this)">+ Comunicazione</button>
-  <button class="admin-tab" onclick="showAdminTab('convocazione',this)">+ Convocazione</button>
-  <button class="admin-tab" onclick="showAdminTab('evento',this)">+ Evento Calendario</button>
-  <button class="admin-tab" onclick="showAdminTab('foto',this)">+ Foto</button>
-  <button class="admin-tab" onclick="showAdminTab('statistiche',this)">Statistiche Squadra</button>
-  <button class="admin-tab" onclick="showAdminTab('rosa',this)">+ Giocatore</button>
-</div>
-
-<!-- ===== PAGE: HOME ===== -->
+<!-- HOME -->
 <div id="page-home" class="page active">
   <div class="hero">
     <div class="hero-sub">Stagione 2026/27 · SS San Giovanni · Primi Calci</div>
     <div class="hero-title">FORZA <span>RAGAZZI</span></div>
     <div class="hero-stats">
-      <div class="stat-item"><div class="stat-num" id="s-v">0</div><div class="stat-lbl">Vittorie</div></div>
-      <div class="stat-item"><div class="stat-num" id="s-p">0</div><div class="stat-lbl">Pareggi</div></div>
-      <div class="stat-item"><div class="stat-num" id="s-s">0</div><div class="stat-lbl">Sconfitte</div></div>
-      <div class="stat-item"><div class="stat-num" id="s-g">0</div><div class="stat-lbl">Gol</div></div>
+      <div><div class="stat-num" id="s-v">0</div><div class="stat-lbl">Vittorie</div></div>
+      <div><div class="stat-num" id="s-p">0</div><div class="stat-lbl">Pareggi</div></div>
+      <div><div class="stat-num" id="s-s">0</div><div class="stat-lbl">Sconfitte</div></div>
+      <div><div class="stat-num" id="s-g">0</div><div class="stat-lbl">Gol</div></div>
     </div>
   </div>
   <div class="quick-tiles">
-    <div class="tile" onclick="showPage('comunicazioni',null)">
-      <div class="tile-icon">📢</div>
-      <div class="tile-label">Comunicazioni</div>
-    </div>
-    <div class="tile" onclick="showPage('convocazioni',null)">
-      <div class="tile-icon">📋</div>
-      <div class="tile-label">Convocazioni</div>
-    </div>
-    <div class="tile" onclick="showPage('calendario',null)">
-      <div class="tile-icon">📅</div>
-      <div class="tile-label">Calendario</div>
-    </div>
-    <div class="tile" onclick="showPage('galleria',null)">
-      <div class="tile-icon">📷</div>
-      <div class="tile-label">Galleria</div>
-    </div>
+    <div class="tile" onclick="showPage('comunicazioni',null)"><div class="tile-icon">📢</div><div class="tile-label">Comunicazioni</div></div>
+    <div class="tile" onclick="showPage('convocazioni',null)"><div class="tile-icon">📋</div><div class="tile-label">Convocazioni</div></div>
+    <div class="tile" onclick="showPage('calendario',null)"><div class="tile-icon">📅</div><div class="tile-label">Calendario</div></div>
+    <div class="tile" onclick="showPage('galleria',null)"><div class="tile-icon">📷</div><div class="tile-label">Galleria</div></div>
   </div>
   <div class="sec-hdr">Ultime Comunicazioni</div>
   <div id="home-comms"></div>
 </div>
 
-<!-- ===== PAGE: COMUNICAZIONI ===== -->
+<!-- COMUNICAZIONI -->
 <div id="page-comunicazioni" class="page">
   <div class="page-hdr">COMUNI<span>CAZIONI</span></div>
   <div id="list-comunicazioni"></div>
 </div>
 
-<!-- ===== PAGE: CONVOCAZIONI ===== -->
+<!-- CONVOCAZIONI -->
 <div id="page-convocazioni" class="page">
   <div class="page-hdr">CONVO<span>CAZIONI</span></div>
   <div id="list-convocazioni"></div>
 </div>
 
-<!-- ===== PAGE: CALENDARIO ===== -->
+<!-- CALENDARIO -->
 <div id="page-calendario" class="page">
   <div class="page-hdr">CALEN<span>DARIO</span></div>
   <div id="list-calendario"></div>
 </div>
 
-<!-- ===== PAGE: GALLERIA ===== -->
+<!-- GALLERIA -->
 <div id="page-galleria" class="page">
   <div class="page-hdr">GAL<span>LERIA</span></div>
   <div class="gallery-grid" id="list-galleria"></div>
 </div>
 
-<!-- ===== LIGHTBOX ===== -->
+<!-- ROSA -->
+<div id="page-rosa" class="page">
+  <div class="page-hdr">ROSA <span>SQUADRA</span></div>
+  <div id="list-rosa"></div>
+</div>
+
+<!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-close">✕</button>
   <img id="lb-img" src="" alt="">
   <div class="lightbox-cap" id="lb-cap"></div>
 </div>
 
-<!-- ===== MODAL: COMUNICAZIONE ===== -->
+<!-- MODAL COMUNICAZIONE -->
 <div class="modal-bg" id="modal-comunicazioni">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-hdr">
@@ -517,27 +275,17 @@ body{min-height:100vh}
     </div>
     <div class="modal-body">
       <input type="hidden" id="mc-id">
-      <div class="form-row">
-        <label class="form-label">Titolo</label>
-        <input class="form-input" id="mc-titolo" placeholder="Es: Allenamento annullato venerdì">
-      </div>
-      <div class="form-row">
-        <label class="form-label">Testo</label>
-        <textarea class="form-textarea" id="mc-testo" placeholder="Scrivi il messaggio per i genitori..."></textarea>
-      </div>
+      <div class="form-row"><label class="form-label">Titolo</label><input class="form-input" id="mc-titolo" placeholder="Titolo comunicazione"></div>
+      <div class="form-row"><label class="form-label">Testo</label><textarea class="form-textarea" id="mc-testo" placeholder="Testo del messaggio..."></textarea></div>
       <div class="form-grid">
-        <div class="form-row">
-          <label class="form-label">Tipo</label>
+        <div class="form-row"><label class="form-label">Tipo</label>
           <select class="form-select" id="mc-tipo">
             <option value="info">📢 Comunicazione</option>
             <option value="avviso">⚠️ Avviso</option>
             <option value="urgente">🔴 Urgente</option>
           </select>
         </div>
-        <div class="form-row">
-          <label class="form-label">Data</label>
-          <input class="form-input" type="date" id="mc-data">
-        </div>
+        <div class="form-row"><label class="form-label">Data</label><input class="form-input" type="date" id="mc-data"></div>
       </div>
       <div class="form-actions">
         <button class="btn btn-secondary" onclick="closeModal('comunicazioni')">Annulla</button>
@@ -547,7 +295,7 @@ body{min-height:100vh}
   </div>
 </div>
 
-<!-- ===== MODAL: CONVOCAZIONE ===== -->
+<!-- MODAL CONVOCAZIONE -->
 <div class="modal-bg" id="modal-convocazione">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-hdr">
@@ -557,50 +305,29 @@ body{min-height:100vh}
     <div class="modal-body">
       <input type="hidden" id="mcv-id">
       <div class="form-grid">
-        <div class="form-row">
-          <label class="form-label">Squadra Casa</label>
-          <input class="form-input" id="mcv-casa" placeholder="SS San Giovanni">
-        </div>
-        <div class="form-row">
-          <label class="form-label">Squadra Ospite</label>
-          <input class="form-input" id="mcv-ospite" placeholder="Avversario">
-        </div>
+        <div class="form-row"><label class="form-label">Squadra Casa</label><input class="form-input" id="mcv-casa" placeholder="SS San Giovanni"></div>
+        <div class="form-row"><label class="form-label">Squadra Ospite</label><input class="form-input" id="mcv-ospite" placeholder="Avversario"></div>
       </div>
       <div class="form-grid">
-        <div class="form-row">
-          <label class="form-label">Data Partita</label>
-          <input class="form-input" type="date" id="mcv-data">
-        </div>
-        <div class="form-row">
-          <label class="form-label">Orario Ritrovo</label>
-          <input class="form-input" type="time" id="mcv-orario">
-        </div>
+        <div class="form-row"><label class="form-label">Data Partita</label><input class="form-input" type="date" id="mcv-data"></div>
+        <div class="form-row"><label class="form-label">Orario Ritrovo</label><input class="form-input" type="time" id="mcv-orario"></div>
       </div>
       <div class="form-grid">
-        <div class="form-row">
-          <label class="form-label">Campo / Luogo</label>
-          <input class="form-input" id="mcv-luogo" placeholder="Campo principale">
-        </div>
-        <div class="form-row">
-          <label class="form-label">Divisa</label>
-          <input class="form-input" id="mcv-divisa" placeholder="Es: Divisa rossa">
-        </div>
+        <div class="form-row"><label class="form-label">Campo / Luogo</label><input class="form-input" id="mcv-luogo" placeholder="Campo principale"></div>
+        <div class="form-row"><label class="form-label">Divisa</label><input class="form-input" id="mcv-divisa" placeholder="Es: Divisa rossa"></div>
       </div>
-      <div class="form-row">
-        <label class="form-label">Note (opzionale)</label>
-        <input class="form-input" id="mcv-note" placeholder="Es: Portare borraccia, scarpe da calcio">
-      </div>
+      <div class="form-row"><label class="form-label">Note</label><input class="form-input" id="mcv-note" placeholder="Note aggiuntive..."></div>
       <div class="sec-hdr" style="margin-top:20px">Seleziona Convocati</div>
       <div id="mcv-players-list"></div>
       <div class="form-actions">
         <button class="btn btn-secondary" onclick="closeModal('convocazione')">Annulla</button>
-        <button class="btn btn-primary" onclick="saveConvocazione()">Salva Convocazione</button>
+        <button class="btn btn-primary" onclick="saveConvocazione()">Salva</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ===== MODAL: EVENTO ===== -->
+<!-- MODAL EVENTO -->
 <div class="modal-bg" id="modal-evento">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-hdr">
@@ -609,8 +336,7 @@ body{min-height:100vh}
     </div>
     <div class="modal-body">
       <input type="hidden" id="mev-id">
-      <div class="form-row">
-        <label class="form-label">Tipo Evento</label>
+      <div class="form-row"><label class="form-label">Tipo</label>
         <select class="form-select" id="mev-tipo">
           <option value="partita">⚽ Partita</option>
           <option value="torneo">🏆 Torneo</option>
@@ -618,43 +344,25 @@ body{min-height:100vh}
           <option value="evento">🎉 Evento</option>
         </select>
       </div>
-      <div class="form-row">
-        <label class="form-label">Titolo</label>
-        <input class="form-input" id="mev-titolo" placeholder="Es: Partita vs ASD Virtus">
+      <div class="form-row"><label class="form-label">Titolo</label><input class="form-input" id="mev-titolo" placeholder="Titolo evento"></div>
+      <div class="form-grid">
+        <div class="form-row"><label class="form-label">Data</label><input class="form-input" type="date" id="mev-data"></div>
+        <div class="form-row"><label class="form-label">Orario</label><input class="form-input" type="time" id="mev-orario"></div>
       </div>
       <div class="form-grid">
-        <div class="form-row">
-          <label class="form-label">Data</label>
-          <input class="form-input" type="date" id="mev-data">
-        </div>
-        <div class="form-row">
-          <label class="form-label">Orario</label>
-          <input class="form-input" type="time" id="mev-orario">
-        </div>
+        <div class="form-row"><label class="form-label">Luogo</label><input class="form-input" id="mev-luogo" placeholder="Campo, indirizzo"></div>
+        <div class="form-row"><label class="form-label">Fine orario</label><input class="form-input" type="time" id="mev-fine"></div>
       </div>
-      <div class="form-grid">
-        <div class="form-row">
-          <label class="form-label">Luogo</label>
-          <input class="form-input" id="mev-luogo" placeholder="Campo, indirizzo">
-        </div>
-        <div class="form-row">
-          <label class="form-label">Fine Orario (opz.)</label>
-          <input class="form-input" type="time" id="mev-fine">
-        </div>
-      </div>
-      <div class="form-row">
-        <label class="form-label">Note</label>
-        <input class="form-input" id="mev-note" placeholder="Info aggiuntive...">
-      </div>
+      <div class="form-row"><label class="form-label">Note</label><input class="form-input" id="mev-note" placeholder="Info aggiuntive..."></div>
       <div class="form-actions">
         <button class="btn btn-secondary" onclick="closeModal('evento')">Annulla</button>
-        <button class="btn btn-primary" onclick="saveEvento()">Salva Evento</button>
+        <button class="btn btn-primary" onclick="saveEvento()">Salva</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ===== MODAL: FOTO ===== -->
+<!-- MODAL FOTO -->
 <div class="modal-bg" id="modal-foto">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-hdr">
@@ -662,21 +370,10 @@ body{min-height:100vh}
       <button class="modal-close" onclick="closeModal('foto')">✕</button>
     </div>
     <div class="modal-body">
-      <div class="form-row">
-        <label class="form-label">Seleziona immagine</label>
-        <input class="form-input" type="file" id="foto-file" accept="image/*" onchange="previewFoto(this)">
-      </div>
-      <div id="foto-preview" style="margin:10px 0;display:none">
-        <img id="foto-prev-img" style="max-width:100%;max-height:200px;border-radius:3px;object-fit:cover">
-      </div>
-      <div class="form-row">
-        <label class="form-label">Didascalia</label>
-        <input class="form-input" id="foto-cap" placeholder="Es: Vittoria contro Cittadella — 25 Mag">
-      </div>
-      <div class="form-row">
-        <label class="form-label">Album / Evento</label>
-        <input class="form-input" id="foto-album" placeholder="Es: Partita 25 Maggio">
-      </div>
+      <div class="form-row"><label class="form-label">Seleziona immagine</label><input class="form-input" type="file" id="foto-file" accept="image/*"></div>
+      <div id="foto-preview" style="margin:10px 0;display:none"><img id="foto-prev-img" style="max-width:100%;max-height:200px;border-radius:3px;object-fit:cover"></div>
+      <div class="form-row"><label class="form-label">Didascalia</label><input class="form-input" id="foto-cap" placeholder="Es: Vittoria contro Cittadella"></div>
+      <div class="form-row"><label class="form-label">Album / Evento</label><input class="form-input" id="foto-album" placeholder="Es: Partita 25 Maggio"></div>
       <div class="form-actions">
         <button class="btn btn-secondary" onclick="closeModal('foto')">Annulla</button>
         <button class="btn btn-primary" onclick="saveFoto()">Aggiungi</button>
@@ -685,7 +382,7 @@ body{min-height:100vh}
   </div>
 </div>
 
-<!-- ===== MODAL: STATISTICHE ===== -->
+<!-- MODAL STATISTICHE -->
 <div class="modal-bg" id="modal-statistiche">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-hdr">
@@ -694,22 +391,10 @@ body{min-height:100vh}
     </div>
     <div class="modal-body">
       <div class="form-grid">
-        <div class="form-row">
-          <label class="form-label">Vittorie</label>
-          <input class="form-input" type="number" id="st-v" min="0">
-        </div>
-        <div class="form-row">
-          <label class="form-label">Pareggi</label>
-          <input class="form-input" type="number" id="st-p" min="0">
-        </div>
-        <div class="form-row">
-          <label class="form-label">Sconfitte</label>
-          <input class="form-input" type="number" id="st-s" min="0">
-        </div>
-        <div class="form-row">
-          <label class="form-label">Gol Segnati</label>
-          <input class="form-input" type="number" id="st-g" min="0">
-        </div>
+        <div class="form-row"><label class="form-label">Vittorie</label><input class="form-input" type="number" id="st-v" min="0"></div>
+        <div class="form-row"><label class="form-label">Pareggi</label><input class="form-input" type="number" id="st-p" min="0"></div>
+        <div class="form-row"><label class="form-label">Sconfitte</label><input class="form-input" type="number" id="st-s" min="0"></div>
+        <div class="form-row"><label class="form-label">Gol Segnati</label><input class="form-input" type="number" id="st-g" min="0"></div>
       </div>
       <div class="form-actions">
         <button class="btn btn-secondary" onclick="closeModal('statistiche')">Annulla</button>
@@ -719,692 +404,7 @@ body{min-height:100vh}
   </div>
 </div>
 
-
-<!-- ===== PAGE: ROSA ===== -->
-<div id="page-rosa" class="page">
-  <div class="page-hdr">ROSA <span>SQUADRA</span></div>
-  <div id="list-rosa"></div>
-</div>
-
-<div class="footer">SS San Giovanni · Portale Genitori · Stagione 2026/27</div>
-
-<script>
-// ============================================================
-// DATA STORE (localStorage)
-// ============================================================
-const STORE = {
-  get(k){try{return JSON.parse(localStorage.getItem('ssg_'+k)||'null')}catch{return null}},
-  set(k,v){localStorage.setItem('ssg_'+k,JSON.stringify(v))},
-};
-
-function getData(k,def){return STORE.get(k)||def}
-function setData(k,v){STORE.set(k,v)}
-
-let comunicazioni = getData('comunicazioni',[]);
-let convocazioni  = getData('convocazioni',[]);
-let calendario    = getData('calendario',[]);
-let galleria      = getData('galleria',[]);
-let stats         = getData('stats',{v:0,p:0,s:0,g:0});
-
-let editingPlayers = [];
-let adminOpen = false;
-
-// ============================================================
-// NAVIGATION
-// ============================================================
-function showPage(id, el){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.topbar-nav a').forEach(a=>a.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  if(el) el.classList.add('active');
-  renderPage(id);
-}
-
-function renderPage(id){
-  if(id==='home') renderHome();
-  if(id==='comunicazioni') renderComunicazioni();
-  if(id==='convocazioni') renderConvocazioni();
-  if(id==='calendario') renderCalendario();
-  if(id==='galleria') renderGalleria();
-  if(id==='rosa') renderRosa();
-}
-
-// ============================================================
-// ADMIN
-// ============================================================
-function toggleAdmin(){
-  adminOpen=!adminOpen;
-  // adminBar hidden
-  // toggle hidden
-}
-
-function showAdminTab(tab, btn){
-  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-  if(tab==='comunicazioni') openModal('comunicazioni','new');
-  if(tab==='convocazione')  openModal('convocazione','new');
-  if(tab==='evento')        openModal('evento','new');
-  if(tab==='foto')          openModal('foto','new');
-  if(tab==='statistiche')   openStatsModal();
-}
-
-// ============================================================
-// MODALS
-// ============================================================
-function openModal_orig(type, mode, id){
-  const bg = document.getElementById('modal-'+type);
-  bg.classList.add('open');
-  if(mode==='new'){
-    clearForm(type);
-    if(type==='convocazione'){
-      editingPlayers=[];
-      renderPlayersList();
-    }
-  }
-  if(mode==='edit' && id!==undefined){
-    fillForm(type,id);
-  }
-}
-
-function closeModal(type){
-  document.getElementById('modal-'+type).classList.remove('open');
-}
-
-function clearForm(type){
-  if(type==='comunicazioni'){
-    document.getElementById('mc-id').value='';
-    document.getElementById('mc-titolo').value='';
-    document.getElementById('mc-testo').value='';
-    document.getElementById('mc-tipo').value='info';
-    document.getElementById('mc-data').value=today();
-    document.getElementById('mc-title').textContent='Nuova Comunicazione';
-  }
-  if(type==='convocazione'){
-    document.getElementById('mcv-id').value='';
-    document.getElementById('mcv-casa').value='SS San Giovanni';
-    document.getElementById('mcv-ospite').value='';
-    document.getElementById('mcv-data').value=today();
-    document.getElementById('mcv-orario').value='09:00';
-    document.getElementById('mcv-luogo').value='';
-    document.getElementById('mcv-divisa').value='';
-    document.getElementById('mcv-note').value='';
-    editingPlayers=[];
-    document.getElementById('mcv-title').textContent='Nuova Convocazione';
-    renderPlayersList();
-  }
-  if(type==='evento'){
-    document.getElementById('mev-id').value='';
-    document.getElementById('mev-tipo').value='partita';
-    document.getElementById('mev-titolo').value='';
-    document.getElementById('mev-data').value=today();
-    document.getElementById('mev-orario').value='';
-    document.getElementById('mev-luogo').value='';
-    document.getElementById('mev-fine').value='';
-    document.getElementById('mev-note').value='';
-    document.getElementById('mev-title').textContent='Nuovo Evento';
-  }
-}
-
-function fillForm(type,id){
-  if(type==='comunicazioni'){
-    const c=comunicazioni.find(x=>x.id===id);
-    if(!c) return;
-    document.getElementById('mc-id').value=c.id;
-    document.getElementById('mc-titolo').value=c.titolo;
-    document.getElementById('mc-testo').value=c.testo;
-    document.getElementById('mc-tipo').value=c.tipo;
-    document.getElementById('mc-data').value=c.data;
-    document.getElementById('mc-title').textContent='Modifica Comunicazione';
-  }
-  if(type==='convocazione'){
-    const c=convocazioni.find(x=>x.id===id);
-    if(!c) return;
-    document.getElementById('mcv-id').value=c.id;
-    document.getElementById('mcv-casa').value=c.casa;
-    document.getElementById('mcv-ospite').value=c.ospite;
-    document.getElementById('mcv-data').value=c.data;
-    document.getElementById('mcv-orario').value=c.orario;
-    document.getElementById('mcv-luogo').value=c.luogo;
-    document.getElementById('mcv-divisa').value=c.divisa;
-    document.getElementById('mcv-note').value=c.note||'';
-    editingPlayers=[...c.players];
-    document.getElementById('mcv-title').textContent='Modifica Convocazione';
-    renderPlayersList();
-  }
-  if(type==='evento'){
-    const e=calendario.find(x=>x.id===id);
-    if(!e) return;
-    document.getElementById('mev-id').value=e.id;
-    document.getElementById('mev-tipo').value=e.tipo;
-    document.getElementById('mev-titolo').value=e.titolo;
-    document.getElementById('mev-data').value=e.data;
-    document.getElementById('mev-orario').value=e.orario||'';
-    document.getElementById('mev-luogo').value=e.luogo||'';
-    document.getElementById('mev-fine').value=e.fine||'';
-    document.getElementById('mev-note').value=e.note||'';
-    document.getElementById('mev-title').textContent='Modifica Evento';
-  }
-}
-
-// ============================================================
-// SAVE / DELETE
-// ============================================================
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
-function today(){return new Date().toISOString().slice(0,10)}
-
-function saveComunicazione(){
-  const id=document.getElementById('mc-id').value||uid();
-  const obj={
-    id, titolo:v('mc-titolo'), testo:v('mc-testo'),
-    tipo:v('mc-tipo'), data:v('mc-data'),
-    ts: Date.now()
-  };
-  comunicazioni=upsert(comunicazioni,obj);
-  setData('comunicazioni',comunicazioni);
-  closeModal('comunicazioni');
-  renderComunicazioni(); renderHome();
-}
-
-function deleteComunicazione(id){
-  if(!confirm('Eliminare questa comunicazione?')) return;
-  comunicazioni=comunicazioni.filter(x=>x.id!==id);
-  setData('comunicazioni',comunicazioni);
-  renderComunicazioni(); renderHome();
-}
-
-function saveConvocazione(){
-  const id=document.getElementById('mcv-id').value||uid();
-  const obj={
-    id,
-    casa:v('mcv-casa'), ospite:v('mcv-ospite'),
-    data:v('mcv-data'), orario:v('mcv-orario'),
-    luogo:v('mcv-luogo'), divisa:v('mcv-divisa'),
-    note:v('mcv-note'), players:[...editingPlayers],
-    ts: Date.now()
-  };
-  convocazioni=upsert(convocazioni,obj);
-  setData('convocazioni',convocazioni);
-  closeModal('convocazione');
-  renderConvocazioni();
-}
-
-function deleteConvocazione(id){
-  if(!confirm('Eliminare questa convocazione?')) return;
-  convocazioni=convocazioni.filter(x=>x.id!==id);
-  setData('convocazioni',convocazioni);
-  renderConvocazioni();
-}
-
-function saveEvento(){
-  const id=document.getElementById('mev-id').value||uid();
-  const obj={
-    id,tipo:v('mev-tipo'),titolo:v('mev-titolo'),
-    data:v('mev-data'),orario:v('mev-orario'),
-    luogo:v('mev-luogo'),fine:v('mev-fine'),note:v('mev-note'),
-    ts:Date.now()
-  };
-  calendario=upsert(calendario,obj);
-  setData('calendario',calendario);
-  closeModal('evento');
-  renderCalendario();
-}
-
-function deleteEvento(id){
-  if(!confirm('Eliminare questo evento?')) return;
-  calendario=calendario.filter(x=>x.id!==id);
-  setData('calendario',calendario);
-  renderCalendario();
-}
-
-function saveFoto(){
-  const file=document.getElementById('foto-file').files[0];
-  const cap=v('foto-cap');
-  const album=v('foto-album');
-  if(!file){alert('Seleziona un\'immagine');return;}
-  const reader=new FileReader();
-  reader.onload=e=>{
-    const obj={id:uid(),src:e.target.result,cap,album,ts:Date.now()};
-    galleria=[...galleria,obj];
-    setData('galleria',galleria);
-    closeModal('foto');
-    renderGalleria();
-  };
-  reader.readAsDataURL(file);
-}
-
-function deleteFoto(id){
-  if(!confirm('Rimuovere questa foto?')) return;
-  galleria=galleria.filter(x=>x.id!==id);
-  setData('galleria',galleria);
-  renderGalleria();
-}
-
-function openStatsModal(){
-  document.getElementById('st-v').value=stats.v;
-  document.getElementById('st-p').value=stats.p;
-  document.getElementById('st-s').value=stats.s;
-  document.getElementById('st-g').value=stats.g;
-  document.getElementById('modal-statistiche').classList.add('open');
-}
-
-function saveStats(){
-  stats={v:+v('st-v'),p:+v('st-p'),s:+v('st-s'),g:+v('st-g')};
-  setData('stats',stats);
-  closeModal('statistiche');
-  renderHome();
-}
-
-// ============================================================
-// PLAYERS
-// ============================================================
-function addPlayer(){
-  const num=v('mcv-p-num');
-  const nome=v('mcv-p-nome');
-  const ruolo=v('mcv-p-ruolo');
-  if(!nome) return;
-  editingPlayers.push({num,nome,ruolo});
-  document.getElementById('mcv-p-num').value='';
-  document.getElementById('mcv-p-nome').value='';
-  renderPlayersList();
-}
-
-function removePlayer(i){
-  editingPlayers.splice(i,1);
-  renderPlayersList();
-}
-
-function renderPlayersList(){
-  const c=document.getElementById('mcv-players-list');
-  if(!editingPlayers.length){c.innerHTML='<div class="empty" style="padding:12px"><div class="empty-text">Nessun giocatore aggiunto</div></div>';return;}
-  c.innerHTML=editingPlayers.map((p,i)=>`
-    <div class="admin-item">
-      <div class="p-num">${p.num||'?'}</div>
-      <div class="admin-item-text">
-        <div class="admin-item-title">${p.nome}</div>
-        <div class="admin-item-sub">${p.ruolo}</div>
-      </div>
-      <button class="btn btn-danger btn-sm" onclick="removePlayer(${i})">✕</button>
-    </div>
-  `).join('');
-}
-
-// ============================================================
-// RENDER PAGES
-// ============================================================
-function renderHome(){
-  document.getElementById('s-v').textContent=stats.v;
-  document.getElementById('s-p').textContent=stats.p;
-  document.getElementById('s-s').textContent=stats.s;
-  document.getElementById('s-g').textContent=stats.g;
-  const sorted=[...comunicazioni].sort((a,b)=>b.ts-a.ts).slice(0,3);
-  const c=document.getElementById('home-comms');
-  if(!sorted.length){c.innerHTML=emptyState('📢','Nessuna comunicazione recente');return;}
-  c.innerHTML=sorted.map(x=>commCard(x,false)).join('');
-}
-
-function renderComunicazioni(){
-  const sorted=[...comunicazioni].sort((a,b)=>b.ts-a.ts);
-  const c=document.getElementById('list-comunicazioni');
-  const editBtn=adminOpen?`<div id="comm-admin-add" style="margin-bottom:12px"></div>`:'';
-  if(!sorted.length){
-    c.innerHTML=`<button class="add-btn" onclick="openModal('comunicazioni','new')">+ Aggiungi Comunicazione</button>`
-      +emptyState('📢','Nessuna comunicazione ancora');return;
-  }
-  c.innerHTML=`<button class="add-btn" onclick="openModal('comunicazioni','new')">+ Aggiungi Comunicazione</button>`
-    +sorted.map(x=>commCard(x,true)).join('');
-}
-
-function commCard(x,edit){
-  const icons={info:'📢',avviso:'⚠️',urgente:'🔴'};
-  const tags={info:'tag-blue',avviso:'tag-amber',urgente:'tag-red'};
-  const tipoLabel={info:'Comunicazione',avviso:'Avviso',urgente:'Urgente'};
-  return `<div class="card">
-    <div class="card-body">
-      <div style="margin-bottom:8px">
-        <span class="card-tag ${tags[x.tipo]||'tag-blue'}">${icons[x.tipo]||'📢'} ${tipoLabel[x.tipo]||'Info'}</span>
-      </div>
-      <div class="card-title">${esc(x.titolo)}</div>
-      <div class="card-meta"><span>📅 ${fmtDate(x.data)}</span></div>
-      <div class="card-text">${esc(x.testo)}</div>
-      ${edit?`<div style="display:flex;gap:8px;margin-top:12px">
-        <button class="btn btn-secondary btn-sm" onclick="openModal('comunicazioni','edit','${x.id}')">✏ Modifica</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteComunicazione('${x.id}')">🗑 Elimina</button>
-      </div>`:''}
-    </div>
-  </div>`;
-}
-
-function renderConvocazioni(){
-  const sorted=[...convocazioni].sort((a,b)=>b.ts-a.ts);
-  const c=document.getElementById('list-convocazioni');
-  if(!sorted.length){
-    c.innerHTML=`<button class="add-btn" onclick="openModal('convocazione','new')">+ Aggiungi Convocazione</button>`
-      +emptyState('📋','Nessuna convocazione ancora');return;
-  }
-  c.innerHTML=`<button class="add-btn" onclick="openModal('convocazione','new')">+ Aggiungi Convocazione</button>`
-    +sorted.map(x=>convCard(x,true)).join('');
-}
-
-function convCard(x,edit){
-  const roleColor={Portiere:'tag-amber',Difensore:'tag-blue',Centrocampista:'tag-green',Attaccante:'tag-red',Riserva:''};
-  const players=x.players||[];
-  return `<div class="card">
-    <div class="conv-match-info">
-      <div class="conv-vs">${esc(x.casa)} <em>vs</em> ${esc(x.ospite)}</div>
-      <div class="conv-detail">📅 ${fmtDate(x.data)}</div>
-      ${x.orario?`<div class="conv-detail">🕐 Ritrovo ${x.orario}</div>`:''}
-      ${x.luogo?`<div class="conv-detail">📍 ${esc(x.luogo)}</div>`:''}
-      ${x.divisa?`<div class="conv-detail">👕 ${esc(x.divisa)}</div>`:''}
-    </div>
-    ${x.note?`<div style="padding:8px 20px;font-size:12px;color:var(--text3);border-bottom:1px solid var(--border)">📌 ${esc(x.note)}</div>`:''}
-    ${players.length?`<div class="players-grid">
-      ${players.map(p=>`<div class="player-row">
-        <div class="p-num">${esc(p.num||'?')}</div>
-        <div><div class="p-name">${esc(p.nome)}</div><div class="p-role">${esc(p.ruolo)}</div></div>
-      </div>`).join('')}
-    </div>`:'<div style="padding:12px 20px;font-size:12px;color:var(--text3)">Nessun giocatore inserito</div>'}
-    ${edit?`<div style="display:flex;gap:8px;padding:12px 20px;border-top:1px solid var(--border)">
-      <button class="btn btn-secondary btn-sm" onclick="openModal('convocazione','edit','${x.id}')">✏ Modifica</button>
-      <button class="btn btn-danger btn-sm" onclick="deleteConvocazione('${x.id}')">🗑 Elimina</button>
-    </div>`:''}
-  </div>`;
-}
-
-function renderCalendario(){
-  const sorted=[...calendario].sort((a,b)=>(a.data||'').localeCompare(b.data||''));
-  const c=document.getElementById('list-calendario');
-  if(!sorted.length){
-    c.innerHTML=`<button class="add-btn" onclick="openModal('evento','new')">+ Aggiungi Evento</button>`
-      +emptyState('📅','Nessun evento in programma');return;
-  }
-  c.innerHTML=`<button class="add-btn" onclick="openModal('evento','new')">+ Aggiungi Evento</button>`
-    +sorted.map(x=>calCard(x,true)).join('');
-}
-
-function calCard(x,edit){
-  const tipoIcons={partita:'⚽',torneo:'🏆',allenamento:'🏃',evento:'🎉'};
-  const tipoLabels={partita:'Partita',torneo:'Torneo',allenamento:'Allenamento',evento:'Evento'};
-  const tagC={partita:'tag-red',torneo:'tag-amber',allenamento:'tag-blue',evento:'tag-green'};
-  let dd='--',mm='---';
-  if(x.data){const d=new Date(x.data+'T12:00:00');dd=d.getDate();mm=d.toLocaleString('it',{month:'short'}).toUpperCase();}
-  const oraStr=[x.orario,x.fine].filter(Boolean).join('–');
-  return `<div class="cal-event">
-    <div class="cal-date tipo-${x.tipo||'evento'}">
-      <div class="cal-dd">${dd}</div>
-      <div class="cal-mm">${mm}</div>
-    </div>
-    <div class="cal-info">
-      <span class="card-tag ${tagC[x.tipo]||'tag-blue'}">${tipoIcons[x.tipo]||'📅'} ${tipoLabels[x.tipo]||'Evento'}</span>
-      <div class="cal-info-title">${esc(x.titolo)}</div>
-      <div class="cal-info-meta">
-        ${oraStr?`<span>🕐 ${oraStr}</span>`:''}
-        ${x.luogo?`<span>📍 ${esc(x.luogo)}</span>`:''}
-        ${x.note?`<span>📌 ${esc(x.note)}</span>`:''}
-      </div>
-      ${edit?`<div style="display:flex;gap:8px;margin-top:10px">
-        <button class="btn btn-secondary btn-sm" onclick="openModal('evento','edit','${x.id}')">✏ Modifica</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteEvento('${x.id}')">🗑 Elimina</button>
-      </div>`:''}
-    </div>
-  </div>`;
-}
-
-function renderGalleria(){
-  const c=document.getElementById('list-galleria');
-  if(!galleria.length){
-    c.innerHTML=`<button class="add-btn" onclick="openModal('foto','new')">+ Aggiungi Foto</button>`
-      +emptyState('📷','Nessuna foto ancora');return;
-  }
-  const sorted=[...galleria].sort((a,b)=>b.ts-a.ts);
-  c.innerHTML=`<div style="grid-column:1/-1"><button class="add-btn" onclick="openModal('foto','new')">+ Aggiungi Foto</button></div>`
-    +sorted.map(x=>`
-      <div class="photo-card">
-        <div class="photo-thumb" onclick="openLightbox('${x.id}')">
-          <img src="${x.src}" alt="${esc(x.cap)}" loading="lazy">
-        </div>
-        <div class="photo-cap">
-          ${x.cap?esc(x.cap):''}
-          ${x.album?`<div class="photo-cap-sub">${esc(x.album)}</div>`:''}
-          <button class="btn btn-danger btn-sm" style="margin-top:6px" onclick="deleteFoto('${x.id}')">🗑 Rimuovi</button>
-        </div>
-      </div>
-    `).join('');
-}
-
-// ============================================================
-// LIGHTBOX
-// ============================================================
-function openLightbox(id){
-  const f=galleria.find(x=>x.id===id);
-  if(!f) return;
-  document.getElementById('lb-img').src=f.src;
-  document.getElementById('lb-cap').textContent=f.cap+(f.album?' — '+f.album:'');
-  document.getElementById('lightbox').classList.add('open');
-}
-function closeLightbox(){document.getElementById('lightbox').classList.remove('open')}
-
-// ============================================================
-// HELPERS
-// ============================================================
-function v(id){return document.getElementById(id).value.trim()}
-function esc(s){if(!s)return '';const d=document.createElement('div');d.textContent=s;return d.innerHTML}
-function upsert(arr,obj){const i=arr.findIndex(x=>x.id===obj.id);if(i>=0){arr[i]=obj;return[...arr];}return[...arr,obj];}
-function emptyState(icon,txt){return`<div class="empty"><div class="empty-icon">${icon}</div><div class="empty-text">${txt}</div></div>`}
-function fmtDate(d){if(!d)return '';try{const dt=new Date(d+'T12:00:00');return dt.toLocaleDateString('it-IT',{day:'2-digit',month:'long',year:'numeric'})}catch{return d}}
-function previewFoto(input){
-  const f=input.files[0];
-  if(!f)return;
-  const r=new FileReader();
-  r.onload=e=>{
-    document.getElementById('foto-prev-img').src=e.target.result;
-    document.getElementById('foto-preview').style.display='block';
-  };
-  r.readAsDataURL(f);
-}
-
-
-
-// ============================================================
-// ROSA GIOCATORI
-// ============================================================
-let rosa = getData('rosa', []);
-
-// rosa rendering handled in main renderPage
-
-function renderRosa() {
-  const c = document.getElementById('list-rosa');
-  const ruoli = ['Portiere','Difensore','Centrocampista','Attaccante'];
-  const colorClass = {Portiere:'porta',Difensore:'dif',Centrocampista:'cen',Attaccante:'att'};
-
-  let html = `<button class="add-btn" onclick="openModal('rosa','new')">+ Aggiungi Giocatore</button>`;
-
-  if (!rosa.length) {
-    c.innerHTML = html + emptyState('👥','Nessun giocatore nella rosa');
-    return;
-  }
-
-  ruoli.forEach(ruolo => {
-    const players = rosa.filter(p => p.ruolo === ruolo).sort((a,b)=>(+a.num||99)-(+b.num||99));
-    if (!players.length) return;
-    const ruoloLabel = {Portiere:'Portieri',Difensore:'Difensori',Centrocampista:'Centrocampisti',Attaccante:'Attaccanti'};
-    html += `<div class="rosa-ruolo-hdr">${ruoloLabel[ruolo]||ruolo} — ${players.length}</div>`;
-    html += `<div class="rosa-grid">`;
-    players.forEach(p => {
-      const fotoHtml = p.foto
-        ? `<img src="${p.foto}" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid var(--border2)">`
-        : `<div class="r-num ${colorClass[p.ruolo]||''}">${esc(p.num||'?')}</div>`;
-      html += `<div class="rosa-card">
-        ${fotoHtml}
-        <div class="r-info">
-          <div class="r-name">${esc(p.nome)} ${esc(p.cognome)}</div>
-          <div class="r-sub">${esc(p.ruolo)} ${p.num?'· #'+esc(p.num):''}</div>
-          ${p.tel?`<div class="r-sub" style="margin-top:3px">📞 ${esc(p.tel)}</div>`:''}
-        </div>
-        <div class="r-actions">
-          <button class="btn btn-secondary btn-sm" onclick="openModal('rosa','edit','${p.id}')">✏</button>
-          <button class="btn btn-danger btn-sm" onclick="deleteGiocatore('${p.id}')">🗑</button>
-        </div>
-      </div>`;
-    });
-    html += `</div>`;
-  });
-
-  c.innerHTML = html;
-}
-
-function saveGiocatore() {
-  const id = document.getElementById('mr-id').value || uid();
-  // keep existing foto if not changed
-  const existing = rosa.find(x=>x.id===id);
-  const fotoEl = document.getElementById('mr-foto-img');
-  const foto = (fotoEl && fotoEl.style.display!=='none' && fotoEl.src && fotoEl.src!==window.location.href) 
-               ? fotoEl.src 
-               : (existing ? existing.foto||'' : '');
-  const obj = {
-    id,
-    nome: v('mr-nome'), cognome: v('mr-cognome'),
-    num: v('mr-num'), ruolo: v('mr-ruolo'),
-    tel: v('mr-tel'),
-    foto: foto,
-    ts: Date.now()
-  };
-  rosa = upsert(rosa, obj);
-  setData('rosa', rosa);
-  closeModal('rosa');
-  renderRosa();
-}
-
-function previewRosaFoto(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const r = new FileReader();
-  r.onload = e => {
-    const img = document.getElementById('mr-foto-img');
-    const ph = document.getElementById('mr-foto-placeholder');
-    img.src = e.target.result;
-    img.style.display = 'block';
-    ph.style.display = 'none';
-  };
-  r.readAsDataURL(file);
-}
-
-function deleteGiocatore(id) {
-  if (!confirm('Rimuovere questo giocatore dalla rosa?')) return;
-  rosa = rosa.filter(x => x.id !== id);
-  setData('rosa', rosa);
-  renderRosa();
-}
-
-// showAdminTab override removed
-
-// ============================================================
-// CONVOCAZIONE: usa rosa con checkbox
-// ============================================================
-function openModal(type, mode, id) {
-  const bg = document.getElementById('modal-' + type);
-  if (!bg) return;
-  bg.classList.add('open');
-  if (mode === 'new') {
-    clearForm(type);
-    if (type === 'convocazione') {
-      editingPlayers = [];
-      renderConvSelection();
-    }
-    if (type === 'rosa') {
-      document.getElementById('mr-id').value='';
-      document.getElementById('mr-nome').value='';
-      document.getElementById('mr-cognome').value='';
-      document.getElementById('mr-num').value='';
-      document.getElementById('mr-ruolo').value='Portiere';
-      document.getElementById('mr-tel').value='';
-      document.getElementById('mr-title').textContent='Nuovo Giocatore';
-      document.getElementById('mr-foto-img').src='';
-      document.getElementById('mr-foto-img').style.display='none';
-      document.getElementById('mr-foto-placeholder').style.display='block';
-      document.getElementById('mr-foto-file').value='';
-    }
-  }
-  if (mode === 'edit' && id !== undefined) {
-    if (type === 'rosa') {
-      const p = rosa.find(x => x.id === id);
-      if (!p) return;
-      document.getElementById('mr-id').value = p.id;
-      document.getElementById('mr-nome').value = p.nome;
-      document.getElementById('mr-cognome').value = p.cognome;
-      document.getElementById('mr-num').value = p.num;
-      document.getElementById('mr-ruolo').value = p.ruolo;
-      document.getElementById('mr-tel').value = p.tel||'';
-      document.getElementById('mr-title').textContent = 'Modifica Giocatore';
-      document.getElementById('mr-foto-file').value='';
-      if (p.foto) {
-        document.getElementById('mr-foto-img').src = p.foto;
-        document.getElementById('mr-foto-img').style.display = 'block';
-        document.getElementById('mr-foto-placeholder').style.display = 'none';
-      } else {
-        document.getElementById('mr-foto-img').src = '';
-        document.getElementById('mr-foto-img').style.display = 'none';
-        document.getElementById('mr-foto-placeholder').style.display = 'block';
-      }
-    } else {
-      fillForm(type, id);
-      if (type === 'convocazione') renderConvSelection();
-    }
-  }
-}
-
-// Also fix showAdminTab to handle rosa add button correctly and re-render after toggleAdmin
-
-
-function renderConvSelection() {
-  const c = document.getElementById('mcv-players-list');
-  if (!rosa.length) {
-    c.innerHTML = `<div style="padding:10px 0;font-size:12px;color:var(--text3)">⚠ Nessun giocatore in rosa. Aggiungi prima i giocatori dalla sezione Rosa.</div>`;
-    return;
-  }
-  const selectedNames = editingPlayers.map(p => p.nome + p.cognome);
-  const ruoli = ['Portiere','Difensore','Centrocampista','Attaccante'];
-  let html = `<div class="conv-select-grid">`;
-  ruoli.forEach(ruolo => {
-    const players = rosa.filter(p => p.ruolo === ruolo).sort((a,b)=>(+a.num||99)-(+b.num||99));
-    players.forEach(p => {
-      const key = p.nome + p.cognome;
-      const sel = selectedNames.includes(key);
-      html += `<label class="conv-chk-item${sel?' selected':''}" onclick="toggleConvPlayer(this,'${p.id}')">
-        <input type="checkbox"${sel?' checked':''} onchange="">
-        <div>
-          <div class="conv-chk-name">${esc(p.num?p.num+'. ':'')}${esc(p.nome)} ${esc(p.cognome)}</div>
-          <div class="conv-chk-sub">${esc(p.ruolo)}</div>
-        </div>
-      </label>`;
-    });
-  });
-  html += `</div>`;
-  c.innerHTML = html;
-}
-
-function toggleConvPlayer(el, playerId) {
-  const p = rosa.find(x => x.id === playerId);
-  if (!p) return;
-  const chk = el.querySelector('input');
-  const already = editingPlayers.findIndex(x => x.pId === playerId);
-  if (already >= 0) {
-    editingPlayers.splice(already, 1);
-    el.classList.remove('selected');
-    chk.checked = false;
-  } else {
-    editingPlayers.push({ pId: playerId, num: p.num, nome: p.nome + ' ' + p.cognome, ruolo: p.ruolo });
-    el.classList.add('selected');
-    chk.checked = true;
-  }
-}
-
-// ============================================================
-// INIT
-// ============================================================
-renderHome();
-</script>
-
-<!-- ===== MODAL: GIOCATORE ===== -->
+<!-- MODAL GIOCATORE -->
 <div class="modal-bg" id="modal-rosa">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-hdr">
@@ -1413,10 +413,9 @@ renderHome();
     </div>
     <div class="modal-body">
       <input type="hidden" id="mr-id">
-      <!-- FOTO -->
       <div class="form-row" style="display:flex;align-items:center;gap:18px;margin-bottom:18px">
-        <div id="mr-foto-preview" style="width:72px;height:72px;border-radius:50%;background:var(--bg3);border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;">
-          <span id="mr-foto-placeholder" style="font-size:28px;color:var(--text3)">👤</span>
+        <div id="mr-foto-preview" style="width:72px;height:72px;border-radius:50%;background:var(--bg3);border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden">
+          <span id="mr-foto-placeholder" style="font-size:28px">👤</span>
           <img id="mr-foto-img" style="width:100%;height:100%;object-fit:cover;display:none" src="" alt="">
         </div>
         <div style="flex:1">
@@ -1424,38 +423,19 @@ renderHome();
           <input class="form-input" type="file" id="mr-foto-file" accept="image/*" onchange="previewRosaFoto(this)">
         </div>
       </div>
-      <!-- NOME / COGNOME -->
       <div class="form-grid">
-        <div class="form-row">
-          <label class="form-label">Nome</label>
-          <input class="form-input" id="mr-nome" placeholder="Nome">
-        </div>
-        <div class="form-row">
-          <label class="form-label">Cognome</label>
-          <input class="form-input" id="mr-cognome" placeholder="Cognome">
-        </div>
+        <div class="form-row"><label class="form-label">Nome</label><input class="form-input" id="mr-nome" placeholder="Nome"></div>
+        <div class="form-row"><label class="form-label">Cognome</label><input class="form-input" id="mr-cognome" placeholder="Cognome"></div>
       </div>
-      <!-- RUOLO / NUMERO -->
       <div class="form-grid">
-        <div class="form-row">
-          <label class="form-label">Ruolo</label>
+        <div class="form-row"><label class="form-label">Ruolo</label>
           <select class="form-select" id="mr-ruolo">
-            <option>Portiere</option>
-            <option>Difensore</option>
-            <option>Centrocampista</option>
-            <option>Attaccante</option>
+            <option>Portiere</option><option>Difensore</option><option>Centrocampista</option><option>Attaccante</option>
           </select>
         </div>
-        <div class="form-row">
-          <label class="form-label">Numero maglia</label>
-          <input class="form-input" type="number" id="mr-num" placeholder="Es: 10" min="1" max="99">
-        </div>
+        <div class="form-row"><label class="form-label">Numero maglia</label><input class="form-input" type="number" id="mr-num" placeholder="Es: 10" min="1" max="99"></div>
       </div>
-      <!-- TEL GENITORE -->
-      <div class="form-row">
-        <label class="form-label">Telefono genitore</label>
-        <input class="form-input" type="tel" id="mr-tel" placeholder="Es: 333 1234567">
-      </div>
+      <div class="form-row"><label class="form-label">Telefono genitore</label><input class="form-input" type="tel" id="mr-tel" placeholder="Es: 333 1234567"></div>
       <div class="form-actions">
         <button class="btn btn-secondary" onclick="closeModal('rosa')">Annulla</button>
         <button class="btn btn-primary" onclick="saveGiocatore()">Salva</button>
@@ -1464,5 +444,407 @@ renderHome();
   </div>
 </div>
 
+<div class="footer">SS San Giovanni · Portale Genitori · Stagione 2026/27</div>
+
+<script>
+// ── STORAGE ──────────────────────────────────────────────────
+function dbGet(k){try{return JSON.parse(localStorage.getItem('ssg_'+k)||'null')}catch{return null}}
+function dbSet(k,v){localStorage.setItem('ssg_'+k,JSON.stringify(v))}
+
+var comunicazioni = dbGet('comunicazioni')||[];
+var convocazioni  = dbGet('convocazioni')||[];
+var calendario    = dbGet('calendario')||[];
+var galleria      = dbGet('galleria')||[];
+var rosa          = dbGet('rosa')||[];
+var stats         = dbGet('stats')||{v:0,p:0,s:0,g:0};
+var editingPlayers = [];
+
+// ── HELPERS ───────────────────────────────────────────────────
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
+function today(){return new Date().toISOString().slice(0,10)}
+function v(id){var el=document.getElementById(id);return el?el.value.trim():''}
+function esc(s){if(!s)return'';var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function upsert(arr,obj){var i=arr.findIndex(function(x){return x.id===obj.id});if(i>=0){arr[i]=obj;return arr.slice()}return arr.concat([obj])}
+function emptyState(icon,txt){return'<div class="empty"><div class="empty-icon">'+icon+'</div><div class="empty-text">'+txt+'</div></div>'}
+function fmtDate(d){if(!d)return'';try{var dt=new Date(d+'T12:00:00');return dt.toLocaleDateString('it-IT',{day:'2-digit',month:'long',year:'numeric'})}catch(e){return d}}
+
+// ── NAVIGATION ────────────────────────────────────────────────
+function showPage(id, el){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
+  document.querySelectorAll('.topbar-nav a').forEach(function(a){a.classList.remove('active')});
+  var pg = document.getElementById('page-'+id);
+  if(pg) pg.classList.add('active');
+  if(el) el.classList.add('active');
+  if(id==='home') renderHome();
+  else if(id==='comunicazioni') renderComunicazioni();
+  else if(id==='convocazioni') renderConvocazioni();
+  else if(id==='calendario') renderCalendario();
+  else if(id==='galleria') renderGalleria();
+  else if(id==='rosa') renderRosa();
+}
+
+// ── MODAL ─────────────────────────────────────────────────────
+function openModal(type, mode, data){
+  var bg = document.getElementById('modal-'+type);
+  if(!bg) return;
+  bg.classList.add('open');
+
+  if(type==='statistiche'){
+    document.getElementById('st-v').value=stats.v;
+    document.getElementById('st-p').value=stats.p;
+    document.getElementById('st-s').value=stats.s;
+    document.getElementById('st-g').value=stats.g;
+    return;
+  }
+
+  if(type==='comunicazioni'){
+    var c = data ? comunicazioni.find(function(x){return x.id===data}) : null;
+    document.getElementById('mc-id').value = c?c.id:'';
+    document.getElementById('mc-titolo').value = c?c.titolo:'';
+    document.getElementById('mc-testo').value = c?c.testo:'';
+    document.getElementById('mc-tipo').value = c?c.tipo:'info';
+    document.getElementById('mc-data').value = c?c.data:today();
+    document.getElementById('mc-title').textContent = c?'Modifica Comunicazione':'Nuova Comunicazione';
+    return;
+  }
+
+  if(type==='convocazione'){
+    var cv = data ? convocazioni.find(function(x){return x.id===data}) : null;
+    document.getElementById('mcv-id').value = cv?cv.id:'';
+    document.getElementById('mcv-casa').value = cv?cv.casa:'SS San Giovanni';
+    document.getElementById('mcv-ospite').value = cv?cv.ospite:'';
+    document.getElementById('mcv-data').value = cv?cv.data:today();
+    document.getElementById('mcv-orario').value = cv?cv.orario:'09:00';
+    document.getElementById('mcv-luogo').value = cv?cv.luogo:'';
+    document.getElementById('mcv-divisa').value = cv?cv.divisa:'';
+    document.getElementById('mcv-note').value = cv?cv.note||'':'';
+    editingPlayers = cv ? cv.players.slice() : [];
+    document.getElementById('mcv-title').textContent = cv?'Modifica Convocazione':'Nuova Convocazione';
+    renderConvSelection();
+    return;
+  }
+
+  if(type==='evento'){
+    var ev = data ? calendario.find(function(x){return x.id===data}) : null;
+    document.getElementById('mev-id').value = ev?ev.id:'';
+    document.getElementById('mev-tipo').value = ev?ev.tipo:'partita';
+    document.getElementById('mev-titolo').value = ev?ev.titolo:'';
+    document.getElementById('mev-data').value = ev?ev.data:today();
+    document.getElementById('mev-orario').value = ev?ev.orario||'':'';
+    document.getElementById('mev-luogo').value = ev?ev.luogo||'':'';
+    document.getElementById('mev-fine').value = ev?ev.fine||'':'';
+    document.getElementById('mev-note').value = ev?ev.note||'':'';
+    document.getElementById('mev-title').textContent = ev?'Modifica Evento':'Nuovo Evento';
+    return;
+  }
+
+  if(type==='foto'){
+    document.getElementById('foto-file').value='';
+    document.getElementById('foto-preview').style.display='none';
+    document.getElementById('foto-cap').value='';
+    document.getElementById('foto-album').value='';
+    return;
+  }
+
+  if(type==='rosa'){
+    var p = data ? rosa.find(function(x){return x.id===data}) : null;
+    document.getElementById('mr-id').value = p?p.id:'';
+    document.getElementById('mr-nome').value = p?p.nome:'';
+    document.getElementById('mr-cognome').value = p?p.cognome:'';
+    document.getElementById('mr-ruolo').value = p?p.ruolo:'Portiere';
+    document.getElementById('mr-num').value = p?p.num:'';
+    document.getElementById('mr-tel').value = p?p.tel||'':'';
+    document.getElementById('mr-foto-file').value='';
+    document.getElementById('mr-title').textContent = p?'Modifica Giocatore':'Nuovo Giocatore';
+    var img=document.getElementById('mr-foto-img');
+    var ph=document.getElementById('mr-foto-placeholder');
+    if(p && p.foto){img.src=p.foto;img.style.display='block';ph.style.display='none'}
+    else{img.src='';img.style.display='none';ph.style.display='block'}
+    return;
+  }
+}
+
+function closeModal(type){
+  var bg=document.getElementById('modal-'+type);
+  if(bg) bg.classList.remove('open');
+}
+
+// ── SAVE ──────────────────────────────────────────────────────
+function saveComunicazione(){
+  var id=v('mc-id')||uid();
+  var obj={id:id,titolo:v('mc-titolo'),testo:v('mc-testo'),tipo:v('mc-tipo'),data:v('mc-data'),ts:Date.now()};
+  comunicazioni=upsert(comunicazioni,obj);
+  dbSet('comunicazioni',comunicazioni);
+  closeModal('comunicazioni');
+  renderComunicazioni();
+  renderHome();
+}
+
+function deleteComunicazione(id){
+  if(!confirm('Eliminare questa comunicazione?'))return;
+  comunicazioni=comunicazioni.filter(function(x){return x.id!==id});
+  dbSet('comunicazioni',comunicazioni);
+  renderComunicazioni();renderHome();
+}
+
+function saveConvocazione(){
+  var id=v('mcv-id')||uid();
+  var obj={id:id,casa:v('mcv-casa'),ospite:v('mcv-ospite'),data:v('mcv-data'),orario:v('mcv-orario'),luogo:v('mcv-luogo'),divisa:v('mcv-divisa'),note:v('mcv-note'),players:editingPlayers.slice(),ts:Date.now()};
+  convocazioni=upsert(convocazioni,obj);
+  dbSet('convocazioni',convocazioni);
+  closeModal('convocazione');
+  renderConvocazioni();
+}
+
+function deleteConvocazione(id){
+  if(!confirm('Eliminare questa convocazione?'))return;
+  convocazioni=convocazioni.filter(function(x){return x.id!==id});
+  dbSet('convocazioni',convocazioni);
+  renderConvocazioni();
+}
+
+function saveEvento(){
+  var id=v('mev-id')||uid();
+  var obj={id:id,tipo:v('mev-tipo'),titolo:v('mev-titolo'),data:v('mev-data'),orario:v('mev-orario'),luogo:v('mev-luogo'),fine:v('mev-fine'),note:v('mev-note'),ts:Date.now()};
+  calendario=upsert(calendario,obj);
+  dbSet('calendario',calendario);
+  closeModal('evento');
+  renderCalendario();
+}
+
+function deleteEvento(id){
+  if(!confirm('Eliminare questo evento?'))return;
+  calendario=calendario.filter(function(x){return x.id!==id});
+  dbSet('calendario',calendario);
+  renderCalendario();
+}
+
+function saveFoto(){
+  var file=document.getElementById('foto-file').files[0];
+  if(!file){alert('Seleziona un\'immagine');return}
+  var r=new FileReader();
+  r.onload=function(e){
+    var obj={id:uid(),src:e.target.result,cap:v('foto-cap'),album:v('foto-album'),ts:Date.now()};
+    galleria=galleria.concat([obj]);
+    dbSet('galleria',galleria);
+    closeModal('foto');
+    renderGalleria();
+  };
+  r.readAsDataURL(file);
+}
+
+function deleteFoto(id){
+  if(!confirm('Rimuovere questa foto?'))return;
+  galleria=galleria.filter(function(x){return x.id!==id});
+  dbSet('galleria',galleria);
+  renderGalleria();
+}
+
+function saveStats(){
+  stats={v:+v('st-v'),p:+v('st-p'),s:+v('st-s'),g:+v('st-g')};
+  dbSet('stats',stats);
+  closeModal('statistiche');
+  renderHome();
+}
+
+function saveGiocatore(){
+  var id=v('mr-id')||uid();
+  var existing=rosa.find(function(x){return x.id===id});
+  var img=document.getElementById('mr-foto-img');
+  var foto=(img&&img.style.display!=='none'&&img.src&&img.src.indexOf('data:')===0)?img.src:(existing?existing.foto||'':'');
+  var obj={id:id,nome:v('mr-nome'),cognome:v('mr-cognome'),ruolo:v('mr-ruolo'),num:v('mr-num'),tel:v('mr-tel'),foto:foto,ts:Date.now()};
+  rosa=upsert(rosa,obj);
+  dbSet('rosa',rosa);
+  closeModal('rosa');
+  renderRosa();
+}
+
+function deleteGiocatore(id){
+  if(!confirm('Rimuovere questo giocatore dalla rosa?'))return;
+  rosa=rosa.filter(function(x){return x.id!==id});
+  dbSet('rosa',rosa);
+  renderRosa();
+}
+
+function previewRosaFoto(input){
+  var file=input.files[0];if(!file)return;
+  var r=new FileReader();
+  r.onload=function(e){
+    var img=document.getElementById('mr-foto-img');
+    var ph=document.getElementById('mr-foto-placeholder');
+    img.src=e.target.result;img.style.display='block';ph.style.display='none';
+  };
+  r.readAsDataURL(file);
+}
+
+// ── CONVOCAZIONE SELECTION ────────────────────────────────────
+function renderConvSelection(){
+  var c=document.getElementById('mcv-players-list');
+  if(!rosa.length){c.innerHTML='<div style="padding:10px 0;font-size:12px;color:var(--text3)">⚠ Aggiungi prima i giocatori nella sezione Rosa.</div>';return}
+  var selIds=editingPlayers.map(function(p){return p.pId});
+  var ruoli=['Portiere','Difensore','Centrocampista','Attaccante'];
+  var html='<div class="conv-select-grid">';
+  ruoli.forEach(function(ruolo){
+    var players=rosa.filter(function(p){return p.ruolo===ruolo}).sort(function(a,b){return(+a.num||99)-(+b.num||99)});
+    players.forEach(function(p){
+      var sel=selIds.indexOf(p.id)>=0;
+      html+='<label class="conv-chk-item'+(sel?' selected':'')+'" onclick="toggleConvPlayer(event,\''+p.id+'\')"><input type="checkbox"'+(sel?' checked':'')+' onclick="event.stopPropagation()"><div><div class="conv-chk-name">'+(p.num?p.num+'. ':'')+esc(p.nome)+' '+esc(p.cognome)+'</div><div class="conv-chk-sub">'+esc(p.ruolo)+'</div></div></label>';
+    });
+  });
+  html+='</div>';
+  c.innerHTML=html;
+}
+
+function toggleConvPlayer(e,playerId){
+  e.preventDefault();
+  var p=rosa.find(function(x){return x.id===playerId});
+  if(!p)return;
+  var idx=editingPlayers.findIndex(function(x){return x.pId===playerId});
+  if(idx>=0){editingPlayers.splice(idx,1)}
+  else{editingPlayers.push({pId:playerId,num:p.num,nome:p.nome+' '+p.cognome,ruolo:p.ruolo})}
+  renderConvSelection();
+}
+
+// ── LIGHTBOX ─────────────────────────────────────────────────
+function openLightbox(id){
+  var f=galleria.find(function(x){return x.id===id});
+  if(!f)return;
+  document.getElementById('lb-img').src=f.src;
+  document.getElementById('lb-cap').textContent=f.cap+(f.album?' — '+f.album:'');
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('open')}
+
+// ── RENDER FUNCTIONS ─────────────────────────────────────────
+function renderHome(){
+  document.getElementById('s-v').textContent=stats.v;
+  document.getElementById('s-p').textContent=stats.p;
+  document.getElementById('s-s').textContent=stats.s;
+  document.getElementById('s-g').textContent=stats.g;
+  var sorted=comunicazioni.slice().sort(function(a,b){return b.ts-a.ts}).slice(0,3);
+  var c=document.getElementById('home-comms');
+  c.innerHTML=sorted.length?sorted.map(function(x){return commCard(x)}).join(''):emptyState('📢','Nessuna comunicazione recente');
+}
+
+function renderComunicazioni(){
+  var sorted=comunicazioni.slice().sort(function(a,b){return b.ts-a.ts});
+  var c=document.getElementById('list-comunicazioni');
+  var btn='<button class="add-btn" onclick="openModal(\'comunicazioni\',\'new\')">+ Aggiungi Comunicazione</button>';
+  c.innerHTML=btn+(sorted.length?sorted.map(function(x){return commCard(x)}).join(''):emptyState('📢','Nessuna comunicazione ancora'));
+}
+
+function commCard(x){
+  var icons={info:'📢',avviso:'⚠️',urgente:'🔴'};
+  var tags={info:'tag-blue',avviso:'tag-amber',urgente:'tag-red'};
+  var labels={info:'Comunicazione',avviso:'Avviso',urgente:'Urgente'};
+  return '<div class="card"><div class="card-body">'
+    +'<div style="margin-bottom:8px"><span class="card-tag '+(tags[x.tipo]||'tag-blue')+'">'+(icons[x.tipo]||'📢')+' '+(labels[x.tipo]||'Info')+'</span></div>'
+    +'<div class="card-title">'+esc(x.titolo)+'</div>'
+    +'<div class="card-meta"><span>📅 '+fmtDate(x.data)+'</span></div>'
+    +'<div class="card-text">'+esc(x.testo)+'</div>'
+    +'<div style="display:flex;gap:8px;margin-top:12px">'
+    +'<button class="btn btn-secondary btn-sm" onclick="openModal(\'comunicazioni\',\'edit\',\''+x.id+'\')">✏ Modifica</button>'
+    +'<button class="btn btn-danger btn-sm" onclick="deleteComunicazione(\''+x.id+'\')">🗑 Elimina</button>'
+    +'</div></div></div>';
+}
+
+function renderConvocazioni(){
+  var sorted=convocazioni.slice().sort(function(a,b){return b.ts-a.ts});
+  var c=document.getElementById('list-convocazioni');
+  var btn='<button class="add-btn" onclick="openModal(\'convocazione\',\'new\')">+ Aggiungi Convocazione</button>';
+  c.innerHTML=btn+(sorted.length?sorted.map(function(x){return convCard(x)}).join(''):emptyState('📋','Nessuna convocazione ancora'));
+}
+
+function convCard(x){
+  var players=x.players||[];
+  var playersHtml=players.length
+    ?'<div class="players-grid">'+players.map(function(p){return '<div class="player-row"><div class="p-num">'+esc(p.num||'?')+'</div><div><div class="p-name">'+esc(p.nome)+'</div><div class="p-role">'+esc(p.ruolo)+'</div></div></div>'}).join('')+'</div>'
+    :'<div style="padding:12px 20px;font-size:12px;color:var(--text3)">Nessun giocatore inserito</div>';
+  return '<div class="card">'
+    +'<div class="conv-match-info"><div class="conv-vs">'+esc(x.casa)+' <em>vs</em> '+esc(x.ospite)+'</div>'
+    +(x.data?'<div class="conv-detail">📅 '+fmtDate(x.data)+'</div>':'')
+    +(x.orario?'<div class="conv-detail">🕐 Ritrovo '+x.orario+'</div>':'')
+    +(x.luogo?'<div class="conv-detail">📍 '+esc(x.luogo)+'</div>':'')
+    +(x.divisa?'<div class="conv-detail">👕 '+esc(x.divisa)+'</div>':'')
+    +'</div>'+(x.note?'<div style="padding:8px 20px;font-size:12px;color:var(--text3);border-bottom:1px solid var(--border)">📌 '+esc(x.note)+'</div>':'')
+    +playersHtml
+    +'<div style="display:flex;gap:8px;padding:12px 20px;border-top:1px solid var(--border)">'
+    +'<button class="btn btn-secondary btn-sm" onclick="openModal(\'convocazione\',\'edit\',\''+x.id+'\')">✏ Modifica</button>'
+    +'<button class="btn btn-danger btn-sm" onclick="deleteConvocazione(\''+x.id+'\')">🗑 Elimina</button>'
+    +'</div></div>';
+}
+
+function renderCalendario(){
+  var sorted=calendario.slice().sort(function(a,b){return(a.data||'').localeCompare(b.data||'')});
+  var c=document.getElementById('list-calendario');
+  var btn='<button class="add-btn" onclick="openModal(\'evento\',\'new\')">+ Aggiungi Evento</button>';
+  c.innerHTML=btn+(sorted.length?sorted.map(function(x){return calCard(x)}).join(''):emptyState('📅','Nessun evento in programma'));
+}
+
+function calCard(x){
+  var icons={partita:'⚽',torneo:'🏆',allenamento:'🏃',evento:'🎉'};
+  var labels={partita:'Partita',torneo:'Torneo',allenamento:'Allenamento',evento:'Evento'};
+  var tagC={partita:'tag-red',torneo:'tag-amber',allenamento:'tag-blue',evento:'tag-green'};
+  var dd='--',mm='---';
+  if(x.data){var d=new Date(x.data+'T12:00:00');dd=d.getDate();mm=d.toLocaleString('it',{month:'short'}).toUpperCase()}
+  var ora=[x.orario,x.fine].filter(Boolean).join('–');
+  return '<div class="cal-event"><div class="cal-date tipo-'+(x.tipo||'evento')+'">'
+    +'<div class="cal-dd">'+dd+'</div><div class="cal-mm">'+mm+'</div></div>'
+    +'<div class="cal-info"><span class="card-tag '+(tagC[x.tipo]||'tag-blue')+'">'+(icons[x.tipo]||'📅')+' '+(labels[x.tipo]||'Evento')+'</span>'
+    +'<div class="cal-info-title">'+esc(x.titolo)+'</div>'
+    +'<div class="cal-info-meta">'+(ora?'<span>🕐 '+ora+'</span>':'')+(x.luogo?'<span>📍 '+esc(x.luogo)+'</span>':'')+(x.note?'<span>📌 '+esc(x.note)+'</span>':'')+'</div>'
+    +'<div style="display:flex;gap:8px;margin-top:10px">'
+    +'<button class="btn btn-secondary btn-sm" onclick="openModal(\'evento\',\'edit\',\''+x.id+'\')">✏ Modifica</button>'
+    +'<button class="btn btn-danger btn-sm" onclick="deleteEvento(\''+x.id+'\')">🗑 Elimina</button>'
+    +'</div></div></div>';
+}
+
+function renderGalleria(){
+  var sorted=galleria.slice().sort(function(a,b){return b.ts-a.ts});
+  var c=document.getElementById('list-galleria');
+  var btn='<div style="grid-column:1/-1"><button class="add-btn" onclick="openModal(\'foto\',\'new\')">+ Aggiungi Foto</button></div>';
+  c.innerHTML=btn+(sorted.length?sorted.map(function(x){
+    return '<div class="photo-card"><div class="photo-thumb" onclick="openLightbox(\''+x.id+'\')"><img src="'+x.src+'" alt="'+esc(x.cap)+'" loading="lazy"></div>'
+      +'<div class="photo-cap">'+(x.cap?esc(x.cap):'')+(x.album?'<div class="photo-cap-sub">'+esc(x.album)+'</div>':'')
+      +'<button class="btn btn-danger btn-sm" style="margin-top:6px" onclick="deleteFoto(\''+x.id+'\')">🗑 Rimuovi</button></div></div>';
+  }).join(''):emptyState('📷','Nessuna foto ancora'));
+}
+
+function renderRosa(){
+  var c=document.getElementById('list-rosa');
+  if(!c){console.error('list-rosa non trovato');return}
+  var ruoli=['Portiere','Difensore','Centrocampista','Attaccante'];
+  var ruoloLabel={Portiere:'Portieri',Difensore:'Difensori',Centrocampista:'Centrocampisti',Attaccante:'Attaccanti'};
+  var colorClass={Portiere:'porta',Difensore:'dif',Centrocampista:'cen',Attaccante:'att'};
+  var html='<button class="add-btn" onclick="openModal(\'rosa\',\'new\')">+ Aggiungi Giocatore</button>';
+  if(!rosa.length){
+    c.innerHTML=html+emptyState('👥','Nessun giocatore nella rosa');
+    return;
+  }
+  ruoli.forEach(function(ruolo){
+    var players=rosa.filter(function(p){return p.ruolo===ruolo}).sort(function(a,b){return(+a.num||99)-(+b.num||99)});
+    if(!players.length)return;
+    html+='<div class="rosa-ruolo-hdr">'+ruoloLabel[ruolo]+' — '+players.length+'</div>';
+    html+='<div class="rosa-grid">';
+    players.forEach(function(p){
+      var fotoHtml=p.foto
+        ?'<img src="'+p.foto+'" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid var(--border2)">'
+        :'<div class="r-num '+colorClass[p.ruolo]+'">'+esc(p.num||'?')+'</div>';
+      html+='<div class="rosa-card">'+fotoHtml+'<div class="r-info"><div class="r-name">'+esc(p.nome)+' '+esc(p.cognome)+'</div>'
+        +'<div class="r-sub">'+esc(p.ruolo)+(p.num?' · #'+esc(p.num):'')+'</div>'
+        +(p.tel?'<div class="r-sub" style="margin-top:3px">📞 '+esc(p.tel)+'</div>':'')
+        +'</div><div class="r-actions">'
+        +'<button class="btn btn-secondary btn-sm" onclick="openModal(\'rosa\',\'edit\',\''+p.id+'\')">✏</button>'
+        +'<button class="btn btn-danger btn-sm" onclick="deleteGiocatore(\''+p.id+'\')">🗑</button>'
+        +'</div></div>';
+    });
+    html+='</div>';
+  });
+  c.innerHTML=html;
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+renderHome();
+</script>
 </body>
 </html>
