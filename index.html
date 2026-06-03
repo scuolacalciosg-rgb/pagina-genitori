@@ -1,78 +1,125 @@
-<div class="admin-bar" id="adminBar">
-  <span class="admin-bar-label">Pannello di Controllo</span>
-  <button class="admin-tab" onclick="openModal('modalAtleta')">+ Aggiungi Atleta</button>
-  <button class="admin-tab" onclick="openModal('modalAvviso')">+ Nuovo Avviso</button>
-  <button class="admin-tab" onclick="openModal('modalPartita')">+ Nuova Partita/Convocazione</button>
-</div>
+<script>
+// Array in memoria per gli atleti (caricati da localStorage se esistono)
+let atleti = JSON.parse(localStorage.getItem('ss_san_giovanni_atleti')) || [];
 
-<div id="page-home" class="page active">
-  <div class="hero">
-    <div class="hero-sub">STAGIONE 2025/2026</div>
-    <div class="hero-title">Benvenuto nel Portale <span>Biancorosso</span></div>
-    <div class="hero-stats">
-      <div class="stat-item"><div class="stat-num" id="stat-atleti">0</div><div class="stat-lbl">Atleti Iscritti</div></div>
-      <div class="stat-item"><div class="stat-num">3</div><div class="stat-lbl">Prossime Gare</div></div>
-    </div>
-  </div>
+document.addEventListener('DOMContentLoaded', () => {
+  // Configura i link di navigazione della Topbar
+  const navLinks = document.querySelectorAll('.nav-link');
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      const pageTarget = link.getAttribute('data-page');
+      switchPage(pageTarget);
+    });
+  });
+
+  // Configura il toggle del pannello amministratore
+  const adminToggle = document.getElementById('adminToggle');
+  const adminBar = document.getElementById('adminBar');
+  adminToggle.addEventListener('click', () => {
+    adminBar.classList.toggle('open');
+    adminToggle.classList.toggle('active');
+  });
+
+  // Rendering iniziale dei dati
+  aggiornaRosa();
+});
+
+// Funzione per cambiare pagina attiva
+function switchPage(pageId) {
+  // Nascondi tutte le pagine
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  // Mostra la pagina selezionata
+  const targetPage = document.getElementById(`page-${pageId}`);
+  if(targetPage) targetPage.classList.add('active');
+
+  // Aggiorna lo stato visivo della Topbar
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.classList.remove('active');
+    if(link.getAttribute('data-page') === pageId) {
+      link.classList.add('active');
+    }
+  });
+}
+
+// Funzioni di gestione Modali
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if(modal) modal.classList.add('open');
+}
+
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if(modal) modal.classList.remove('open');
+}
+
+// Salva Atleta nel LocalStorage ed esegui il refresh visivo
+function salvaAtleta(event) {
+  event.preventDefault();
   
-  <div class="quick-tiles">
-    <div class="tile" onclick="switchPage('comunicazioni')"><div class="tile-icon">📢</div><div class="tile-label">Avvisi</div></div>
-    <div class="tile" onclick="switchPage('rosa')"><div class="tile-icon">🏃‍♂️</div><div class="tile-label">Rosa</div></div>
-    <div class="tile" onclick="switchPage('pagamenti')"><div class="tile-icon">💳</div><div class="tile-label">Pagamenti</div></div>
-    <div class="tile" onclick="switchPage('iscrizioni')"><div class="tile-icon">📝</div><div class="tile-label">Iscrizioni</div></div>
-  </div>
-</div>
+  const nome = document.getElementById('mr-nome').value;
+  const cognome = document.getElementById('mr-cognome').value;
+  const numero = document.getElementById('mr-num').value;
+  const ruolo = document.getElementById('mr-ruolo').value;
 
-<div id="page-rosa" class="page">
-  <div class="page-hdr">Rosa <span>Attuale</span></div>
-  <div class="rosa-ruolo-hdr">Portieri</div>
-  <div class="rosa-grid" id="grid-Portiere"></div>
-  <div class="rosa-ruolo-hdr">Difensori</div>
-  <div class="rosa-grid" id="grid-Difensore"></div>
-  <div class="rosa-ruolo-hdr">Centrocampisti</div>
-  <div class="rosa-grid" id="grid-Centrocampista"></div>
-  <div class="rosa-ruolo-hdr">Attaccanti</div>
-  <div class="rosa-grid" id="grid-Attaccante"></div>
-</div>
+  const nuovoAtleta = { id: Date.now(), nome, cognome, numero, ruolo };
+  atleti.push(nuovoAtleta);
+  
+  localStorage.setItem('ss_san_giovanni_atleti', JSON.stringify(atleti));
+  
+  // Reset form e chiusura modal
+  document.getElementById('form-atleta').reset();
+  closeModal('modalAtleta');
+  
+  // Aggiorna l'interfaccia
+  aggiornaRosa();
+}
 
-<div class="modal-bg" id="modalAtleta">
-  <div class="modal">
-    <div class="modal-hdr">
-      <div class="modal-hdr-title">Aggiungi Nuovo Atleta</div>
-      <button class="modal-close" onclick="closeModal('modalAtleta')">&times;</button>
-    </div>
-    <div class="modal-body">
-      <form id="form-atleta" onsubmit="salvaAtleta(event)">
-        <div class="form-grid">
-          <div class="form-row">
-            <label class="form-label">Nome</label>
-            <input class="form-input" type="text" id="mr-nome" required>
-          </div>
-          <div class="form-row">
-            <label class="form-label">Cognome</label>
-            <input class="form-input" type="text" id="mr-cognome" required>
-          </div>
+// Svuota le griglie e ricrea le card della rosa aggiornata
+function aggiornaRosa() {
+  // Pulisci i contenitori dei ruoli
+  const ruoli = ['Portiere', 'Difensore', 'Centrocampista', 'Attaccante'];
+  ruoli.forEach(r => {
+    const grid = document.getElementById(`grid-${r}`);
+    if(grid) grid.innerHTML = '';
+  });
+
+  // Popola con gli atleti salvati
+  atleti.forEach(atleta => {
+    const grid = document.getElementById(`grid-${atleta.ruolo}`);
+    if(grid) {
+      // Determina la classe CSS abbreviata del ruolo per lo stile del cerchio numero
+      let ruoloClass = 'att';
+      if(atleta.ruolo === 'Portiere') ruoloClass = 'porta';
+      else if(atleta.ruolo === 'Difensore') ruoloClass = 'dif';
+      else if(atleta.ruolo === 'Centrocampista') ruoloClass = 'cen';
+
+      const card = document.createElement('div');
+      card.className = 'rosa-card';
+      card.innerHTML = `
+        <div class="r-num ${ruoloClass}">${atleta.numero}</div>
+        <div class="r-info">
+          <div class="r-name">${atleta.nome} ${atleta.cognome}</div>
+          <div class="r-sub">${atleta.ruolo}</div>
         </div>
-        <div class="form-grid">
-          <div class="form-row">
-            <label class="form-label">Numero maglia</label>
-            <input class="form-input" type="number" id="mr-num" min="1" max="99" required>
-          </div>
-          <div class="form-row">
-            <label class="form-label">Ruolo</label>
-            <select class="form-select" id="mr-ruolo">
-              <option value="Portiere">Portiere</option>
-              <option value="Difensore">Difensore</option>
-              <option value="Centrocampista">Centrocampista</option>
-              <option value="Attaccante">Attaccante</option>
-            </select>
-          </div>
+        <div class="r-actions">
+          <button class="btn btn-secondary btn-sm" onclick="rimuoviAtleta(${atleta.id})">❌</button>
         </div>
-        <div class="form-actions">
-          <button type="button" class="btn btn-secondary" onclick="closeModal('modalAtleta')">Annulla</button>
-          <button type="submit" class="btn btn-primary">Salva Atleta</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+      `;
+      grid.appendChild(card);
+    }
+  });
+
+  // Aggiorna il counter nella Hero della Home
+  const statCounter = document.getElementById('stat-atleti');
+  if(statCounter) statCounter.innerText = atleti.length;
+}
+
+// Rimuove un atleta
+function rimuoviAtleta(id) {
+  if(confirm('Vuoi davvero rimuovere questo atleta dalla rosa?')) {
+    atleti = atleti.filter(a => a.id !== id);
+    localStorage.setItem('ss_san_giovanni_atleti', JSON.stringify(atleti));
+    aggiornaRosa();
+  }
+}
+</script>
