@@ -766,6 +766,7 @@ function renderPage(id){
   if(id==='convocazioni') renderConvocazioni();
   if(id==='calendario') renderCalendario();
   if(id==='galleria') renderGalleria();
+  if(id==='rosa') renderRosa();
 }
 
 // ============================================================
@@ -1208,15 +1209,7 @@ function previewFoto(input){
 // ============================================================
 let rosa = getData('rosa', []);
 
-function renderPage_extended(id) {
-  if(id === 'rosa') renderRosa();
-}
-
-const origRenderPage = renderPage;
-function renderPage(id) {
-  origRenderPage(id);
-  renderPage_extended(id);
-}
+// rosa rendering handled in main renderPage
 
 function renderRosa() {
   const c = document.getElementById('list-rosa');
@@ -1302,14 +1295,7 @@ function deleteGiocatore(id) {
   renderRosa();
 }
 
-// Override admin tab to also handle rosa
-const origShowAdminTab = showAdminTab;
-function showAdminTab(tab, btn) {
-  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  if (tab === 'rosa') { openModal('rosa','new'); return; }
-  origShowAdminTab(tab, btn);
-}
+// showAdminTab override removed
 
 // ============================================================
 // CONVOCAZIONE: usa rosa con checkbox
@@ -1367,11 +1353,7 @@ function openModal(type, mode, id) {
 }
 
 // Also fix showAdminTab to handle rosa add button correctly and re-render after toggleAdmin
-const _origToggleAdmin = toggleAdmin;
-function toggleAdmin() {
-  _origToggleAdmin();
-  
-}
+
 
 function renderConvSelection() {
   const c = document.getElementById('mcv-players-list');
