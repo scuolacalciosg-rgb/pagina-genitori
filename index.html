@@ -1,14 +1,78 @@
-<div class="topbar">
-  <div class="logo-mark">SG</div>
-  <div class="logo-text">SS SAN GIOVANNI <span class="logo-sub">Portale Genitori</span></div>
-  <div class="topbar-nav">
-    <a class="nav-link active" data-page="home">Home</a>
-    <a class="nav-link" data-page="comunicazioni">Comunicazioni</a>
-    <a class="nav-link" data-page="pagamenti">Pagamenti</a>
-    <a class="nav-link" data-page="iscrizioni">Iscrizioni</a>
-    <a class="nav-link" data-page="rosa">Rosa Squadra</a>
+<div class="admin-bar" id="adminBar">
+  <span class="admin-bar-label">Pannello di Controllo</span>
+  <button class="admin-tab" onclick="openModal('modalAtleta')">+ Aggiungi Atleta</button>
+  <button class="admin-tab" onclick="openModal('modalAvviso')">+ Nuovo Avviso</button>
+  <button class="admin-tab" onclick="openModal('modalPartita')">+ Nuova Partita/Convocazione</button>
+</div>
+
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-sub">STAGIONE 2025/2026</div>
+    <div class="hero-title">Benvenuto nel Portale <span>Biancorosso</span></div>
+    <div class="hero-stats">
+      <div class="stat-item"><div class="stat-num" id="stat-atleti">0</div><div class="stat-lbl">Atleti Iscritti</div></div>
+      <div class="stat-item"><div class="stat-num">3</div><div class="stat-lbl">Prossime Gare</div></div>
+    </div>
   </div>
-  <div class="topbar-right">
-    <button class="btn-admin" id="adminToggle">Area Admin</button>
+  
+  <div class="quick-tiles">
+    <div class="tile" onclick="switchPage('comunicazioni')"><div class="tile-icon">📢</div><div class="tile-label">Avvisi</div></div>
+    <div class="tile" onclick="switchPage('rosa')"><div class="tile-icon">🏃‍♂️</div><div class="tile-label">Rosa</div></div>
+    <div class="tile" onclick="switchPage('pagamenti')"><div class="tile-icon">💳</div><div class="tile-label">Pagamenti</div></div>
+    <div class="tile" onclick="switchPage('iscrizioni')"><div class="tile-icon">📝</div><div class="tile-label">Iscrizioni</div></div>
+  </div>
+</div>
+
+<div id="page-rosa" class="page">
+  <div class="page-hdr">Rosa <span>Attuale</span></div>
+  <div class="rosa-ruolo-hdr">Portieri</div>
+  <div class="rosa-grid" id="grid-Portiere"></div>
+  <div class="rosa-ruolo-hdr">Difensori</div>
+  <div class="rosa-grid" id="grid-Difensore"></div>
+  <div class="rosa-ruolo-hdr">Centrocampisti</div>
+  <div class="rosa-grid" id="grid-Centrocampista"></div>
+  <div class="rosa-ruolo-hdr">Attaccanti</div>
+  <div class="rosa-grid" id="grid-Attaccante"></div>
+</div>
+
+<div class="modal-bg" id="modalAtleta">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div class="modal-hdr-title">Aggiungi Nuovo Atleta</div>
+      <button class="modal-close" onclick="closeModal('modalAtleta')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="form-atleta" onsubmit="salvaAtleta(event)">
+        <div class="form-grid">
+          <div class="form-row">
+            <label class="form-label">Nome</label>
+            <input class="form-input" type="text" id="mr-nome" required>
+          </div>
+          <div class="form-row">
+            <label class="form-label">Cognome</label>
+            <input class="form-input" type="text" id="mr-cognome" required>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-row">
+            <label class="form-label">Numero maglia</label>
+            <input class="form-input" type="number" id="mr-num" min="1" max="99" required>
+          </div>
+          <div class="form-row">
+            <label class="form-label">Ruolo</label>
+            <select class="form-select" id="mr-ruolo">
+              <option value="Portiere">Portiere</option>
+              <option value="Difensore">Difensore</option>
+              <option value="Centrocampista">Centrocampista</option>
+              <option value="Attaccante">Attaccante</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modalAtleta')">Annulla</button>
+          <button type="submit" class="btn btn-primary">Salva Atleta</button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
