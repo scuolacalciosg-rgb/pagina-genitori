@@ -186,6 +186,11 @@ main{max-width:100%;padding:2rem 2rem 4rem;}
 .rm-btn{background:none;border:none;color:var(--text-lo);font-size:16px;cursor:pointer;padding:0 4px;}
 .rm-btn:hover{color:var(--red);}
 .add-player-btn{background:none;border:1px dashed var(--border);border-radius:3px;color:var(--text-md);font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:6px 12px;cursor:pointer;transition:border-color .2s,color .2s;width:100%;}
+.squadra-row,.partita-row{display:flex;gap:6px;margin-bottom:5px;align-items:center;}
+.squadra-row input,.partita-row input,.partita-row select{flex:1;background:#111;border:1px solid var(--border);border-radius:3px;color:var(--text-hi);font-family:'Barlow',sans-serif;font-size:13px;padding:6px 8px;outline:none;}
+.squadra-row input:focus,.partita-row input:focus,.partita-row select:focus{border-color:var(--border-red);}
+.partita-row .res-inp{width:60px;flex:none;}
+.partita-row select{flex:none;width:120px;background:#111;}
 .add-player-btn:hover{border-color:var(--border-red);color:var(--red);}
 
 footer{text-align:center;padding:2rem;font-size:13px;letter-spacing:1px;color:var(--text-lo);border-top:1px solid var(--border);}
@@ -238,18 +243,43 @@ footer{text-align:center;padding:2rem;font-size:13px;letter-spacing:1px;color:va
   <div class="event-modal">
     <div class="event-modal-title" id="eventModalTitle">➕ Nuovo Evento</div>
     <input type="hidden" id="ev-id">
+
     <div class="settings-field">
-      <label class="settings-label">Tipo</label>
-      <select class="settings-select" id="ev-tipo">
+      <label class="settings-label">Tipo evento</label>
+      <select class="settings-select" id="ev-tipo" onchange="onTipoChange()">
         <option value="campionato">⚽ Campionato</option>
         <option value="torneo">🏆 Torneo</option>
         <option value="amichevole">🤝 Amichevole</option>
       </select>
     </div>
-    <div class="settings-field">
-      <label class="settings-label">Avversario / Titolo</label>
-      <input class="settings-input" id="ev-titolo" placeholder="es. SS San Giovanni vs FC Riviera">
+
+    <!-- CAMPIONATO / AMICHEVOLE -->
+    <div id="ev-block-singolo">
+      <div class="settings-field">
+        <label class="settings-label" id="ev-avv-label">Squadra avversaria</label>
+        <input class="settings-input" id="ev-titolo" placeholder="es. FC Riviera">
+      </div>
     </div>
+
+    <!-- TORNEO -->
+    <div id="ev-block-torneo" style="display:none">
+      <div class="settings-field">
+        <label class="settings-label">Nome Torneo</label>
+        <input class="settings-input" id="ev-torneo-nome" placeholder="es. 43a Coppa Altipiano">
+      </div>
+      <div class="settings-field">
+        <label class="settings-label">Squadre partecipanti</label>
+        <div id="torneo-squadre-area"></div>
+        <button class="add-player-btn" onclick="addSquadraRow()" style="margin-top:5px">+ Aggiungi squadra</button>
+      </div>
+      <div class="settings-field" style="margin-top:.75rem">
+        <label class="settings-label">Partite disputate nel torneo</label>
+        <div id="torneo-partite-area"></div>
+        <button class="add-player-btn" onclick="addPartitaRow()">+ Aggiungi partita</button>
+      </div>
+    </div>
+
+    <!-- CAMPI COMUNI -->
     <div class="form-row">
       <div class="settings-field">
         <label class="settings-label">Data</label>
@@ -264,20 +294,30 @@ footer{text-align:center;padding:2rem;font-size:13px;letter-spacing:1px;color:va
       <label class="settings-label">Luogo</label>
       <input class="settings-input" id="ev-luogo" placeholder="es. Campo Municipale, Via Roma 1">
     </div>
-    <div class="form-row">
-      <div class="settings-field">
-        <label class="settings-label">Risultato (se disputata)</label>
-        <input class="settings-input" id="ev-risultato" placeholder="es. 3-1">
-      </div>
-      <div class="settings-field">
-        <label class="settings-label">Orario Ritrovo</label>
-        <input class="settings-input" id="ev-ritrovo" type="time" value="09:30">
-      </div>
-    </div>
     <div class="settings-field">
-      <label class="settings-label">Note per i genitori</label>
-      <textarea class="settings-textarea" id="ev-note" placeholder="Informazioni aggiuntive..."></textarea>
+      <label class="settings-label">Orario Ritrovo</label>
+      <input class="settings-input" id="ev-ritrovo" type="time" value="09:30">
     </div>
+
+    <!-- RISULTATO + MARCATORI (campionato/amichevole) -->
+    <div id="ev-block-risultato">
+      <div class="form-row">
+        <div class="settings-field">
+          <label class="settings-label">Risultato finale</label>
+          <input class="settings-input" id="ev-risultato" placeholder="es. 3-1">
+        </div>
+        <div class="settings-field">
+          <label class="settings-label">Marcatori</label>
+          <input class="settings-input" id="ev-marcatori" placeholder="es. Rossi, Bianchi x2">
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-field">
+      <label class="settings-label">Descrizione / Cronaca partita</label>
+      <textarea class="settings-textarea" id="ev-note" placeholder="Racconta come e andata..."></textarea>
+    </div>
+
     <div class="settings-actions">
       <button class="btn-danger" id="evDeleteBtn" onclick="deleteEvent()" style="display:none">Elimina</button>
       <button class="btn-cancel" onclick="closeEventModal()">Annulla</button>
@@ -495,14 +535,19 @@ function renderEventsList() {
   sorted.forEach(function(ev){
     var d = new Date(ev.data);
     var dateStr = d.getDate()+' '+MONTHS_IT[d.getMonth()].substring(0,3)+' '+d.getFullYear();
-    var tipo = ev.tipo==='campionato'?'⚽':ev.tipo==='torneo'?'🏆':'🤝';
+    var tipoico = ev.tipo==='campionato'?'⚽':ev.tipo==='torneo'?'🏆':'🤝';
     html += '<div class="cal-event-item">';
     html += '<div class="cal-event-strip strip-'+ev.tipo+'"></div>';
     html += '<div class="cal-event-info">';
-    html += '<div class="cal-event-date">'+tipo+' '+dateStr+(ev.ora?' · '+ev.ora:'')+'</div>';
+    html += '<div class="cal-event-date">'+tipoico+' '+dateStr+(ev.ora?' · '+ev.ora:'')+'</div>';
     html += '<div class="cal-event-name">'+ev.titolo+'</div>';
     if(ev.luogo) html += '<div class="cal-event-meta">📍 '+ev.luogo+'</div>';
-    if(ev.risultato) html += '<div class="cal-event-meta" style="color:var(--red-bright);font-weight:600;">Risultato: '+ev.risultato+'</div>';
+    if(ev.tipo==='torneo' && ev.partite && ev.partite.length){
+      ev.partite.forEach(function(p){
+        if(p.ris) html += '<div class="cal-event-meta" style="color:var(--gold);">vs '+p.avv+' <strong>'+p.ris+'</strong>'+(p.marc?' · '+p.marc:'')+'</div>';
+      });
+    }
+    if(ev.risultato) html += '<div class="cal-event-meta" style="color:var(--red-bright);font-weight:600;">Risultato: '+ev.risultato+(ev.marcatori?' · Marcatori: '+ev.marcatori:'')+'</div>';
     html += '</div></div>';
   });
   document.getElementById('calEventsList').innerHTML = html;
@@ -607,17 +652,23 @@ function renderConvList() {
 // ═══ STATS ═══
 function updateStats() {
   var v=0,p=0,s=0,g=0;
-  events.forEach(function(ev){
-    if(!ev.risultato) return;
-    var parts = ev.risultato.split('-');
+  function parseRis(ris, isUs){
+    if(!ris) return;
+    var parts = ris.split('-');
     if(parts.length!==2) return;
     var n1=parseInt(parts[0]),n2=parseInt(parts[1]);
     if(isNaN(n1)||isNaN(n2)) return;
-    // assume che il nome squadra sia sempre prima nel titolo
-    g += n1;
+    if(isUs !== false) g += n1;
     if(n1>n2) v++;
     else if(n1===n2) p++;
     else s++;
+  }
+  events.forEach(function(ev){
+    if(ev.tipo==='torneo'){
+      (ev.partite||[]).forEach(function(p){ parseRis(p.ris); });
+    } else {
+      parseRis(ev.risultato);
+    }
   });
   document.getElementById('stat-v').textContent = v;
   document.getElementById('stat-p').textContent = p;
@@ -627,54 +678,130 @@ function updateStats() {
 
 // ═══ EVENT MODAL ═══
 var editingId = null;
+
+function onTipoChange(){
+  var tipo = document.getElementById('ev-tipo').value;
+  var isTorneo = tipo === 'torneo';
+  document.getElementById('ev-block-singolo').style.display = isTorneo ? 'none' : 'block';
+  document.getElementById('ev-block-torneo').style.display = isTorneo ? 'block' : 'none';
+  document.getElementById('ev-block-risultato').style.display = isTorneo ? 'none' : 'block';
+  document.getElementById('ev-avv-label').textContent = tipo === 'amichevole' ? 'Squadra avversaria' : 'Squadra avversaria';
+}
+
+function addSquadraRow(val){
+  var area = document.getElementById('torneo-squadre-area');
+  var row = document.createElement('div');
+  row.className = 'squadra-row';
+  row.innerHTML = '<input type="text" placeholder="Nome squadra" value="'+(val||'')+'"><button class="rm-btn" onclick="this.parentElement.remove()">✕</button>';
+  area.appendChild(row);
+}
+
+function addPartitaRow(p){
+  p = p || {};
+  var area = document.getElementById('torneo-partite-area');
+  var row = document.createElement('div');
+  row.className = 'partita-row';
+  row.innerHTML =
+    '<input type="text" placeholder="Avversario" value="'+(p.avv||'')+'">'+
+    '<input class="res-inp" type="text" placeholder="Ris." value="'+(p.ris||'')+'">'+
+    '<input type="text" placeholder="Marcatori" value="'+(p.marc||'')+'">'+
+    '<button class="rm-btn" onclick="this.parentElement.remove()">✕</button>';
+  area.appendChild(row);
+}
+
 function openEventModal(id) {
   editingId = id || null;
   var del = document.getElementById('evDeleteBtn');
+  // reset torneo areas
+  document.getElementById('torneo-squadre-area').innerHTML = '';
+  document.getElementById('torneo-partite-area').innerHTML = '';
+
   if(id){
     var ev = events.find(function(e){return e.id===id;});
     if(!ev) return;
-    document.getElementById('eventModalTitle').textContent = '✏️ Modifica Evento';
+    document.getElementById('eventModalTitle').textContent = 'Modifica Evento';
     document.getElementById('ev-id').value = ev.id;
     document.getElementById('ev-tipo').value = ev.tipo;
-    document.getElementById('ev-titolo').value = ev.titolo;
+    onTipoChange();
+    if(ev.tipo === 'torneo'){
+      document.getElementById('ev-torneo-nome').value = ev.titolo||'';
+      (ev.squadre||[]).forEach(function(s){ addSquadraRow(s); });
+      (ev.partite||[]).forEach(function(p){ addPartitaRow(p); });
+    } else {
+      document.getElementById('ev-titolo').value = ev.avversario||ev.titolo||'';
+      document.getElementById('ev-risultato').value = ev.risultato||'';
+      document.getElementById('ev-marcatori').value = ev.marcatori||'';
+    }
     document.getElementById('ev-data').value = ev.data;
     document.getElementById('ev-ora').value = ev.ora||'';
     document.getElementById('ev-luogo').value = ev.luogo||'';
-    document.getElementById('ev-risultato').value = ev.risultato||'';
     document.getElementById('ev-ritrovo').value = ev.ritrovo||'';
     document.getElementById('ev-note').value = ev.note||'';
     del.style.display = 'block';
   } else {
-    document.getElementById('eventModalTitle').textContent = '➕ Nuovo Evento';
+    document.getElementById('eventModalTitle').textContent = 'Nuovo Evento';
     document.getElementById('ev-id').value = '';
     document.getElementById('ev-tipo').value = 'campionato';
+    onTipoChange();
     document.getElementById('ev-titolo').value = '';
+    document.getElementById('ev-torneo-nome').value = '';
     document.getElementById('ev-data').value = '';
     document.getElementById('ev-ora').value = '10:00';
     document.getElementById('ev-luogo').value = '';
     document.getElementById('ev-risultato').value = '';
+    document.getElementById('ev-marcatori').value = '';
     document.getElementById('ev-ritrovo').value = '09:30';
     document.getElementById('ev-note').value = '';
     del.style.display = 'none';
   }
   document.getElementById('eventOverlay').classList.add('open');
 }
+
 function closeEventModal(){ document.getElementById('eventOverlay').classList.remove('open'); }
+
 function saveEvent(){
-  var titolo = document.getElementById('ev-titolo').value.trim();
+  var tipo = document.getElementById('ev-tipo').value;
   var data = document.getElementById('ev-data').value;
-  if(!titolo||!data){ alert('Inserisci almeno titolo e data.'); return; }
+  if(!data){ alert('Inserisci la data.'); return; }
+
+  var titolo, avversario, risultato, marcatori, squadre, partite;
+
+  if(tipo === 'torneo'){
+    titolo = document.getElementById('ev-torneo-nome').value.trim();
+    if(!titolo){ alert('Inserisci il nome del torneo.'); return; }
+    squadre = [];
+    document.querySelectorAll('#torneo-squadre-area .squadra-row input').forEach(function(i){
+      if(i.value.trim()) squadre.push(i.value.trim());
+    });
+    partite = [];
+    document.querySelectorAll('#torneo-partite-area .partita-row').forEach(function(row){
+      var ins = row.querySelectorAll('input');
+      if(ins[0].value.trim()) partite.push({ avv:ins[0].value.trim(), ris:ins[1].value.trim(), marc:ins[2].value.trim() });
+    });
+  } else {
+    avversario = document.getElementById('ev-titolo').value.trim();
+    if(!avversario){ alert('Inserisci la squadra avversaria.'); return; }
+    titolo = config.nome + ' vs ' + avversario;
+    risultato = document.getElementById('ev-risultato').value.trim();
+    marcatori = document.getElementById('ev-marcatori').value.trim();
+  }
+
   var ev = {
     id: editingId || ('ev_'+Date.now()),
-    tipo: document.getElementById('ev-tipo').value,
+    tipo: tipo,
     titolo: titolo,
+    avversario: avversario||'',
     data: data,
     ora: document.getElementById('ev-ora').value,
     luogo: document.getElementById('ev-luogo').value.trim(),
-    risultato: document.getElementById('ev-risultato').value.trim(),
     ritrovo: document.getElementById('ev-ritrovo').value,
+    risultato: risultato||'',
+    marcatori: marcatori||'',
+    squadre: squadre||[],
+    partite: partite||[],
     note: document.getElementById('ev-note').value.trim()
   };
+
   if(editingId){
     var idx = events.findIndex(function(e){return e.id===editingId;});
     if(idx>=0) events[idx] = ev;
@@ -685,6 +812,7 @@ function saveEvent(){
   closeEventModal();
   renderCalendar();
 }
+
 function deleteEvent(){
   if(!editingId) return;
   if(!confirm('Eliminare questo evento?')) return;
