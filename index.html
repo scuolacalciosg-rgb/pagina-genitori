@@ -1237,13 +1237,15 @@ function renderRosa() {
     html += `<div class="rosa-ruolo-hdr">${ruoloLabel[ruolo]||ruolo} — ${players.length}</div>`;
     html += `<div class="rosa-grid">`;
     players.forEach(p => {
-      const dob = p.dob ? new Date(p.dob+'T12:00:00').toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'numeric'}) : '';
+      const fotoHtml = p.foto
+        ? `<img src="${p.foto}" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid var(--border2)">`
+        : `<div class="r-num ${colorClass[p.ruolo]||''}">${esc(p.num||'?')}</div>`;
       html += `<div class="rosa-card">
-        <div class="r-num ${colorClass[p.ruolo]||''}">${esc(p.num||'?')}</div>
+        ${fotoHtml}
         <div class="r-info">
           <div class="r-name">${esc(p.nome)} ${esc(p.cognome)}</div>
-          <div class="r-sub">${esc(p.ruolo)}${dob?' · '+dob:''}${p.tel?' · '+esc(p.tel):''}</div>
-          ${p.note?`<div class="r-sub" style="margin-top:2px">📌 ${esc(p.note)}</div>`:''}
+          <div class="r-sub">${esc(p.ruolo)} ${p.num?'· #'+esc(p.num):''}</div>
+          ${p.tel?`<div class="r-sub" style="margin-top:3px">📞 ${esc(p.tel)}</div>`:''}
         </div>
         ${adminOpen?`<div class="r-actions">
           <button class="btn btn-secondary btn-sm" onclick="openModal('rosa','edit','${p.id}')">✏</button>
@@ -1259,17 +1261,38 @@ function renderRosa() {
 
 function saveGiocatore() {
   const id = document.getElementById('mr-id').value || uid();
+  // keep existing foto if not changed
+  const existing = rosa.find(x=>x.id===id);
+  const fotoEl = document.getElementById('mr-foto-img');
+  const foto = (fotoEl && fotoEl.style.display!=='none' && fotoEl.src && fotoEl.src!==window.location.href) 
+               ? fotoEl.src 
+               : (existing ? existing.foto||'' : '');
   const obj = {
     id,
     nome: v('mr-nome'), cognome: v('mr-cognome'),
     num: v('mr-num'), ruolo: v('mr-ruolo'),
-    dob: v('mr-dob'), tel: v('mr-tel'), note: v('mr-note'),
+    tel: v('mr-tel'),
+    foto: foto,
     ts: Date.now()
   };
   rosa = upsert(rosa, obj);
   setData('rosa', rosa);
   closeModal('rosa');
   renderRosa();
+}
+
+function previewRosaFoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const r = new FileReader();
+  r.onload = e => {
+    const img = document.getElementById('mr-foto-img');
+    const ph = document.getElementById('mr-foto-placeholder');
+    img.src = e.target.result;
+    img.style.display = 'block';
+    ph.style.display = 'none';
+  };
+  r.readAsDataURL(file);
 }
 
 function deleteGiocatore(id) {
@@ -1307,10 +1330,12 @@ function openModal(type, mode, id) {
       document.getElementById('mr-cognome').value='';
       document.getElementById('mr-num').value='';
       document.getElementById('mr-ruolo').value='Portiere';
-      document.getElementById('mr-dob').value='';
       document.getElementById('mr-tel').value='';
-      document.getElementById('mr-note').value='';
       document.getElementById('mr-title').textContent='Nuovo Giocatore';
+      document.getElementById('mr-foto-img').src='';
+      document.getElementById('mr-foto-img').style.display='none';
+      document.getElementById('mr-foto-placeholder').style.display='block';
+      document.getElementById('mr-foto-file').value='';
     }
   }
   if (mode === 'edit' && id !== undefined) {
@@ -1322,10 +1347,18 @@ function openModal(type, mode, id) {
       document.getElementById('mr-cognome').value = p.cognome;
       document.getElementById('mr-num').value = p.num;
       document.getElementById('mr-ruolo').value = p.ruolo;
-      document.getElementById('mr-dob').value = p.dob||'';
       document.getElementById('mr-tel').value = p.tel||'';
-      document.getElementById('mr-note').value = p.note||'';
       document.getElementById('mr-title').textContent = 'Modifica Giocatore';
+      document.getElementById('mr-foto-file').value='';
+      if (p.foto) {
+        document.getElementById('mr-foto-img').src = p.foto;
+        document.getElementById('mr-foto-img').style.display = 'block';
+        document.getElementById('mr-foto-placeholder').style.display = 'none';
+      } else {
+        document.getElementById('mr-foto-img').src = '';
+        document.getElementById('mr-foto-img').style.display = 'none';
+        document.getElementById('mr-foto-placeholder').style.display = 'block';
+      }
     } else {
       fillForm(type, id);
       if (type === 'convocazione') renderConvSelection();
@@ -1400,6 +1433,18 @@ renderHome();
     </div>
     <div class="modal-body">
       <input type="hidden" id="mr-id">
+      <!-- FOTO -->
+      <div class="form-row" style="display:flex;align-items:center;gap:18px;margin-bottom:18px">
+        <div id="mr-foto-preview" style="width:72px;height:72px;border-radius:50%;background:var(--bg3);border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;">
+          <span id="mr-foto-placeholder" style="font-size:28px;color:var(--text3)">👤</span>
+          <img id="mr-foto-img" style="width:100%;height:100%;object-fit:cover;display:none" src="" alt="">
+        </div>
+        <div style="flex:1">
+          <label class="form-label">Foto giocatore</label>
+          <input class="form-input" type="file" id="mr-foto-file" accept="image/*" onchange="previewRosaFoto(this)">
+        </div>
+      </div>
+      <!-- NOME / COGNOME -->
       <div class="form-grid">
         <div class="form-row">
           <label class="form-label">Nome</label>
@@ -1410,11 +1455,8 @@ renderHome();
           <input class="form-input" id="mr-cognome" placeholder="Cognome">
         </div>
       </div>
+      <!-- RUOLO / NUMERO -->
       <div class="form-grid">
-        <div class="form-row">
-          <label class="form-label">Numero maglia</label>
-          <input class="form-input" type="number" id="mr-num" placeholder="Es: 10" min="1" max="99">
-        </div>
         <div class="form-row">
           <label class="form-label">Ruolo</label>
           <select class="form-select" id="mr-ruolo">
@@ -1424,20 +1466,15 @@ renderHome();
             <option>Attaccante</option>
           </select>
         </div>
-      </div>
-      <div class="form-grid">
         <div class="form-row">
-          <label class="form-label">Data di nascita</label>
-          <input class="form-input" type="date" id="mr-dob">
-        </div>
-        <div class="form-row">
-          <label class="form-label">Telefono genitore</label>
-          <input class="form-input" type="tel" id="mr-tel" placeholder="Es: 333 1234567">
+          <label class="form-label">Numero maglia</label>
+          <input class="form-input" type="number" id="mr-num" placeholder="Es: 10" min="1" max="99">
         </div>
       </div>
+      <!-- TEL GENITORE -->
       <div class="form-row">
-        <label class="form-label">Note (opzionale)</label>
-        <input class="form-input" id="mr-note" placeholder="Es: Capitano, allergie, ecc.">
+        <label class="form-label">Telefono genitore</label>
+        <input class="form-input" type="tel" id="mr-tel" placeholder="Es: 333 1234567">
       </div>
       <div class="form-actions">
         <button class="btn btn-secondary" onclick="closeModal('rosa')">Annulla</button>
