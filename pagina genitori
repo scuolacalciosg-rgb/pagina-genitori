@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SS San Giovanni - Portale Genitori</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <style>
+    /* STILE ORIGINALE CUSTOM - SS SAN GIOVANNI */
+    :root {
+      --bg-main: #0b0c10;
+      --bg-card: #1f2833;
+      --text-main: #c5a059; /* Colore oro/bronzo alternativo o bianco/grigio */
+      --text-light: #ffffff;
+      --text-muted: #95a5a6;
+      --red: #e8271a;
+      --red-hover: #c01c12;
+      --border-color: #2c3e50;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Barlow', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-light);
+      padding-bottom: 50px;
+    }
+
+    /* TOPBAR */
+    .topbar {
+      display: flex;
+      align-items: center;
+      background-color: #000000;
+      padding: 15px 30px;
+      border-bottom: 3px solid var(--red);
+    }
+    .logo-mark {
+      background-color: var(--red);
+      color: #fff;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 4px;
+      margin-right: 15px;
+      font-size: 1.2rem;
+    }
+    .logo-text {
+      font-weight: 700;
+      font-size: 1.3rem;
+      letter-spacing: 1px;
+    }
+    .logo-sub {
+      color: var(--red);
+      font-weight: 300;
+      font-size: 0.9rem;
+      display: block;
+    }
+    .topbar-nav {
+      margin-left: auto;
+      display: flex;
+      gap: 20px;
+    }
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: color 0.3s;
+      text-transform: uppercase;
+      font-size: 0.95rem;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: var(--text-light);
+      border-bottom: 2px solid var(--red);
+    }
+    .topbar-right {
+      margin-left: 25px;
+    }
+    .btn-admin {
+      background: transparent;
+      border: 1px solid var(--red);
+      color: var(--red);
+      padding: 6px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    .btn-admin:hover, .btn-admin.active {
+      background-color: var(--red);
+      color: #fff;
+    }
+
+    /* ADMIN PANEL BAR */
+    .admin-bar {
+      background-color: #111;
+      padding: 10px 30px;
+      display: none;
+      align-items: center;
+      gap: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .admin-bar.open {
+      display: flex;
+    }
+    .admin-bar-label {
+      font-size: 0.85rem;
+      color: var(--red);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .admin-tab {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 5px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .admin-tab:hover {
+      border-color: var(--red);
+    }
+
+    /* CONTENITORI PAGINA */
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #1f2833 0%, #0f141c 100%);
+      padding: 40px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      border-left: 5px solid var(--red);
+    }
+    .hero-sub {
+      color: var(--red);
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+    }
+    .hero-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-top: 5px;
+    }
+    .hero-title span {
+      color: var(--red);
+    }
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 25px;
+    }
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .stat-num {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .stat-lbl {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+    }
+
+    /* TILES RAPIDI */
+    .quick-tiles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .tile {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 25px;
+      border-radius: 6px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .tile:hover {
+      transform: translateY(-4px);
+      border-color: var(--red);
+    }
+    .tile-icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    .tile-label {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    /* PAGINE DI DETTAGLIO GENERALE */
+    .page-hdr {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 25px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+    .page-hdr span {
+      color: var(--red);
+    }
+
+    /* ROSA SQUADRA GRIDS */
+    .rosa-ruolo-hdr {
+      font-size: 1.2rem;
+      color: var(--red);
+      font-weight: 700;
+      text-transform: uppercase;
+      margin: 25px 0 15px 0;
+    }
+    .rosa-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 15px;
+    }
+    .rosa-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .r-num {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background-color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.2rem;
+      border: 2px solid var(--text-muted);
+    }
+    .r-num.porta { border-color: #f1c40f; color: #f1c40f; }
+    .r-num.dif { border-color: #2ecc71; color: #2ecc71; }
+    .r-num.cen { border-color: #3498db; color: #3498db; }
+    .r-num.att { border-color: var(--red); color: var(--red); }
+    
+    .r-info { flex-grow: 1; }
+    .r-name { font-weight: 600; font-size: 1.1rem; }
+    .r-sub { color: var(--text-muted); font-size: 0.85rem; }
+
+    /* MODALI (FINESTRE POPUP) */
+    .modal-bg {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-bg.open { display: flex; }
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      width: 100%;
+      max-width: 500px;
+      overflow: hidden;
+    }
+    .modal-hdr {
+      background: #111;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--red);
+    }
+    .modal-hdr-title { font-weight: 700; font-size: 1.1rem; }
+    .modal-close {
+      background: transparent; border: none; color: #fff;
+      font-size: 1.5rem; cursor: pointer;
+    }
+    .modal-body { padding: 20px; }
+
+    /* FORMS & INPUTS */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+    .form-row { display: flex; flex-direction: column; margin-bottom: 15px; }
+    .form-label { font-size: 0.85rem; text-transform: uppercase; margin-bottom: 5px; color: var(--text-muted); }
+    .form-input, .form-select {
+      background: #111; border: 1px solid var(--border-color);
+      color: #fff; padding: 10px; border-radius: 4px; font-size: 0.95rem;
+    }
+    .form-input:focus, .form-select:focus { border-color: var(--red); outline: none; }
+    .form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+
+    /* BOTTONI STANDARD */
+    .btn { padding: 10px 20px; border-radius: 4px; font-weight: 600; cursor: pointer; border: none; }
+    .btn-primary { background-color: var(--red); color: #fff; }
+    .btn-primary:hover { background-color: var(--red-hover); }
+    .btn-secondary { background-color: #34495e; color: #fff; }
+    .btn-sm { padding: 3px 8px; font-size: 0.8rem; }
+
+    /* STILI PLACEHOLDER DELLE ALTRE SEZIONI */
+    .placeholder-box {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 30px;
+      border-radius: 6px;
+      text-align: center;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo-mark">SG</div>
+    <div class="logo-text">SS SAN GIOVANNI <span class="logo-sub">Portale Genitori</span></div>
+    <div class="topbar-nav">
+      <div class="nav-link active" data-page="home">Home</div>
+      <div class="nav-link" data-page="comunicazioni">Comunicazioni</div>
+      <div class="nav-link" data-page="pagamenti">Pagamenti</div>
+      <div class="nav-link" data-page="iscrizioni">Iscrizioni</div>
+      <div class="nav-link" data-page="rosa">Rosa Squadra</div>
+    </div>
+    <div class="topbar-right">
+      <button class="btn-admin" id="adminToggle">Area Admin</button>
+    </div>
+  </div>
+
+  <!-- BARRA AMMINISTRATORE -->
+  <div class="admin-bar" id="adminBar">
+    <span class="admin-bar-label">Pannello Gestione</span>
+    <button class="admin-tab" onclick="openModal('modalAtleta')">+ Inserisci Atleta</button>
+    <button class="admin-tab" onclick="alert('Funzione Avviso in arrivo!')">+ Nuovo Avviso</button>
+  </div>
+
+  <!-- CONTENITORE PRINCIPALE APPLICAZIONE -->
+  <div class="container">
+
+    <!-- SEZIONE 1: HOME DASHBOARD -->
+    <div id="page-home" class="page active">
+      <div class="hero">
+        <div class="hero-sub">STAGIONE VIRTÙ - 2026</div>
+        <div class="hero-title">Benvenuto nel Portale <span>Biancorosso</span></div>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div class="stat-num" id="stat-atleti">0</div>
+            <div class="stat-lbl">Atleti Gestiti</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">Attivo</div>
+            <div class="stat-lbl">Stato Portale</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="quick-tiles">
+        <div class="tile" onclick="switchPage('comunicazioni')">
+          <div class="tile-icon">📢</div>
+          <div class="tile-label">Comunicazioni</div>
+        </div>
+        <div class="tile" onclick="switchPage('rosa')">
+          <div class="tile-icon">🏃‍♂️</div>
+          <div class="tile-label">Rosa Squadra</div>
+        </div>
+        <div class="tile" onclick="switchPage('pagamenti')">
+          <div class="tile-icon">💳</div>
+          <div class="tile-label">Quote & Pagamenti</div>
+        </div>
+        <div class="tile" onclick="switchPage('iscrizioni')">
+          <div class="tile-icon">📝</div>
+          <div class="tile-label">Moduli Iscrizione</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEZIONE 2: COMUNICAZIONI -->
+    <div id="page-comunicazioni" class="page">
+      <div class="page-hdr">Bacheca <span>Avvisi</span></div>
+      <div class="placeholder-box">
+        <p>📢 Nessuna nuova comunicazione importante. Qui compariranno le notifiche e i cambi di campo della società.</p>
+      </div>
+    </div>
+
+    <!-- SEZIONE 3: PAGAMENTI -->
+    <div id="page-pagamenti" class="page">
+      <div class="page-hdr">Gestione <span>Contabile</span></div>
+      <div class="placeholder-box">
+        <p>💳 Sezione scadenze quote e tracciamento ricevute. Configurazione in corso.</p>
+      </div>
+    </div>
+
+    <!-- SEZIONE 4: ISCRIZIONI -->
+    <div id="page-iscrizioni" class="page">
+      <div class="page-hdr">Iscrizioni e <span>Documenti</span></div>
+      <div class="placeholder-box">
+        <p>📝 Compilazione dati per il tesseramento e caricamento del certificato medico medico-sportivo.</p>
+      </div>
+    </div>
+
+    <!-- SEZIONE 5: ROSA SQUADRA -->
+    <div id="page-rosa" class="page">
+      <div class="page-hdr">La Nostra <span>Squadra</span></div>
+      
+      <div class="rosa-ruolo-hdr">Portieri</div>
+      <div class="rosa-grid" id="grid-Portiere"></div>
+      
+      <div class="rosa-ruolo-hdr">Difensori</div>
+      <div class="rosa-grid" id="grid-Difensore"></div>
+      
+      <div class="rosa-ruolo-hdr">Centrocampisti</div>
+      <div class="rosa-grid" id="grid-Centrocampista"></div>
+      
+      <div class="rosa-ruolo-hdr">Attaccanti</div>
+      <div class="rosa-grid" id="grid-Attaccante"></div>
+    </div>
+
+  </div>
+
+  <!-- POPUP MODAL: INSERIMENTO ATLETA -->
+  <div class="modal-bg" id="modalAtleta">
+    <div class="modal">
+      <div class="modal-hdr">
+        <div class="modal-hdr-title">Aggiungi Nuovo Atleta</div>
+        <button class="modal-close" onclick="closeModal('modalAtleta')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="form-atleta" onsubmit="salvaAtleta(event)">
+          <div class="form-grid">
+            <div class="form-row">
+              <label class="form-label">Nome</label>
+              <input class="form-input" type="text" id="mr-nome" required placeholder="Es. Mario">
+            </div>
+            <div class="form-row">
+              <label class="form-label">Cognome</label>
+              <input class="form-input" type="text" id="mr-cognome" required placeholder="Es. Rossi">
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-row">
+              <label class="form-label">N° Maglia</label>
+              <input class="form-input" type="number" id="mr-num" min="1" max="99" required placeholder="10">
+            </div>
+            <div class="form-row">
+              <label class="form-label">Ruolo</label>
+              <select class="form-select" id="mr-ruolo">
+                <option value="Portiere">Portiere</option>
+                <option value="Difensore">Difensore</option>
+                <option value="Centrocampista">Centrocampista</option>
+                <option value="Attaccante">Attaccante</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modalAtleta')">Chiudi</button>
+            <button type="submit" class="btn btn-primary">Conferma Inserimento</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- CORE INTERACTIVE ENGINE (JAVASCRIPT) -->
+  <script>
+    // Recupera la rosa salvata localmente o inizializza array vuoto
+    let atleti = JSON.parse(localStorage.getItem('ss_san_giovanni_atleti')) || [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Gestore eventi per i link nella Topbar
+      const links = document.querySelectorAll('.nav-link');
+      links.forEach(l => {
+        l.addEventListener('click', () => {
+          const target = l.getAttribute('data-page');
+          switchPage(target);
+        });
+      });
+
+      // Gestore Toggle del menu Amministratore
+      const adminToggle = document.getElementById('adminToggle');
+      const adminBar = document.getElementById('adminBar');
+      adminToggle.addEventListener('click', () => {
+        adminBar.classList.toggle('open');
+        adminToggle.classList.toggle('active');
+      });
+
+      // Renderizza gli atleti al caricamento
+      aggiornaRosa();
+    });
+
+    // Cambia la pagina visibile
+    function switchPage(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      const activePage = document.getElementById(`page-${pageId}`);
+      if(activePage) activePage.classList.add('active');
+
+      document.querySelectorAll('.nav-link').forEach(l => {
+        l.classList.remove('active');
+        if(l.getAttribute('data-page') === pageId) l.classList.add('active');
+      });
+    }
+
+    // Gestione visualizzazione Modal
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      if(modal) modal.classList.add('open');
+    }
+
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      if(modal) modal.classList.remove('open');
+    }
+
+    // Aggiunta atleta e sincronizzazione
+    function salvaAtleta(e) {
+      e.preventDefault();
+      
+      const nome = document.getElementById('mr-nome').value;
+      const cognome = document.getElementById('mr-cognome').value;
+      const numero = document.getElementById('mr-num').value;
+      const ruolo = document.getElementById('mr-ruolo').value;
+
+      const nuovo = { id: Date.now(), nome, cognome, numero, ruolo };
+      atleti.push(nuovo);
+      
+      localStorage.setItem('ss_san_giovanni_atleti', JSON.stringify(atleti));
+      
+      document.getElementById('form-atleta').reset();
+      closeModal('modalAtleta');
+      aggiornaRosa();
+    }
+
+    // Rigenera i blocchi della rosa e aggiorna i counter della Home
+    function aggiornaRosa() {
+      const ruoli = ['Portiere', 'Difensore', 'Centrocampista', 'Attaccante'];
+      ruoli.forEach(r => {
+        const container = document.getElementById(`grid-${r}`);
+        if(container) container.innerHTML = '';
+      });
+
+      atleti.forEach(atleta => {
+        const container = document.getElementById(`grid-${atleta.ruolo}`);
+        if(container) {
+          let tipoColore = 'att';
+          if(atleta.ruolo === 'Portiere') tipoColore = 'porta';
+          else if(atleta.ruolo === 'Difensore') tipoColore = 'dif';
+          else if(atleta.ruolo === 'Centrocampista') tipoColore = 'cen';
+
+          const card = document.createElement('div');
+          card.className = 'rosa-card';
+          card.innerHTML = `
+            <div class="r-num ${tipoColore}">${atleta.numero}</div>
+            <div class="r-info">
+              <div class="r-name">${atleta.nome} ${atleta.cognome}</div>
+              <div class="r-sub">${atleta.ruolo}</div>
+            </div>
+            <div>
+              <button class="btn btn-secondary btn-sm" onclick="eliminaAtleta(${atleta.id})">🗑️</button>
+            </div>
+          `;
+          container.appendChild(card);
+        }
+      });
+
+      const contatore = document.getElementById('stat-atleti');
+      if(contatore) contatore.innerText = atleti.length;
+    }
+
+    // Cancella un atleta con conferma
+    function eliminaAtleta(id) {
+      if(confirm('Rimuovere definitivamente questo atleta dalla squadra?')) {
+        atleti = atleti.filter(a => a.id !== id);
+        localStorage.setItem('ss_san_giovanni_atleti', JSON.stringify(atleti));
+        aggiornaRosa();
+      }
+    }
+  </script>
+</body>
+</html>
