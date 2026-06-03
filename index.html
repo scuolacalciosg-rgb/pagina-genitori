@@ -428,7 +428,7 @@ body{min-height:100vh}
     <a onclick="showPage('rosa',this)">Rosa</a>
   </nav>
   <div class="topbar-right">
-    <button class="btn-admin" id="adminToggleBtn" onclick="toggleAdmin()">⚙ Impostazioni</button>
+    <button class="btn-admin" id="adminToggleBtn" onclick="openStatsModal()" title="Aggiorna statistiche squadra">⚙ Statistiche</button>
   </div>
 </div>
 
@@ -773,8 +773,8 @@ function renderPage(id){
 // ============================================================
 function toggleAdmin(){
   adminOpen=!adminOpen;
-  document.getElementById('adminBar').classList.toggle('open',adminOpen);
-  document.getElementById('adminToggleBtn').classList.toggle('active',adminOpen);
+  // adminBar hidden
+  // toggle hidden
 }
 
 function showAdminTab(tab, btn){
@@ -1046,11 +1046,11 @@ function renderComunicazioni(){
   const c=document.getElementById('list-comunicazioni');
   const editBtn=adminOpen?`<div id="comm-admin-add" style="margin-bottom:12px"></div>`:'';
   if(!sorted.length){
-    c.innerHTML=(adminOpen?`<button class="add-btn" onclick="openModal('comunicazioni','new')">+ Aggiungi Comunicazione</button>`:'')
+    c.innerHTML=`<button class="add-btn" onclick="openModal('comunicazioni','new')">+ Aggiungi Comunicazione</button>`
       +emptyState('📢','Nessuna comunicazione ancora');return;
   }
-  c.innerHTML=(adminOpen?`<button class="add-btn" onclick="openModal('comunicazioni','new')">+ Aggiungi Comunicazione</button>`:'')
-    +sorted.map(x=>commCard(x,adminOpen)).join('');
+  c.innerHTML=`<button class="add-btn" onclick="openModal('comunicazioni','new')">+ Aggiungi Comunicazione</button>`
+    +sorted.map(x=>commCard(x,true)).join('');
 }
 
 function commCard(x,edit){
@@ -1077,11 +1077,11 @@ function renderConvocazioni(){
   const sorted=[...convocazioni].sort((a,b)=>b.ts-a.ts);
   const c=document.getElementById('list-convocazioni');
   if(!sorted.length){
-    c.innerHTML=(adminOpen?`<button class="add-btn" onclick="openModal('convocazione','new')">+ Aggiungi Convocazione</button>`:'')
+    c.innerHTML=`<button class="add-btn" onclick="openModal('convocazione','new')">+ Aggiungi Convocazione</button>`
       +emptyState('📋','Nessuna convocazione ancora');return;
   }
-  c.innerHTML=(adminOpen?`<button class="add-btn" onclick="openModal('convocazione','new')">+ Aggiungi Convocazione</button>`:'')
-    +sorted.map(x=>convCard(x,adminOpen)).join('');
+  c.innerHTML=`<button class="add-btn" onclick="openModal('convocazione','new')">+ Aggiungi Convocazione</button>`
+    +sorted.map(x=>convCard(x,true)).join('');
 }
 
 function convCard(x,edit){
@@ -1113,11 +1113,11 @@ function renderCalendario(){
   const sorted=[...calendario].sort((a,b)=>(a.data||'').localeCompare(b.data||''));
   const c=document.getElementById('list-calendario');
   if(!sorted.length){
-    c.innerHTML=(adminOpen?`<button class="add-btn" onclick="openModal('evento','new')">+ Aggiungi Evento</button>`:'')
+    c.innerHTML=`<button class="add-btn" onclick="openModal('evento','new')">+ Aggiungi Evento</button>`
       +emptyState('📅','Nessun evento in programma');return;
   }
-  c.innerHTML=(adminOpen?`<button class="add-btn" onclick="openModal('evento','new')">+ Aggiungi Evento</button>`:'')
-    +sorted.map(x=>calCard(x,adminOpen)).join('');
+  c.innerHTML=`<button class="add-btn" onclick="openModal('evento','new')">+ Aggiungi Evento</button>`
+    +sorted.map(x=>calCard(x,true)).join('');
 }
 
 function calCard(x,edit){
@@ -1151,11 +1151,11 @@ function calCard(x,edit){
 function renderGalleria(){
   const c=document.getElementById('list-galleria');
   if(!galleria.length){
-    c.innerHTML=(adminOpen?`<button class="add-btn" onclick="openModal('foto','new')">+ Aggiungi Foto</button>`:'')
+    c.innerHTML=`<button class="add-btn" onclick="openModal('foto','new')">+ Aggiungi Foto</button>`
       +emptyState('📷','Nessuna foto ancora');return;
   }
   const sorted=[...galleria].sort((a,b)=>b.ts-a.ts);
-  c.innerHTML=(adminOpen?`<div style="grid-column:1/-1"><button class="add-btn" onclick="openModal('foto','new')">+ Aggiungi Foto</button></div>`:'')
+  c.innerHTML=`<div style="grid-column:1/-1"><button class="add-btn" onclick="openModal('foto','new')">+ Aggiungi Foto</button></div>`
     +sorted.map(x=>`
       <div class="photo-card">
         <div class="photo-thumb" onclick="openLightbox('${x.id}')">
@@ -1164,7 +1164,7 @@ function renderGalleria(){
         <div class="photo-cap">
           ${x.cap?esc(x.cap):''}
           ${x.album?`<div class="photo-cap-sub">${esc(x.album)}</div>`:''}
-          ${adminOpen?`<button class="btn btn-danger btn-sm" style="margin-top:6px" onclick="deleteFoto('${x.id}')">🗑 Rimuovi</button>`:''}
+          <button class="btn btn-danger btn-sm" style="margin-top:6px" onclick="deleteFoto('${x.id}')">🗑 Rimuovi</button>
         </div>
       </div>
     `).join('');
@@ -1223,7 +1223,7 @@ function renderRosa() {
   const ruoli = ['Portiere','Difensore','Centrocampista','Attaccante'];
   const colorClass = {Portiere:'porta',Difensore:'dif',Centrocampista:'cen',Attaccante:'att'};
 
-  let html = adminOpen ? `<button class="add-btn" onclick="openModal('rosa','new')">+ Aggiungi Giocatore</button>` : '';
+  let html = `<button class="add-btn" onclick="openModal('rosa','new')">+ Aggiungi Giocatore</button>`;
 
   if (!rosa.length) {
     c.innerHTML = html + emptyState('👥','Nessun giocatore nella rosa');
@@ -1247,10 +1247,10 @@ function renderRosa() {
           <div class="r-sub">${esc(p.ruolo)} ${p.num?'· #'+esc(p.num):''}</div>
           ${p.tel?`<div class="r-sub" style="margin-top:3px">📞 ${esc(p.tel)}</div>`:''}
         </div>
-        ${adminOpen?`<div class="r-actions">
+        <div class="r-actions">
           <button class="btn btn-secondary btn-sm" onclick="openModal('rosa','edit','${p.id}')">✏</button>
           <button class="btn btn-danger btn-sm" onclick="deleteGiocatore('${p.id}')">🗑</button>
-        </div>`:''}
+        </div>
       </div>`;
     });
     html += `</div>`;
@@ -1370,9 +1370,7 @@ function openModal(type, mode, id) {
 const _origToggleAdmin = toggleAdmin;
 function toggleAdmin() {
   _origToggleAdmin();
-  // re-render current page to show/hide edit buttons
-  const activePage = document.querySelector('.page.active');
-  if (activePage) renderPage(activePage.id.replace('page-',''));
+  
 }
 
 function renderConvSelection() {
