@@ -112,18 +112,18 @@ body{min-height:100vh}
 .photo-cap-sub{font-size:11px;color:var(--text3);margin-top:2px}
 
 /* ROSA */
-.rosa-ruolo-hdr{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);padding:10px 0 6px;margin-top:8px;border-bottom:1px solid var(--border);margin-bottom:8px}
-.rosa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-bottom:16px}
-.rosa-card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:16px 18px;display:flex;align-items:center;gap:14px;transition:.15s}
+.rosa-ruolo-hdr{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);padding:14px 0 8px;margin-top:12px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.rosa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;margin-bottom:20px}
+.rosa-card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:22px 24px;display:flex;align-items:center;gap:18px;transition:.15s}
 .rosa-card:hover{border-color:var(--border2)}
-.r-num{width:42px;height:42px;border-radius:50%;color:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:19px}
+.r-num{width:72px;height:72px;border-radius:50%;color:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:28px}
 .r-num.porta{background:rgba(232,160,32,.9)}
 .r-num.dif{background:rgba(58,159,212,.9)}
 .r-num.cen{background:rgba(39,194,122,.9)}
 .r-num.att{background:var(--red)}
 .r-info{flex:1;min-width:0}
-.r-name{font-size:16px;font-weight:500;color:var(--text)}
-.r-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.r-name{font-size:20px;font-weight:600;color:var(--text)}
+.r-sub{font-size:14px;color:var(--text3);margin-top:4px}
 .r-actions{display:flex;gap:4px;flex-shrink:0}
 
 /* CONV CHECKBOX */
@@ -828,7 +828,7 @@ function renderRosa(){
     html+='<div class="rosa-grid">';
     players.forEach(function(p){
       var fotoHtml=p.foto
-        ?'<img src="'+p.foto+'" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid var(--border2)">'
+        ?'<img src="'+p.foto+'" style="width:72px;height:72px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid var(--border2)">'
         :'<div class="r-num '+colorClass[p.ruolo]+'">'+esc(p.num||'?')+'</div>';
       html+='<div class="rosa-card">'+fotoHtml+'<div class="r-info"><div class="r-name">'+esc(p.nome)+' '+esc(p.cognome)+'</div>'
         +'<div class="r-sub">'+esc(p.ruolo)+(p.num?' · #'+esc(p.num):'')+'</div>'
