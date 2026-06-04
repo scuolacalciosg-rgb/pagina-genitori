@@ -16,7 +16,7 @@
   --border:rgba(255,255,255,0.06); --border-red:rgba(204,31,31,0.3);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Barlow',sans-serif;background:var(--bg-base);color:var(--text-hi);min-height:100vh;background-image:radial-gradient(ellipse 60% 50% at 15% 0%,rgba(140,10,10,0.22) 0%,transparent 70%);}
+body{font-family:'Barlow',sans-serif;background:var(--bg-base);color:var(--text-hi);min-height:100vh;font-size:17px;background-image:radial-gradient(ellipse 60% 50% at 15% 0%,rgba(140,10,10,0.22) 0%,transparent 70%);}
 
 /* HEADER */
 header{background:rgba(10,10,10,0.95);border-bottom:1px solid var(--border-red);position:sticky;top:0;z-index:100;backdrop-filter:blur(8px);}
@@ -34,8 +34,8 @@ header{background:rgba(10,10,10,0.95);border-bottom:1px solid var(--border-red);
 .settings-modal{background:#1a1010;border:1px solid var(--border-red);border-radius:6px;padding:1.5rem;width:340px;max-width:92vw;max-height:90vh;overflow-y:auto;}
 .settings-title{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:1.25rem;}
 .settings-field{margin-bottom:1rem;}
-.settings-label{font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-md);margin-bottom:5px;display:block;}
-.settings-input,.settings-select,.settings-textarea{width:100%;background:#0d0d0d;border:1px solid var(--border-red);border-radius:3px;color:var(--text-hi);font-family:'Barlow',sans-serif;font-size:14px;padding:8px 10px;outline:none;}
+.settings-label{font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--text-md);margin-bottom:5px;display:block;}
+.settings-input,.settings-select,.settings-textarea{width:100%;background:#0d0d0d;border:1px solid var(--border-red);border-radius:3px;color:var(--text-hi);font-family:'Barlow',sans-serif;font-size:16px;padding:8px 10px;outline:none;}
 .settings-textarea{min-height:70px;resize:vertical;}
 .settings-input:focus,.settings-select:focus,.settings-textarea:focus{border-color:var(--red-bright);}
 .settings-select option{background:#1a1010;}
@@ -50,7 +50,7 @@ header{background:rgba(10,10,10,0.95);border-bottom:1px solid var(--border-red);
 nav{background:var(--bg-panel);border-bottom:1px solid var(--border);}
 .nav-inner{max-width:100%;padding:0 2rem;display:flex;overflow-x:auto;scrollbar-width:none;gap:2px;}
 .nav-inner::-webkit-scrollbar{display:none;}
-.tab{padding:0 22px;height:48px;display:flex;align-items:center;gap:7px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-md);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .2s,background .2s;user-select:none;}
+.tab{padding:0 22px;height:52px;display:flex;align-items:center;gap:7px;font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-md);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .2s,background .2s;user-select:none;}
 .tab:hover{color:var(--text-hi);background:var(--red-dim);}
 .tab.active{color:var(--red-bright);border-bottom-color:var(--red-bright);}
 
@@ -61,16 +61,16 @@ main{max-width:100%;padding:2rem 2rem 4rem;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 
 /* SECTION TITLE */
-.sec-title{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--red);margin-bottom:1.25rem;padding-bottom:10px;border-bottom:1px solid var(--border-red);display:flex;align-items:center;justify-content:center;gap:10px;}
+.sec-title{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--red);margin-bottom:1.25rem;padding-bottom:10px;border-bottom:1px solid var(--border-red);display:flex;align-items:center;justify-content:center;gap:10px;}
 .sec-title::before{content:'';width:3px;height:14px;background:var(--red);border-radius:2px;display:inline-block;}
 
 /* EMPTY STATE */
 .empty-state{text-align:center;padding:5rem 1rem;color:var(--text-lo);}
 .empty-state-icon{font-size:52px;margin-bottom:16px;opacity:.35;}
-.empty-state-text{font-family:'Rajdhani',sans-serif;font-size:15px;letter-spacing:3px;text-transform:uppercase;}
+.empty-state-text{font-family:'Rajdhani',sans-serif;font-size:18px;letter-spacing:3px;text-transform:uppercase;}
 
 /* BADGES */
-.badge{display:inline-block;font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 8px;border-radius:2px;}
+.badge{display:inline-block;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 8px;border-radius:2px;}
 .badge-red{background:var(--red-dim);border:1px solid var(--border-red);color:var(--red-bright);}
 .badge-gold{background:var(--gold-dim);border:1px solid rgba(201,147,58,.3);color:var(--gold);}
 .badge-gray{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--text-md);}
@@ -91,16 +91,16 @@ main{max-width:100%;padding:2rem 2rem 4rem;}
 .quick-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:1.5rem;}
 .quick-item{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:1.5rem 1rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;}
 .quick-item:hover{border-color:var(--red-border);background:var(--bg-hover);}
-.quick-icon{font-size:34px;margin-bottom:10px;}
-.quick-lbl{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-md);}
+.quick-icon{font-size:38px;margin-bottom:10px;}
+.quick-lbl{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-md);}
 
 /* CARD */
 .card{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:1.75rem 2rem;margin-bottom:1rem;transition:border-color .2s,background .2s;}
 .card:hover{border-color:var(--border-red);background:var(--bg-hover);}
 .card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:.75rem;}
-.card-title{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:600;letter-spacing:.5px;color:var(--text-hi);}
-.card-date{font-size:14px;color:var(--text-lo);white-space:nowrap;flex-shrink:0;margin-top:4px;}
-.card-body{font-size:16px;color:var(--text-md);line-height:1.8;}
+.card-title{font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:600;letter-spacing:.5px;color:var(--text-hi);}
+.card-date{font-size:16px;color:var(--text-lo);white-space:nowrap;flex-shrink:0;margin-top:4px;}
+.card-body{font-size:18px;color:var(--text-md);line-height:1.8;}
 
 /* ═══ CALENDARIO GRIGLIA ═══ */
 .cal-layout{display:grid;grid-template-columns:1fr 340px;gap:1.5rem;align-items:start;}
@@ -111,17 +111,17 @@ main{max-width:100%;padding:2rem 2rem 4rem;}
 .cal-nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid var(--border);background:linear-gradient(90deg,rgba(140,10,10,0.3),transparent);}
 .cal-nav-btn{background:none;border:1px solid var(--border-red);border-radius:3px;color:var(--red);font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;}
 .cal-nav-btn:hover{background:var(--red-dim);}
-.cal-month-label{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-hi);}
+.cal-month-label{font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-hi);}
 .cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid var(--border);}
-.cal-wd{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-lo);text-align:center;padding:8px 0;}
+.cal-wd{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-lo);text-align:center;padding:8px 0;}
 .cal-days{display:grid;grid-template-columns:repeat(7,1fr);}
 .cal-cell{min-height:72px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:6px;position:relative;cursor:default;}
 .cal-cell:nth-child(7n){border-right:none;}
 .cal-cell.empty{background:rgba(0,0,0,0.1);}
 .cal-cell.today .cal-num{background:var(--red);color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;}
-.cal-num{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:var(--text-md);margin-bottom:3px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;}
+.cal-num{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:600;color:var(--text-md);margin-bottom:3px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;}
 .cal-cell.has-event{background:rgba(204,31,31,0.04);}
-.cal-dot{font-size:9px;border-radius:2px;padding:1px 4px;margin-bottom:2px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Rajdhani',sans-serif;font-weight:600;letter-spacing:.5px;cursor:pointer;}
+.cal-dot{font-size:11px;border-radius:2px;padding:1px 4px;margin-bottom:2px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Rajdhani',sans-serif;font-weight:600;letter-spacing:.5px;cursor:pointer;}
 .cal-dot.campionato{background:rgba(204,31,31,0.25);color:var(--red-bright);}
 .cal-dot.torneo{background:rgba(201,147,58,0.25);color:var(--gold);}
 .cal-dot.amichevole{background:rgba(255,255,255,0.08);color:var(--text-md);}
@@ -137,9 +137,9 @@ main{max-width:100%;padding:2rem 2rem 4rem;}
 .strip-torneo{background:var(--gold);}
 .strip-amichevole{background:var(--text-lo);}
 .cal-event-info{}
-.cal-event-date{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;letter-spacing:1px;color:var(--text-lo);text-transform:uppercase;margin-bottom:2px;}
-.cal-event-name{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:var(--text-hi);margin-bottom:2px;}
-.cal-event-meta{font-size:12px;color:var(--text-md);}
+.cal-event-date{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;color:var(--text-lo);text-transform:uppercase;margin-bottom:2px;}
+.cal-event-name{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--text-hi);margin-bottom:2px;}
+.cal-event-meta{font-size:14px;color:var(--text-md);}
 
 /* Pulsante aggiungi evento */
 .add-event-btn{width:100%;background:none;border:1px dashed var(--border-red);border-radius:6px;color:var(--red);font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:14px;cursor:pointer;transition:background .2s,border-color .2s;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:center;gap:8px;}
@@ -149,13 +149,13 @@ main{max-width:100%;padding:2rem 2rem 4rem;}
 .conv-block{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:1.5rem;transition:border-color .2s;}
 .conv-block:hover{border-color:var(--border-red);}
 .conv-head{background:linear-gradient(90deg,rgba(140,10,10,0.5) 0%,rgba(20,10,10,0.3) 100%);border-bottom:1px solid var(--border-red);padding:1.1rem 1.75rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
-.conv-match-name{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;letter-spacing:.5px;color:var(--text-hi);}
-.conv-match-sub{font-size:14px;color:var(--text-md);margin-top:3px;}
+.conv-match-name{font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:700;letter-spacing:.5px;color:var(--text-hi);}
+.conv-match-sub{font-size:16px;color:var(--text-md);margin-top:3px;}
 .players-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;padding:1.25rem 1.75rem;}
 .player-chip{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(204,31,31,0.06);border:1px solid rgba(204,31,31,0.15);border-radius:4px;}
 .player-num{width:28px;height:28px;background:var(--red);border-radius:50%;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.player-name{font-size:15px;font-weight:500;color:var(--text-hi);}
-.conv-footer{padding:.9rem 1.75rem;background:rgba(0,0,0,.2);border-top:1px solid var(--border);font-size:14px;color:var(--text-md);display:flex;gap:2rem;flex-wrap:wrap;}
+.player-name{font-size:17px;font-weight:500;color:var(--text-hi);}
+.conv-footer{padding:.9rem 1.75rem;background:rgba(0,0,0,.2);border-top:1px solid var(--border);font-size:16px;color:var(--text-md);display:flex;gap:2rem;flex-wrap:wrap;}
 .conv-edit-btn{background:none;border:1px solid var(--border-red);border-radius:3px;color:var(--red);font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;cursor:pointer;transition:background .2s;}
 .conv-edit-btn:hover{background:var(--red-dim);}
 
@@ -165,8 +165,8 @@ main{max-width:100%;padding:2rem 2rem 4rem;}
 .album-card:hover{border-color:var(--border-red);transform:translateY(-3px);}
 .album-thumb{height:150px;display:flex;align-items:center;justify-content:center;background:#111;font-size:44px;opacity:.3;}
 .album-info{padding:12px 16px;border-top:1px solid var(--border);}
-.album-title{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:600;color:var(--text-hi);margin-bottom:3px;}
-.album-date{font-size:13px;color:var(--text-lo);}
+.album-title{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:600;color:var(--text-hi);margin-bottom:3px;}
+.album-date{font-size:15px;color:var(--text-lo);}
 .photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;}
 .photo-item{border-radius:3px;aspect-ratio:4/3;background:var(--bg-panel);border:1px solid var(--border);}
 .back-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--bg-card);border:1px solid var(--border-red);border-radius:3px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;color:var(--red);margin-bottom:1rem;}
@@ -189,7 +189,7 @@ main{max-width:100%;padding:2rem 2rem 4rem;}
 
 /* COMUNICAZIONI */
 .com-filters{display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap;}
-.com-filter{background:var(--bg-card);border:1px solid var(--border);border-radius:3px;color:var(--text-md);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:6px 16px;cursor:pointer;transition:all .2s;}
+.com-filter{background:var(--bg-card);border:1px solid var(--border);border-radius:3px;color:var(--text-md);font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:6px 16px;cursor:pointer;transition:all .2s;}
 .com-filter:hover{border-color:var(--border-red);color:var(--text-hi);}
 .com-filter.active{background:var(--red-dim);border-color:var(--red-border);color:var(--red-bright);}
 
@@ -206,10 +206,10 @@ main{max-width:100%;padding:2rem 2rem 4rem;}
 .com-card.tipo-generali{border-left:3px solid var(--gold);}
 .com-card.tipo-visite{border-left:3px solid #4caf7a;}
 .com-card-head{padding:1rem 1.25rem .6rem;display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;}
-.com-card-title{font-family:'Rajdhani',sans-serif;font-size:19px;font-weight:700;color:var(--text-hi);line-height:1.2;}
+.com-card-title{font-family:'Rajdhani',sans-serif;font-size:23px;font-weight:700;color:var(--text-hi);line-height:1.2;}
 .com-card-meta{display:flex;gap:8px;align-items:center;flex-shrink:0;flex-direction:column;align-items:flex-end;}
-.com-card-date{font-size:11px;color:var(--text-lo);letter-spacing:.5px;}
-.com-card-body{padding:0 1.25rem 1rem;font-size:14px;color:var(--text-md);line-height:1.7;}
+.com-card-date{font-size:14px;color:var(--text-lo);letter-spacing:.5px;}
+.com-card-body{padding:0 1.25rem 1rem;font-size:17px;color:var(--text-md);line-height:1.7;}
 .com-card-footer{padding:.6rem 1.25rem;background:rgba(0,0,0,.15);border-top:1px solid var(--border);display:flex;gap:8px;align-items:center;justify-content:space-between;}
 .com-edit-btn{background:none;border:1px solid var(--border-red);border-radius:2px;color:var(--red);font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;cursor:pointer;}
 
@@ -223,15 +223,15 @@ main{max-width:100%;padding:2rem 2rem 4rem;}
 .player-card:hover{border-color:var(--border-red);transform:translateY(-2px);}
 .player-card-foto{height:140px;background:linear-gradient(135deg,#1a0505,#2a0808);display:flex;align-items:center;justify-content:center;font-size:52px;position:relative;overflow:hidden;}
 .player-card-foto img{width:100%;height:100%;object-fit:cover;}
-.player-card-num{position:absolute;top:8px;left:8px;background:var(--red);color:#fff;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
-.player-card-visita-badge{position:absolute;top:8px;right:8px;font-size:10px;padding:2px 6px;border-radius:2px;font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:.5px;}
+.player-card-num{position:absolute;top:8px;left:8px;background:var(--red);color:#fff;font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.player-card-visita-badge{position:absolute;top:8px;right:8px;font-size:12px;padding:2px 6px;border-radius:2px;font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:.5px;}
 .visita-ok{background:rgba(45,122,69,.8);color:#4caf7a;}
 .visita-warn{background:rgba(201,147,58,.8);color:#ffe082;}
 .visita-exp{background:rgba(204,31,31,.8);color:#ff8a80;}
 .player-card-body{padding:12px 14px;}
-.player-card-name{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--text-hi);line-height:1.1;margin-bottom:4px;}
-.player-card-role{font-size:12px;color:var(--red);font-family:'Rajdhani',sans-serif;font-weight:600;letter-spacing:1px;text-transform:uppercase;}
-.player-card-info{font-size:12px;color:var(--text-lo);margin-top:6px;display:flex;flex-direction:column;gap:2px;}
+.player-card-name{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:var(--text-hi);line-height:1.1;margin-bottom:4px;}
+.player-card-role{font-size:14px;color:var(--red);font-family:'Rajdhani',sans-serif;font-weight:600;letter-spacing:1px;text-transform:uppercase;}
+.player-card-info{font-size:14px;color:var(--text-lo);margin-top:6px;display:flex;flex-direction:column;gap:2px;}
 
 /* Detail modal */
 .detail-header{display:flex;gap:1rem;align-items:center;margin-bottom:1.25rem;}
@@ -251,7 +251,7 @@ main{max-width:100%;padding:2rem 2rem 4rem;}
 .partita-row select{flex:none;width:120px;background:#111;}
 .add-player-btn:hover{border-color:var(--border-red);color:var(--red);}
 
-footer{text-align:center;padding:2rem;font-size:13px;letter-spacing:1px;color:var(--text-lo);border-top:1px solid var(--border);}
+footer{text-align:center;padding:2rem;font-size:15px;letter-spacing:1px;color:var(--text-lo);border-top:1px solid var(--border);}
 @media(max-width:700px){
   .tab{padding:0 12px;font-size:13px;}
   .hero-title{font-size:54px;}
@@ -259,6 +259,16 @@ footer{text-align:center;padding:2rem;font-size:13px;letter-spacing:1px;color:va
   .players-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}
   .form-row{grid-template-columns:1fr;}
 }
+
+/* calendar list items size boost */
+.cal-body { font-size:16px; }
+.cal-result { font-size:14px; }
+.cal-day { font-size:46px !important; }
+.cal-mon { font-size:14px !important; }
+.res-score { font-size:32px !important; }
+.res-lbl { font-size:13px !important; }
+.cal-title { font-size:22px !important; }
+.cal-meta { font-size:14px !important; }
 </style>
 </head>
 <body>
