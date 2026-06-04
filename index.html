@@ -260,6 +260,22 @@ footer{text-align:center;padding:2rem;font-size:15px;letter-spacing:1px;color:va
   .form-row{grid-template-columns:1fr;}
 }
 
+/* HOME GRID */
+.home-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start;}
+@media(max-width:800px){.home-grid{grid-template-columns:1fr;}}
+
+/* HOME COM CARD */
+.home-com-card{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:1rem 1.25rem;margin-bottom:.75rem;cursor:pointer;transition:border-color .2s,background .2s;display:flex;gap:10px;align-items:flex-start;}
+.home-com-card:hover{border-color:var(--border-red);background:var(--bg-hover);}
+.home-com-card.tipo-partite{border-left:3px solid var(--red);}
+.home-com-card.tipo-generali{border-left:3px solid var(--gold);}
+.home-com-card.tipo-visite{border-left:3px solid #4caf7a;}
+.home-com-body{flex:1;}
+.home-com-title{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;color:var(--text-hi);margin-bottom:3px;line-height:1.2;}
+.home-com-preview{font-size:14px;color:var(--text-md);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.home-com-footer{display:flex;justify-content:space-between;align-items:center;margin-top:6px;}
+.home-com-date{font-size:12px;color:var(--text-lo);}
+
 /* calendar list items size boost */
 .cal-body { font-size:16px; }
 .cal-result { font-size:14px; }
@@ -597,8 +613,16 @@ footer{text-align:center;padding:2rem;font-size:15px;letter-spacing:1px;color:va
     <div class="quick-item" onclick="showTab('calendario')"><div class="quick-icon">📅</div><div class="quick-lbl">Calendario</div></div>
     <div class="quick-item" onclick="showTab('galleria')"><div class="quick-icon">📸</div><div class="quick-lbl">Galleria</div></div>
   </div>
-  <div class="sec-title">Prossimi eventi</div>
-  <div id="home-events"></div>
+  <div class="home-grid">
+    <div>
+      <div class="sec-title">📅 Prossimi eventi</div>
+      <div id="home-events"></div>
+    </div>
+    <div>
+      <div class="sec-title">📢 Ultime comunicazioni</div>
+      <div id="home-comunicazioni"></div>
+    </div>
+  </div>
 </section>
 
 <!-- ROSA -->
@@ -804,6 +828,40 @@ function renderHomeEvents() {
     html += '</div></div>';
   });
   document.getElementById('home-events').innerHTML = html;
+}
+
+function renderHomeComunicazioni(){
+  var el = document.getElementById('home-comunicazioni');
+  if(!el) return;
+  var sorted = comunicazioni.slice()
+    .sort(function(a,b){ return new Date(b.data)-new Date(a.data); })
+    .slice(0,4);
+  if(!sorted.length){
+    el.innerHTML = '<div class="empty-state" style="padding:2rem 1rem;"><div class="empty-state-icon" style="font-size:36px;">📢</div><div class="empty-state-text" style="font-size:14px;">Nessuna comunicazione</div></div>';
+    return;
+  }
+  var html = '';
+  sorted.forEach(function(c){
+    var tipoLabel = c.tipo==='partite'?'⚽':c.tipo==='visite'?'🏥':'📋';
+    var prioBadge = c.priorita==='urgente'
+      ? '<span class="badge badge-urgente" style="font-size:10px;">🔴 Urgente</span>'
+      : c.priorita==='importante'
+        ? '<span class="badge badge-importante" style="font-size:10px;">⚠️ Importante</span>'
+        : '';
+    html += '<div class="home-com-card tipo-'+c.tipo+'" onclick="showTab(\'comunicazioni\')">';
+    html += '<div style="font-size:22px;flex-shrink:0;opacity:.8;">'+tipoLabel+'</div>';
+    html += '<div class="home-com-body">';
+    html += '<div class="home-com-title">'+c.titolo+'</div>';
+    if(c.testo) html += '<div class="home-com-preview">'+c.testo+'</div>';
+    html += '<div class="home-com-footer">';
+    html += '<span class="home-com-date">'+fmtDate(c.data)+'</span>';
+    if(prioBadge) html += prioBadge;
+    html += '</div></div></div>';
+  });
+  if(comunicazioni.length > 4){
+    html += '<div style="text-align:center;padding:.5rem;"><button onclick="showTab(\'comunicazioni\')" style="background:none;border:none;color:var(--red);font-family:Rajdhani,sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">Vedi tutte ('+comunicazioni.length+') →</button></div>';
+  }
+  el.innerHTML = html;
 }
 
 // ═══ CONVOCAZIONI ═══
@@ -1466,7 +1524,7 @@ function showTab(id){
   window.scrollTo(0,0);
   if(id==='calendario') renderCalendar();
   if(id==='convocazioni') renderConvList();
-  if(id==='home') renderHomeEvents();
+  if(id==='home'){ renderHomeEvents(); renderHomeComunicazioni(); }
   if(id==='rosa') renderRosa();
   if(id==='comunicazioni') renderComunicazioni();
 }
@@ -1483,6 +1541,7 @@ function closeAlbum(){
 // ═══ INIT ═══
 applyConfig();
 renderHomeEvents();
+renderHomeComunicazioni();
 renderRosa();
 </script>
 </body>
