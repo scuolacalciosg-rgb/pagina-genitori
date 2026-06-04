@@ -607,7 +607,9 @@ function changeMonth(dir) {
 }
 
 function renderCalendar() {
-  document.getElementById('calMonthLabel').textContent = MONTHS_IT[calMonth] + ' ' + calYear;
+  var lbl = document.getElementById('calMonthLabel');
+  if(!lbl) return;
+  lbl.textContent = MONTHS_IT[calMonth] + ' ' + calYear;
   var firstDay = new Date(calYear, calMonth, 1).getDay(); // 0=dom
   // converti a lunedì=0
   firstDay = (firstDay + 6) % 7;
@@ -641,7 +643,7 @@ function renderCalendar() {
     }
     html += '</div>';
   }
-  document.getElementById('calDays').innerHTML = html;
+  var cd=document.getElementById('calDays'); if(cd) cd.innerHTML = html;
 
   renderEventsList();
   renderConvList();
@@ -747,7 +749,11 @@ function renderConvList() {
     html += '</div></div>';
     html += '<div class="players-grid">';
     c.players.forEach(function(p){
-      html += '<div class="player-chip"><div class="player-num">'+p.num+'</div><div class="player-name">'+p.nome+'</div></div>';
+      var rp = rosa.find(function(r){ return r.id === p.id; });
+      var fotoHtml = (rp && rp.foto)
+        ? '<img src="'+rp.foto+'" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;">'
+        : '<div class="player-num">'+(p.num||'?')+'</div>';
+      html += '<div class="player-chip">'+fotoHtml+'<div class="player-name">'+p.nome+'</div></div>';
     });
     html += '</div>';
     html += '<div class="conv-footer">';
@@ -953,14 +959,41 @@ function openConvModal(evId){
   convEvId = evId;
   var ev = events.find(function(e){return e.id===evId;});
   if(!ev) return;
-  document.getElementById('convModalTitle').textContent = '📋 '+ev.titolo;
+  document.getElementById('convModalTitle').textContent = ev.titolo;
   var c = convocazioni[evId] || {};
   document.getElementById('conv-ritrovo').value = c.ritrovo || ev.ritrovo || '';
   var area = document.getElementById('playersArea');
   area.innerHTML = '';
-  var players = c.players || [];
-  if(!players.length) players = [{num:'1',nome:''}];
-  players.forEach(function(p){ addPlayerRow(p.num, p.nome); });
+  var convIds = (c.players||[]).map(function(p){ return p.id; });
+
+  if(rosa.length){
+    // mostra rosa come checkbox
+    var sorted = rosa.slice().sort(function(a,b){ return (parseInt(a.numero)||99)-(parseInt(b.numero)||99); });
+    sorted.forEach(function(p){
+      var checked = convIds.indexOf(p.id) >= 0 ? 'checked' : '';
+      var row = document.createElement('div');
+      row.className = 'player-add-row';
+      row.style.cssText = 'align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);';
+      var fotoHtml = p.foto
+        ? '<img src="'+p.foto+'" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;">'
+        : '<div style="width:28px;height:28px;border-radius:50%;background:var(--red-dim);border:1px solid var(--border-red);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;">'+( p.numero||'?' )+'</div>';
+      row.innerHTML =
+        '<input type="checkbox" '+checked+' data-id="'+p.id+'" data-num="'+(p.numero||'?')+'" data-nome="'+p.nome+' '+p.cognome+'" style="width:16px;height:16px;accent-color:var(--red);cursor:pointer;">'+
+        fotoHtml+
+        '<span style="font-family:Rajdhani,sans-serif;font-weight:600;font-size:15px;color:var(--text-hi);">'+p.nome+' '+p.cognome+'</span>'+
+        '<span style="font-size:12px;color:var(--text-lo);margin-left:auto;">'+( p.ruolo||'' )+'</span>';
+      area.appendChild(row);
+    });
+  } else {
+    // fallback manuale se non c è la rosa
+    var players = c.players || [{num:'',nome:''}];
+    players.forEach(function(p){ addPlayerRow(p.num, p.nome); });
+    var addBtn = document.createElement('button');
+    addBtn.className = 'add-player-btn';
+    addBtn.textContent = '+ Aggiungi giocatore';
+    addBtn.onclick = function(){ addPlayerRow(); };
+    area.appendChild(addBtn);
+  }
   document.getElementById('convOverlay').classList.add('open');
 }
 function closeConvModal(){ document.getElementById('convOverlay').classList.remove('open'); }
@@ -973,14 +1006,23 @@ function addPlayerRow(num, nome){
 }
 function saveConv(){
   if(!convEvId) return;
-  var rows = document.querySelectorAll('#playersArea .player-add-row');
   var players = [];
-  rows.forEach(function(row){
-    var inputs = row.querySelectorAll('input');
-    var num = inputs[0].value.trim();
-    var nome = inputs[1].value.trim();
-    if(nome) players.push({num:num||'?', nome:nome});
-  });
+  if(rosa.length){
+    // leggi checkbox
+    document.querySelectorAll('#playersArea input[type=checkbox]:checked').forEach(function(cb){
+      players.push({ id:cb.dataset.id, num:cb.dataset.num, nome:cb.dataset.nome });
+    });
+  } else {
+    var rows = document.querySelectorAll('#playersArea .player-add-row');
+    rows.forEach(function(row){
+      var inputs = row.querySelectorAll('input[type=text]');
+      if(inputs.length>=2){
+        var num = inputs[0].value.trim();
+        var nome = inputs[1].value.trim();
+        if(nome) players.push({num:num||'?', nome:nome});
+      }
+    });
+  }
   convocazioni[convEvId] = {
     ritrovo: document.getElementById('conv-ritrovo').value,
     players: players
@@ -1015,7 +1057,7 @@ function renderRosa(){
     var fotoHtml = p.foto
       ? '<img src="'+p.foto+'" alt="">'
       : '👤';
-    html += '<div class="player-card" onclick="openPlayerDetail(''+p.id+'')">';
+    html += '<div class="player-card" onclick="openPlayerDetail(\'' + p.id + '\')">';
     html += '<div class="player-card-foto">';
     html += fotoHtml;
     if(p.numero) html += '<div class="player-card-num">'+p.numero+'</div>';
@@ -1211,7 +1253,7 @@ function closeAlbum(){
 
 // ═══ INIT ═══
 applyConfig();
-renderCalendar();
+renderHomeEvents();
 renderRosa();
 </script>
 </body>
