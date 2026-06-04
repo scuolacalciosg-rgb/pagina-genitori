@@ -88,7 +88,7 @@ main{max-width:100%;padding:2rem 2rem 4rem;}
 .stat-lbl{font-size:13px;color:var(--text-lo);letter-spacing:1.5px;text-transform:uppercase;margin-top:4px;}
 
 /* QUICK GRID */
-.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.5rem;}
+.quick-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:1.5rem;}
 .quick-item{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:1.5rem 1rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;}
 .quick-item:hover{border-color:var(--red-border);background:var(--bg-hover);}
 .quick-icon{font-size:34px;margin-bottom:10px;}
@@ -185,6 +185,33 @@ main{max-width:100%;padding:2rem 2rem 4rem;}
 .player-add-row .num-input{width:52px;flex:none;}
 .rm-btn{background:none;border:none;color:var(--text-lo);font-size:16px;cursor:pointer;padding:0 4px;}
 .rm-btn:hover{color:var(--red);}
+
+/* ROSA */
+.rosa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
+.player-card{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;overflow:hidden;cursor:pointer;transition:border-color .2s,transform .15s;position:relative;}
+.player-card:hover{border-color:var(--border-red);transform:translateY(-2px);}
+.player-card-foto{height:140px;background:linear-gradient(135deg,#1a0505,#2a0808);display:flex;align-items:center;justify-content:center;font-size:52px;position:relative;overflow:hidden;}
+.player-card-foto img{width:100%;height:100%;object-fit:cover;}
+.player-card-num{position:absolute;top:8px;left:8px;background:var(--red);color:#fff;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.player-card-visita-badge{position:absolute;top:8px;right:8px;font-size:10px;padding:2px 6px;border-radius:2px;font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:.5px;}
+.visita-ok{background:rgba(45,122,69,.8);color:#4caf7a;}
+.visita-warn{background:rgba(201,147,58,.8);color:#ffe082;}
+.visita-exp{background:rgba(204,31,31,.8);color:#ff8a80;}
+.player-card-body{padding:12px 14px;}
+.player-card-name{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--text-hi);line-height:1.1;margin-bottom:4px;}
+.player-card-role{font-size:12px;color:var(--red);font-family:'Rajdhani',sans-serif;font-weight:600;letter-spacing:1px;text-transform:uppercase;}
+.player-card-info{font-size:12px;color:var(--text-lo);margin-top:6px;display:flex;flex-direction:column;gap:2px;}
+
+/* Detail modal */
+.detail-header{display:flex;gap:1rem;align-items:center;margin-bottom:1.25rem;}
+.detail-foto{width:80px;height:80px;border-radius:8px;background:linear-gradient(135deg,#1a0505,#2a0808);display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0;overflow:hidden;}
+.detail-foto img{width:100%;height:100%;object-fit:cover;}
+.detail-name{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:var(--text-hi);line-height:1;}
+.detail-role{font-size:13px;color:var(--red);font-family:'Rajdhani',sans-serif;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-top:3px;}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:1rem;}
+.detail-field{background:#0d0d0d;border-radius:4px;padding:10px 12px;}
+.detail-field-label{font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-lo);margin-bottom:3px;}
+.detail-field-val{font-size:14px;color:var(--text-hi);font-weight:500;}
 .add-player-btn{background:none;border:1px dashed var(--border);border-radius:3px;color:var(--text-md);font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:6px 12px;cursor:pointer;transition:border-color .2s,color .2s;width:100%;}
 .squadra-row,.partita-row{display:flex;gap:6px;margin-bottom:5px;align-items:center;}
 .squadra-row input,.partita-row input,.partita-row select{flex:1;background:#111;border:1px solid var(--border);border-radius:3px;color:var(--text-hi);font-family:'Barlow',sans-serif;font-size:13px;padding:6px 8px;outline:none;}
@@ -197,7 +224,7 @@ footer{text-align:center;padding:2rem;font-size:13px;letter-spacing:1px;color:va
 @media(max-width:700px){
   .tab{padding:0 12px;font-size:13px;}
   .hero-title{font-size:54px;}
-  .quick-grid{grid-template-columns:repeat(2,1fr);}
+  .quick-grid{grid-template-columns:repeat(3,1fr);}
   .players-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}
   .form-row{grid-template-columns:1fr;}
 }
@@ -326,6 +353,94 @@ footer{text-align:center;padding:2rem;font-size:13px;letter-spacing:1px;color:va
   </div>
 </div>
 
+<!-- GIOCATORE MODAL -->
+<div class="settings-overlay" id="playerOverlay">
+  <div class="event-modal" style="width:500px;">
+    <div class="event-modal-title" id="playerModalTitle">👤 Nuovo Giocatore</div>
+    <input type="hidden" id="pl-id">
+
+    <!-- FOTO -->
+    <div class="settings-field" style="display:flex;gap:1rem;align-items:flex-start;">
+      <div id="pl-foto-preview" style="width:80px;height:80px;border-radius:6px;background:#111;border:1px solid var(--border-red);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0;overflow:hidden;">👤</div>
+      <div style="flex:1;">
+        <label class="settings-label">Foto giocatore</label>
+        <input type="file" id="pl-foto-input" accept="image/*" style="display:none" onchange="previewFoto(this)">
+        <button class="add-player-btn" onclick="document.getElementById('pl-foto-input').click()">📷 Carica foto</button>
+        <input type="hidden" id="pl-foto">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="settings-field">
+        <label class="settings-label">Nome</label>
+        <input class="settings-input" id="pl-nome" placeholder="Nome">
+      </div>
+      <div class="settings-field">
+        <label class="settings-label">Cognome</label>
+        <input class="settings-input" id="pl-cognome" placeholder="Cognome">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="settings-field">
+        <label class="settings-label">Data di nascita</label>
+        <input class="settings-input" id="pl-nascita" type="date">
+      </div>
+      <div class="settings-field">
+        <label class="settings-label">Numero maglia</label>
+        <input class="settings-input" id="pl-numero" type="number" placeholder="es. 7" min="1" max="99">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="settings-field">
+        <label class="settings-label">Ruolo</label>
+        <select class="settings-select" id="pl-ruolo">
+          <option value="">— Seleziona —</option>
+          <option>Portiere</option>
+          <option>Difensore</option>
+          <option>Centrocampista</option>
+          <option>Ala</option>
+          <option>Attaccante</option>
+          <option>Trequartista</option>
+          <option>Mediano</option>
+          <option>Terzino</option>
+          <option>Libero</option>
+        </select>
+      </div>
+      <div class="settings-field">
+        <label class="settings-label">Scadenza visita medica</label>
+        <input class="settings-input" id="pl-visita" type="date">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="settings-field">
+        <label class="settings-label">Nome genitore</label>
+        <input class="settings-input" id="pl-genitore" placeholder="Nome e Cognome">
+      </div>
+      <div class="settings-field">
+        <label class="settings-label">Telefono genitore</label>
+        <input class="settings-input" id="pl-telefono" type="tel" placeholder="es. 333 1234567">
+      </div>
+    </div>
+
+    <div class="settings-actions">
+      <button class="btn-danger" id="plDeleteBtn" onclick="deletePlayer()" style="display:none">Elimina</button>
+      <button class="btn-cancel" onclick="closePlayerModal()">Annulla</button>
+      <button class="btn-save" onclick="savePlayer()">Salva</button>
+    </div>
+  </div>
+</div>
+
+<!-- GIOCATORE DETTAGLIO MODAL -->
+<div class="settings-overlay" id="playerDetailOverlay">
+  <div class="event-modal" style="width:480px;">
+    <div id="playerDetailContent"></div>
+    <div class="settings-actions" style="margin-top:1rem;">
+      <button class="btn-cancel" onclick="closePlayerDetail()">Chiudi</button>
+      <button class="btn-save" id="playerDetailEditBtn">✏️ Modifica</button>
+    </div>
+  </div>
+</div>
+
 <!-- CONVOCAZIONE MODAL -->
 <div class="settings-overlay" id="convOverlay">
   <div class="conv-modal">
@@ -363,6 +478,7 @@ footer{text-align:center;padding:2rem;font-size:13px;letter-spacing:1px;color:va
 <nav>
   <div class="nav-inner">
     <div class="tab active" onclick="showTab('home')" data-tab="home">◈ Home</div>
+    <div class="tab" onclick="showTab('rosa')" data-tab="rosa">◈ Rosa</div>
     <div class="tab" onclick="showTab('comunicazioni')" data-tab="comunicazioni">◈ Comunicazioni</div>
     <div class="tab" onclick="showTab('convocazioni')" data-tab="convocazioni">◈ Convocazioni</div>
     <div class="tab" onclick="showTab('calendario')" data-tab="calendario">◈ Calendario</div>
@@ -385,6 +501,7 @@ footer{text-align:center;padding:2rem;font-size:13px;letter-spacing:1px;color:va
     </div>
   </div>
   <div class="quick-grid">
+    <div class="quick-item" onclick="showTab('rosa')"><div class="quick-icon">👥</div><div class="quick-lbl">Rosa</div></div>
     <div class="quick-item" onclick="showTab('comunicazioni')"><div class="quick-icon">📢</div><div class="quick-lbl">Comunicazioni</div></div>
     <div class="quick-item" onclick="showTab('convocazioni')"><div class="quick-icon">📋</div><div class="quick-lbl">Convocazioni</div></div>
     <div class="quick-item" onclick="showTab('calendario')"><div class="quick-icon">📅</div><div class="quick-lbl">Calendario</div></div>
@@ -392,6 +509,13 @@ footer{text-align:center;padding:2rem;font-size:13px;letter-spacing:1px;color:va
   </div>
   <div class="sec-title">Prossimi eventi</div>
   <div id="home-events"></div>
+</section>
+
+<!-- ROSA -->
+<section id="rosa" class="section">
+  <div class="sec-title">Rosa Giocatori</div>
+  <button class="add-event-btn" onclick="openPlayerModal()">👤 Aggiungi Giocatore</button>
+  <div id="rosa-grid"></div>
 </section>
 
 <!-- COMUNICAZIONI -->
@@ -866,6 +990,173 @@ function saveConv(){
   renderConvList();
 }
 
+
+// ═══ ROSA ═══
+var rosa = JSON.parse(localStorage.getItem('sg_rosa') || '[]');
+
+function saveRosa(){ localStorage.setItem('sg_rosa', JSON.stringify(rosa)); }
+
+function renderRosa(){
+  var grid = document.getElementById('rosa-grid');
+  if(!rosa.length){
+    grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">👥</div><div class="empty-state-text">Nessun giocatore nella rosa</div></div>';
+    return;
+  }
+  var sorted = rosa.slice().sort(function(a,b){ return (parseInt(a.numero)||99)-(parseInt(b.numero)||99); });
+  var html = '<div class="rosa-grid">';
+  sorted.forEach(function(p){
+    var visitaClass='', visitaLabel='';
+    if(p.visita){
+      var diff = Math.ceil((new Date(p.visita)-new Date())/(1000*60*60*24));
+      if(diff<0){ visitaClass='visita-exp'; visitaLabel='SCADUTA'; }
+      else if(diff<=30){ visitaClass='visita-warn'; visitaLabel='Scade presto'; }
+      else { visitaClass='visita-ok'; visitaLabel='Visita OK'; }
+    }
+    var fotoHtml = p.foto
+      ? '<img src="'+p.foto+'" alt="">'
+      : '👤';
+    html += '<div class="player-card" onclick="openPlayerDetail(''+p.id+'')">';
+    html += '<div class="player-card-foto">';
+    html += fotoHtml;
+    if(p.numero) html += '<div class="player-card-num">'+p.numero+'</div>';
+    if(visitaLabel) html += '<div class="player-card-visita-badge '+visitaClass+'">'+visitaLabel+'</div>';
+    html += '</div>';
+    html += '<div class="player-card-body">';
+    html += '<div class="player-card-name">'+p.nome+' '+p.cognome+'</div>';
+    if(p.ruolo) html += '<div class="player-card-role">'+p.ruolo+'</div>';
+    html += '<div class="player-card-info">';
+    if(p.nascita) html += '<span>🎂 '+fmtDate(p.nascita)+'</span>';
+    if(p.genitore) html += '<span>👨‍👩‍👦 '+p.genitore+'</span>';
+    html += '</div></div></div>';
+  });
+  html += '</div>';
+  grid.innerHTML = html;
+}
+
+var editingPlayerId = null;
+
+function openPlayerModal(id){
+  editingPlayerId = id || null;
+  var del = document.getElementById('plDeleteBtn');
+  document.getElementById('pl-foto-preview').innerHTML = '👤';
+  document.getElementById('pl-foto').value = '';
+
+  if(id){
+    var p = rosa.find(function(r){return r.id===id;});
+    if(!p) return;
+    document.getElementById('playerModalTitle').textContent = 'Modifica Giocatore';
+    document.getElementById('pl-id').value = p.id;
+    document.getElementById('pl-nome').value = p.nome||'';
+    document.getElementById('pl-cognome').value = p.cognome||'';
+    document.getElementById('pl-nascita').value = p.nascita||'';
+    document.getElementById('pl-numero').value = p.numero||'';
+    document.getElementById('pl-ruolo').value = p.ruolo||'';
+    document.getElementById('pl-visita').value = p.visita||'';
+    document.getElementById('pl-genitore').value = p.genitore||'';
+    document.getElementById('pl-telefono').value = p.telefono||'';
+    document.getElementById('pl-foto').value = p.foto||'';
+    if(p.foto){
+      document.getElementById('pl-foto-preview').innerHTML = '<img src="'+p.foto+'" style="width:100%;height:100%;object-fit:cover;">';
+    }
+    del.style.display = 'block';
+  } else {
+    document.getElementById('playerModalTitle').textContent = 'Nuovo Giocatore';
+    ['pl-nome','pl-cognome','pl-numero','pl-genitore','pl-telefono'].forEach(function(id){ document.getElementById(id).value=''; });
+    document.getElementById('pl-nascita').value='';
+    document.getElementById('pl-visita').value='';
+    document.getElementById('pl-ruolo').value='';
+    del.style.display = 'none';
+  }
+  document.getElementById('playerOverlay').classList.add('open');
+}
+function closePlayerModal(){ document.getElementById('playerOverlay').classList.remove('open'); }
+
+function previewFoto(input){
+  if(!input.files||!input.files[0]) return;
+  var reader = new FileReader();
+  reader.onload = function(e){
+    var data = e.target.result;
+    document.getElementById('pl-foto').value = data;
+    document.getElementById('pl-foto-preview').innerHTML = '<img src="'+data+'" style="width:100%;height:100%;object-fit:cover;border-radius:6px;">';
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function savePlayer(){
+  var nome = document.getElementById('pl-nome').value.trim();
+  var cognome = document.getElementById('pl-cognome').value.trim();
+  if(!nome && !cognome){ alert('Inserisci almeno il nome.'); return; }
+  var p = {
+    id: editingPlayerId || ('pl_'+Date.now()),
+    nome: nome,
+    cognome: cognome,
+    nascita: document.getElementById('pl-nascita').value,
+    numero: document.getElementById('pl-numero').value,
+    ruolo: document.getElementById('pl-ruolo').value,
+    visita: document.getElementById('pl-visita').value,
+    genitore: document.getElementById('pl-genitore').value.trim(),
+    telefono: document.getElementById('pl-telefono').value.trim(),
+    foto: document.getElementById('pl-foto').value
+  };
+  if(editingPlayerId){
+    var idx = rosa.findIndex(function(r){return r.id===editingPlayerId;});
+    if(idx>=0) rosa[idx]=p;
+  } else {
+    rosa.push(p);
+  }
+  saveRosa();
+  closePlayerModal();
+  renderRosa();
+}
+
+function deletePlayer(){
+  if(!editingPlayerId) return;
+  if(!confirm('Eliminare questo giocatore dalla rosa?')) return;
+  rosa = rosa.filter(function(r){return r.id!==editingPlayerId;});
+  saveRosa();
+  closePlayerModal();
+  closePlayerDetail();
+  renderRosa();
+}
+
+function openPlayerDetail(id){
+  var p = rosa.find(function(r){return r.id===id;});
+  if(!p) return;
+  var fotoHtml = p.foto
+    ? '<img src="'+p.foto+'" style="width:100%;height:100%;object-fit:cover;">'
+    : '👤';
+  var visitaStr = '', visitaColor = 'var(--text-hi)';
+  if(p.visita){
+    var diff = Math.ceil((new Date(p.visita)-new Date())/(1000*60*60*24));
+    visitaStr = fmtDate(p.visita);
+    if(diff<0) visitaColor='var(--red-bright)';
+    else if(diff<=30) visitaColor='var(--gold)';
+    else visitaColor='#4caf7a';
+  }
+  var eta = '';
+  if(p.nascita){
+    var ageDiff = Date.now() - new Date(p.nascita).getTime();
+    eta = Math.abs(new Date(ageDiff).getUTCFullYear() - 1970)+' anni';
+  }
+  var html = '';
+  html += '<div class="detail-header">';
+  html += '<div class="detail-foto">'+fotoHtml+'</div>';
+  html += '<div>';
+  html += '<div class="detail-name">'+(p.numero?'#'+p.numero+' ':'')+p.nome+' '+p.cognome+'</div>';
+  if(p.ruolo) html += '<div class="detail-role">'+p.ruolo+'</div>';
+  html += '</div></div>';
+  html += '<div class="detail-grid">';
+  if(p.nascita) html += '<div class="detail-field"><div class="detail-field-label">Data di nascita</div><div class="detail-field-val">'+fmtDate(p.nascita)+(eta?' · '+eta:'')+'</div></div>';
+  if(p.visita) html += '<div class="detail-field"><div class="detail-field-label">Visita medica</div><div class="detail-field-val" style="color:'+visitaColor+'">'+visitaStr+'</div></div>';
+  if(p.genitore) html += '<div class="detail-field"><div class="detail-field-label">Genitore</div><div class="detail-field-val">'+p.genitore+'</div></div>';
+  if(p.telefono) html += '<div class="detail-field"><div class="detail-field-label">Telefono</div><div class="detail-field-val"><a href="tel:'+p.telefono+'" style="color:var(--red-bright);text-decoration:none;">'+p.telefono+'</a></div></div>';
+  html += '</div>';
+  document.getElementById('playerDetailContent').innerHTML = html;
+  document.getElementById('playerDetailEditBtn').onclick = function(){ closePlayerDetail(); openPlayerModal(id); };
+  document.getElementById('playerDetailOverlay').classList.add('open');
+}
+function closePlayerDetail(){ document.getElementById('playerDetailOverlay').classList.remove('open'); }
+
 // ═══ UTILS ═══
 function fmtDate(dateStr){
   var d = new Date(dateStr);
@@ -906,6 +1197,7 @@ function showTab(id){
   if(id==='calendario') renderCalendar();
   if(id==='convocazioni') renderConvList();
   if(id==='home') renderHomeEvents();
+  if(id==='rosa') renderRosa();
 }
 function closeAlbum(){
   document.getElementById('photos-view').style.display='none';
@@ -913,13 +1205,14 @@ function closeAlbum(){
 }
 
 // close modals clicking outside
-['settingsOverlay','eventOverlay','convOverlay'].forEach(function(id){
+['settingsOverlay','eventOverlay','convOverlay','playerOverlay','playerDetailOverlay'].forEach(function(id){
   document.getElementById(id).addEventListener('click',function(e){ if(e.target===this) this.classList.remove('open'); });
 });
 
 // ═══ INIT ═══
 applyConfig();
 renderCalendar();
+renderRosa();
 </script>
 </body>
 </html>
