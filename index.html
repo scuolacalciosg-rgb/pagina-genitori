@@ -1317,7 +1317,7 @@ function renderComunicazioni(){
       : c.priorita==='importante'
         ? '<span class="badge badge-importante">⚠️ Importante</span>'
         : '';
-    html += '<div class="com-card tipo-'+c.tipo+'" onclick="openComModal(''+c.id+'')">';
+    html += '<div class="com-card tipo-'+c.tipo+'" onclick="openComModal(\''+c.id+'\')">';
     html += '<div class="com-card-head">';
     html += '<div class="com-card-title">'+c.titolo+'</div>';
     html += '<div class="com-card-meta">';
@@ -1327,7 +1327,7 @@ function renderComunicazioni(){
     if(c.testo) html += '<div class="com-card-body">'+c.testo+'</div>';
     html += '<div class="com-card-footer">';
     html += '<span class="badge '+(c.tipo==='partite'?'badge-red':c.tipo==='visite'?'badge-green':'badge-gold')+'">'+tipoLabel+'</span>';
-    html += '<button class="com-edit-btn" onclick="event.stopPropagation();openComModal(''+c.id+'')">✏️ Modifica</button>';
+    html += '<button class="com-edit-btn" onclick="event.stopPropagation();openComModal(\''+c.id+'\')">✏️ Modifica</button>';
     html += '</div></div>';
   });
   lista.innerHTML = html;
