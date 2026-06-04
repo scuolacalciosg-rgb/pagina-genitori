@@ -186,6 +186,37 @@ main{max-width:100%;padding:2rem 2rem 4rem;}
 .rm-btn{background:none;border:none;color:var(--text-lo);font-size:16px;cursor:pointer;padding:0 4px;}
 .rm-btn:hover{color:var(--red);}
 
+
+/* COMUNICAZIONI */
+.com-filters{display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap;}
+.com-filter{background:var(--bg-card);border:1px solid var(--border);border-radius:3px;color:var(--text-md);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:6px 16px;cursor:pointer;transition:all .2s;}
+.com-filter:hover{border-color:var(--border-red);color:var(--text-hi);}
+.com-filter.active{background:var(--red-dim);border-color:var(--red-border);color:var(--red-bright);}
+
+.com-tipo-btns{display:flex;gap:8px;margin-top:4px;}
+.com-tipo-btn{flex:1;background:var(--bg-card);border:1px solid var(--border);border-radius:3px;color:var(--text-md);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:8px;cursor:pointer;transition:all .2s;}
+.com-tipo-btn:hover{border-color:var(--border-red);color:var(--text-hi);}
+.com-tipo-btn.active{border-color:var(--red-border);color:var(--red-bright);background:var(--red-dim);}
+.com-tipo-btn[data-tipo="generali"].active{border-color:rgba(201,147,58,.4);color:var(--gold);background:var(--gold-dim);}
+.com-tipo-btn[data-tipo="visite"].active{border-color:rgba(45,122,69,.4);color:#4caf7a;background:rgba(45,122,69,.1);}
+
+.com-card{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:.9rem;transition:border-color .2s,background .2s;cursor:pointer;}
+.com-card:hover{background:var(--bg-hover);}
+.com-card.tipo-partite{border-left:3px solid var(--red);}
+.com-card.tipo-generali{border-left:3px solid var(--gold);}
+.com-card.tipo-visite{border-left:3px solid #4caf7a;}
+.com-card-head{padding:1rem 1.25rem .6rem;display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;}
+.com-card-title{font-family:'Rajdhani',sans-serif;font-size:19px;font-weight:700;color:var(--text-hi);line-height:1.2;}
+.com-card-meta{display:flex;gap:8px;align-items:center;flex-shrink:0;flex-direction:column;align-items:flex-end;}
+.com-card-date{font-size:11px;color:var(--text-lo);letter-spacing:.5px;}
+.com-card-body{padding:0 1.25rem 1rem;font-size:14px;color:var(--text-md);line-height:1.7;}
+.com-card-footer{padding:.6rem 1.25rem;background:rgba(0,0,0,.15);border-top:1px solid var(--border);display:flex;gap:8px;align-items:center;justify-content:space-between;}
+.com-edit-btn{background:none;border:1px solid var(--border-red);border-radius:2px;color:var(--red);font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;cursor:pointer;}
+
+.badge-urgente{background:rgba(204,31,31,.2);border:1px solid var(--border-red);color:var(--red-bright);}
+.badge-importante{background:rgba(201,147,58,.15);border:1px solid rgba(201,147,58,.3);color:var(--gold);}
+.badge-normale{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text-lo);}
+
 /* ROSA */
 .rosa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
 .player-card{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;overflow:hidden;cursor:pointer;transition:border-color .2s,transform .15s;position:relative;}
@@ -441,6 +472,55 @@ footer{text-align:center;padding:2rem;font-size:13px;letter-spacing:1px;color:va
   </div>
 </div>
 
+<!-- COMUNICAZIONE MODAL -->
+<div class="settings-overlay" id="comOverlay">
+  <div class="event-modal" style="width:500px;">
+    <div class="event-modal-title" id="comModalTitle">📢 Nuova Comunicazione</div>
+    <input type="hidden" id="com-id">
+
+    <div class="settings-field">
+      <label class="settings-label">Categoria</label>
+      <div class="com-tipo-btns">
+        <button class="com-tipo-btn active" data-tipo="partite" onclick="selectComTipo('partite')">⚽ Partite</button>
+        <button class="com-tipo-btn" data-tipo="generali" onclick="selectComTipo('generali')">📋 Generali</button>
+        <button class="com-tipo-btn" data-tipo="visite" onclick="selectComTipo('visite')">🏥 Visite</button>
+      </div>
+      <input type="hidden" id="com-tipo" value="partite">
+    </div>
+
+    <div class="settings-field">
+      <label class="settings-label">Titolo</label>
+      <input class="settings-input" id="com-titolo" placeholder="es. Partita rinviata al 15 giugno">
+    </div>
+
+    <div class="settings-field">
+      <label class="settings-label">Messaggio</label>
+      <textarea class="settings-textarea" id="com-testo" placeholder="Scrivi qui il testo della comunicazione..." style="min-height:100px;"></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="settings-field">
+        <label class="settings-label">Data</label>
+        <input class="settings-input" id="com-data" type="date">
+      </div>
+      <div class="settings-field">
+        <label class="settings-label">Priorità</label>
+        <select class="settings-select" id="com-priorita">
+          <option value="normale">Normale</option>
+          <option value="importante">⚠️ Importante</option>
+          <option value="urgente">🔴 Urgente</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="settings-actions">
+      <button class="btn-danger" id="comDeleteBtn" onclick="deleteCom()" style="display:none">Elimina</button>
+      <button class="btn-cancel" onclick="closeComModal()">Annulla</button>
+      <button class="btn-save" onclick="saveCom()">Pubblica</button>
+    </div>
+  </div>
+</div>
+
 <!-- CONVOCAZIONE MODAL -->
 <div class="settings-overlay" id="convOverlay">
   <div class="conv-modal">
@@ -521,7 +601,17 @@ footer{text-align:center;padding:2rem;font-size:13px;letter-spacing:1px;color:va
 <!-- COMUNICAZIONI -->
 <section id="comunicazioni" class="section">
   <div class="sec-title">Comunicazioni</div>
-  <div class="empty-state"><div class="empty-state-icon">📢</div><div class="empty-state-text">Nessuna comunicazione</div></div>
+  <button class="add-event-btn" onclick="openComModal()">📢 Nuova Comunicazione</button>
+
+  <!-- filtri categoria -->
+  <div class="com-filters">
+    <button class="com-filter active" onclick="filterCom('tutti')" data-filter="tutti">Tutte</button>
+    <button class="com-filter" onclick="filterCom('partite')" data-filter="partite">⚽ Partite</button>
+    <button class="com-filter" onclick="filterCom('generali')" data-filter="generali">📋 Generali</button>
+    <button class="com-filter" onclick="filterCom('visite')" data-filter="visite">🏥 Visite</button>
+  </div>
+
+  <div id="com-list"></div>
 </section>
 
 <!-- CONVOCAZIONI -->
@@ -1199,6 +1289,134 @@ function openPlayerDetail(id){
 }
 function closePlayerDetail(){ document.getElementById('playerDetailOverlay').classList.remove('open'); }
 
+
+// ═══ COMUNICAZIONI ═══
+var comunicazioni = JSON.parse(localStorage.getItem('sg_com') || '[]');
+var comFilter = 'tutti';
+
+function saveComunicazioni(){ localStorage.setItem('sg_com', JSON.stringify(comunicazioni)); }
+
+function renderComunicazioni(){
+  var lista = document.getElementById('com-list');
+  if(!lista) return;
+  var filtered = comFilter === 'tutti'
+    ? comunicazioni
+    : comunicazioni.filter(function(c){ return c.tipo === comFilter; });
+  var sorted = filtered.slice().sort(function(a,b){ return new Date(b.data)-new Date(a.data); });
+
+  if(!sorted.length){
+    lista.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📢</div><div class="empty-state-text">Nessuna comunicazione</div></div>';
+    return;
+  }
+
+  var html = '';
+  sorted.forEach(function(c){
+    var tipoLabel = c.tipo==='partite'?'⚽ Partite':c.tipo==='visite'?'🏥 Visite':'📋 Generali';
+    var prioBadge = c.priorita==='urgente'
+      ? '<span class="badge badge-urgente">🔴 Urgente</span>'
+      : c.priorita==='importante'
+        ? '<span class="badge badge-importante">⚠️ Importante</span>'
+        : '';
+    html += '<div class="com-card tipo-'+c.tipo+'" onclick="openComModal(''+c.id+'')">';
+    html += '<div class="com-card-head">';
+    html += '<div class="com-card-title">'+c.titolo+'</div>';
+    html += '<div class="com-card-meta">';
+    html += '<div class="com-card-date">'+fmtDate(c.data)+'</div>';
+    if(prioBadge) html += prioBadge;
+    html += '</div></div>';
+    if(c.testo) html += '<div class="com-card-body">'+c.testo+'</div>';
+    html += '<div class="com-card-footer">';
+    html += '<span class="badge '+(c.tipo==='partite'?'badge-red':c.tipo==='visite'?'badge-green':'badge-gold')+'">'+tipoLabel+'</span>';
+    html += '<button class="com-edit-btn" onclick="event.stopPropagation();openComModal(''+c.id+'')">✏️ Modifica</button>';
+    html += '</div></div>';
+  });
+  lista.innerHTML = html;
+
+  // update filter counts
+  document.querySelectorAll('.com-filter').forEach(function(btn){
+    var f = btn.dataset.filter;
+    var count = f === 'tutti' ? comunicazioni.length : comunicazioni.filter(function(c){ return c.tipo===f; }).length;
+    var base = f==='tutti'?'Tutte':f==='partite'?'⚽ Partite':f==='visite'?'🏥 Visite':'📋 Generali';
+    btn.textContent = base + (count ? ' ('+count+')' : '');
+  });
+}
+
+function filterCom(tipo){
+  comFilter = tipo;
+  document.querySelectorAll('.com-filter').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelector('[data-filter="'+tipo+'"]').classList.add('active');
+  renderComunicazioni();
+}
+
+var editingComId = null;
+
+function selectComTipo(tipo){
+  document.getElementById('com-tipo').value = tipo;
+  document.querySelectorAll('.com-tipo-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelector('.com-tipo-btn[data-tipo="'+tipo+'"]').classList.add('active');
+}
+
+function openComModal(id){
+  editingComId = id || null;
+  var del = document.getElementById('comDeleteBtn');
+  var today = new Date().toISOString().split('T')[0];
+
+  if(id){
+    var c = comunicazioni.find(function(x){ return x.id===id; });
+    if(!c) return;
+    document.getElementById('comModalTitle').textContent = 'Modifica Comunicazione';
+    document.getElementById('com-id').value = c.id;
+    document.getElementById('com-titolo').value = c.titolo;
+    document.getElementById('com-testo').value = c.testo||'';
+    document.getElementById('com-data').value = c.data;
+    document.getElementById('com-priorita').value = c.priorita||'normale';
+    selectComTipo(c.tipo||'generali');
+    del.style.display = 'block';
+  } else {
+    document.getElementById('comModalTitle').textContent = 'Nuova Comunicazione';
+    document.getElementById('com-id').value = '';
+    document.getElementById('com-titolo').value = '';
+    document.getElementById('com-testo').value = '';
+    document.getElementById('com-data').value = today;
+    document.getElementById('com-priorita').value = 'normale';
+    selectComTipo('generali');
+    del.style.display = 'none';
+  }
+  document.getElementById('comOverlay').classList.add('open');
+}
+function closeComModal(){ document.getElementById('comOverlay').classList.remove('open'); }
+
+function saveCom(){
+  var titolo = document.getElementById('com-titolo').value.trim();
+  if(!titolo){ alert('Inserisci il titolo.'); return; }
+  var c = {
+    id: editingComId || ('com_'+Date.now()),
+    tipo: document.getElementById('com-tipo').value || 'generali',
+    titolo: titolo,
+    testo: document.getElementById('com-testo').value.trim(),
+    data: document.getElementById('com-data').value || new Date().toISOString().split('T')[0],
+    priorita: document.getElementById('com-priorita').value
+  };
+  if(editingComId){
+    var idx = comunicazioni.findIndex(function(x){ return x.id===editingComId; });
+    if(idx>=0) comunicazioni[idx]=c;
+  } else {
+    comunicazioni.unshift(c);
+  }
+  saveComunicazioni();
+  closeComModal();
+  renderComunicazioni();
+}
+
+function deleteCom(){
+  if(!editingComId) return;
+  if(!confirm('Eliminare questa comunicazione?')) return;
+  comunicazioni = comunicazioni.filter(function(c){ return c.id!==editingComId; });
+  saveComunicazioni();
+  closeComModal();
+  renderComunicazioni();
+}
+
 // ═══ UTILS ═══
 function fmtDate(dateStr){
   var d = new Date(dateStr);
@@ -1240,6 +1458,7 @@ function showTab(id){
   if(id==='convocazioni') renderConvList();
   if(id==='home') renderHomeEvents();
   if(id==='rosa') renderRosa();
+  if(id==='comunicazioni') renderComunicazioni();
 }
 function closeAlbum(){
   document.getElementById('photos-view').style.display='none';
@@ -1247,7 +1466,7 @@ function closeAlbum(){
 }
 
 // close modals clicking outside
-['settingsOverlay','eventOverlay','convOverlay','playerOverlay','playerDetailOverlay'].forEach(function(id){
+['settingsOverlay','eventOverlay','convOverlay','playerOverlay','playerDetailOverlay','comOverlay'].forEach(function(id){
   document.getElementById(id).addEventListener('click',function(e){ if(e.target===this) this.classList.remove('open'); });
 });
 
