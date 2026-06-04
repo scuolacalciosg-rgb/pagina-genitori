@@ -193,6 +193,26 @@ main{max-width:100%;padding:2rem 2rem 4rem;}
 .partita-row select{flex:none;width:120px;background:#111;}
 .add-player-btn:hover{border-color:var(--border-red);color:var(--red);}
 
+
+/* ═══ ROSA ═══ */
+.rosa-ruolo-hdr{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-lo);padding:14px 0 8px;margin-top:8px;border-bottom:1px solid var(--border);margin-bottom:12px;}
+.rosa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;margin-bottom:20px;}
+.rosa-card{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:22px 24px;display:flex;align-items:center;gap:18px;transition:border-color .2s,background .2s;}
+.rosa-card:hover{border-color:var(--border-red);background:var(--bg-hover);}
+.r-avatar{width:72px;height:72px;border-radius:50%;flex-shrink:0;object-fit:cover;border:2px solid var(--border-red);}
+.r-num-badge{width:72px;height:72px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-weight:800;font-size:28px;color:#fff;}
+.r-num-badge.porta{background:rgba(201,147,58,0.85);}
+.r-num-badge.dif{background:rgba(58,159,212,0.85);}
+.r-num-badge.cen{background:rgba(39,194,122,0.85);}
+.r-num-badge.att{background:var(--red);}
+.r-info{flex:1;min-width:0;}
+.r-name{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;letter-spacing:.5px;color:var(--text-hi);line-height:1.1;}
+.r-role{font-size:13px;color:var(--text-md);margin-top:5px;letter-spacing:.3px;}
+.r-tel{font-size:13px;color:var(--text-lo);margin-top:4px;}
+.r-actions{display:flex;flex-direction:column;gap:5px;flex-shrink:0;}
+.add-rosa-btn{width:100%;background:none;border:1px dashed var(--border-red);border-radius:6px;color:var(--red);font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:14px;cursor:pointer;transition:background .2s,border-color .2s;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:center;gap:8px;}
+.add-rosa-btn:hover{background:var(--red-dim);border-style:solid;}
+
 footer{text-align:center;padding:2rem;font-size:13px;letter-spacing:1px;color:var(--text-lo);border-top:1px solid var(--border);}
 @media(max-width:700px){
   .tab{padding:0 12px;font-size:13px;}
@@ -367,6 +387,7 @@ footer{text-align:center;padding:2rem;font-size:13px;letter-spacing:1px;color:va
     <div class="tab" onclick="showTab('convocazioni')" data-tab="convocazioni">◈ Convocazioni</div>
     <div class="tab" onclick="showTab('calendario')" data-tab="calendario">◈ Calendario</div>
     <div class="tab" onclick="showTab('galleria')" data-tab="galleria">◈ Galleria</div>
+    <div class="tab" onclick="showTab('rosa')" data-tab="rosa">◈ Rosa</div>
   </div>
 </nav>
 
@@ -443,6 +464,14 @@ footer{text-align:center;padding:2rem;font-size:13px;letter-spacing:1px;color:va
     <button class="back-btn" onclick="closeAlbum()">← Torna agli album</button>
     <div class="photo-grid" id="photo-grid-ph"></div>
   </div>
+</section>
+
+
+<!-- ROSA -->
+<section id="rosa" class="section">
+  <div class="sec-title">Rosa Squadra</div>
+  <button class="add-rosa-btn" onclick="openRosaModal(null)">➕ Aggiungi Giocatore</button>
+  <div id="rosa-list"></div>
 </section>
 
 </main>
@@ -906,6 +935,7 @@ function showTab(id){
   if(id==='calendario') renderCalendar();
   if(id==='convocazioni') renderConvList();
   if(id==='home') renderHomeEvents();
+  if(id==='rosa') renderRosa();
 }
 function closeAlbum(){
   document.getElementById('photos-view').style.display='none';
@@ -913,13 +943,202 @@ function closeAlbum(){
 }
 
 // close modals clicking outside
-['settingsOverlay','eventOverlay','convOverlay'].forEach(function(id){
+['settingsOverlay','eventOverlay','convOverlay','rosaOverlay'].forEach(function(id){
   document.getElementById(id).addEventListener('click',function(e){ if(e.target===this) this.classList.remove('open'); });
 });
+
+
+// ═══ ROSA ═══
+var rosaPlayers = JSON.parse(localStorage.getItem('sg_rosa') || '[]');
+var editingRosaId = null;
+
+function saveRosa() {
+  localStorage.setItem('sg_rosa', JSON.stringify(rosaPlayers));
+}
+
+function openRosaModal(id) {
+  editingRosaId = id;
+  var p = id ? rosaPlayers.find(function(x){ return x.id===id; }) : null;
+  document.getElementById('rosa-id').value = id || '';
+  document.getElementById('rosa-nome').value = p ? p.nome : '';
+  document.getElementById('rosa-cognome').value = p ? p.cognome : '';
+  document.getElementById('rosa-ruolo').value = p ? p.ruolo : 'Portiere';
+  document.getElementById('rosa-num').value = p ? p.num : '';
+  document.getElementById('rosa-tel').value = p ? (p.tel||'') : '';
+  document.getElementById('rosa-foto-file').value = '';
+  document.getElementById('rosa-modal-title').textContent = p ? '✏ Modifica Giocatore' : '👤 Nuovo Giocatore';
+  document.getElementById('rosa-del-btn').style.display = p ? 'flex' : 'none';
+  // foto preview
+  var wrap = document.getElementById('rosa-foto-wrap');
+  if (p && p.foto) {
+    wrap.innerHTML = '<img src="'+p.foto+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+  } else {
+    wrap.innerHTML = '👤';
+  }
+  document.getElementById('rosaOverlay').classList.add('open');
+}
+
+function closeRosaModal() {
+  document.getElementById('rosaOverlay').classList.remove('open');
+}
+
+function previewRosaFoto(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var r = new FileReader();
+  r.onload = function(e) {
+    var wrap = document.getElementById('rosa-foto-wrap');
+    wrap.innerHTML = '<img src="'+e.target.result+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+  };
+  r.readAsDataURL(file);
+}
+
+function saveGiocatore() {
+  var nome = document.getElementById('rosa-nome').value.trim();
+  var cognome = document.getElementById('rosa-cognome').value.trim();
+  if (!nome && !cognome) { alert('Inserisci almeno nome o cognome'); return; }
+
+  var wrap = document.getElementById('rosa-foto-wrap');
+  var imgEl = wrap.querySelector('img');
+  var foto = imgEl ? imgEl.src : '';
+
+  var obj = {
+    id: editingRosaId || ('r'+Date.now()),
+    nome: nome,
+    cognome: cognome,
+    ruolo: document.getElementById('rosa-ruolo').value,
+    num: document.getElementById('rosa-num').value.trim(),
+    tel: document.getElementById('rosa-tel').value.trim(),
+    foto: foto
+  };
+
+  if (editingRosaId) {
+    var idx = rosaPlayers.findIndex(function(x){ return x.id===editingRosaId; });
+    if (idx >= 0) rosaPlayers[idx] = obj;
+  } else {
+    rosaPlayers.push(obj);
+  }
+  saveRosa();
+  closeRosaModal();
+  renderRosa();
+}
+
+function deleteGiocatore() {
+  if (!editingRosaId) return;
+  if (!confirm('Rimuovere questo giocatore dalla rosa?')) return;
+  rosaPlayers = rosaPlayers.filter(function(x){ return x.id!==editingRosaId; });
+  saveRosa();
+  closeRosaModal();
+  renderRosa();
+}
+
+function renderRosa() {
+  var c = document.getElementById('rosa-list');
+  if (!c) return;
+
+  var ruoli = ['Portiere','Difensore','Centrocampista','Attaccante'];
+  var ruoloLabels = { Portiere:'Portieri', Difensore:'Difensori', Centrocampista:'Centrocampisti', Attaccante:'Attaccanti' };
+  var colorClass = { Portiere:'porta', Difensore:'dif', Centrocampista:'cen', Attaccante:'att' };
+
+  if (!rosaPlayers.length) {
+    c.innerHTML = '<div class="empty-state"><div class="empty-state-icon">👥</div><div class="empty-state-text">Nessun giocatore nella rosa</div></div>';
+    return;
+  }
+
+  var html = '';
+  ruoli.forEach(function(ruolo) {
+    var players = rosaPlayers.filter(function(p){ return p.ruolo===ruolo; })
+      .sort(function(a,b){ return (+a.num||99)-(+b.num||99); });
+    if (!players.length) return;
+    html += '<div class="rosa-ruolo-hdr">'+ruoloLabels[ruolo]+' — '+players.length+'</div>';
+    html += '<div class="rosa-grid">';
+    players.forEach(function(p) {
+      var avatarHtml = p.foto && p.foto.indexOf('data:') === 0
+        ? '<img class="r-avatar" src="'+p.foto+'" alt="">'
+        : '<div class="r-num-badge '+colorClass[p.ruolo]+'">'+(p.num||'?')+'</div>';
+      html += '<div class="rosa-card">'
+        + avatarHtml
+        + '<div class="r-info">'
+        + '<div class="r-name">'+esc(p.nome)+' '+esc(p.cognome)+'</div>'
+        + '<div class="r-role"><span class="badge '+(p.ruolo==='Portiere'?'badge-gold':p.ruolo==='Difensore'?'badge-gray':p.ruolo==='Centrocampista'?'badge-green':'badge-red')+'">'+esc(p.ruolo)+'</span>'+(p.num?' &nbsp;#'+esc(p.num):'')+'</div>'
+        + (p.tel ? '<div class="r-tel">📞 '+esc(p.tel)+'</div>' : '')
+        + '</div>'
+        + '<div class="r-actions">'
+        + '<button class="conv-edit-btn" onclick="openRosaModal(''+p.id+'')">✏ Modifica</button>'
+        + '</div>'
+        + '</div>';
+    });
+    html += '</div>';
+  });
+  c.innerHTML = html;
+}
+
+function esc(s) {
+  if (!s) return '';
+  var d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
 
 // ═══ INIT ═══
 applyConfig();
 renderCalendar();
 </script>
+
+<!-- ROSA MODAL -->
+<div class="settings-overlay" id="rosaOverlay">
+  <div class="settings-modal" onclick="event.stopPropagation()" style="width:420px;max-width:94vw;">
+    <div class="settings-title" id="rosa-modal-title">👤 Nuovo Giocatore</div>
+
+    <!-- FOTO preview -->
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:1.25rem;">
+      <div id="rosa-foto-wrap" style="width:72px;height:72px;border-radius:50%;background:#1a1010;border:2px solid var(--border-red);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;font-size:28px;">👤</div>
+      <div style="flex:1;">
+        <label class="settings-label">Foto giocatore</label>
+        <input class="settings-input" type="file" id="rosa-foto-file" accept="image/*" onchange="previewRosaFoto(this)">
+        <img id="rosa-foto-img" src="" alt="" style="display:none;width:72px;height:72px;border-radius:50%;object-fit:cover;position:absolute;top:0;left:0;">
+      </div>
+    </div>
+
+    <input type="hidden" id="rosa-id">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div class="settings-field">
+        <label class="settings-label">Nome</label>
+        <input class="settings-input" id="rosa-nome" placeholder="Nome">
+      </div>
+      <div class="settings-field">
+        <label class="settings-label">Cognome</label>
+        <input class="settings-input" id="rosa-cognome" placeholder="Cognome">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div class="settings-field">
+        <label class="settings-label">Ruolo</label>
+        <select class="settings-select" id="rosa-ruolo">
+          <option>Portiere</option>
+          <option>Difensore</option>
+          <option>Centrocampista</option>
+          <option>Attaccante</option>
+        </select>
+      </div>
+      <div class="settings-field">
+        <label class="settings-label">N° Maglia</label>
+        <input class="settings-input" type="number" id="rosa-num" placeholder="Es: 10" min="1" max="99">
+      </div>
+    </div>
+    <div class="settings-field">
+      <label class="settings-label">Telefono Genitore</label>
+      <input class="settings-input" type="tel" id="rosa-tel" placeholder="Es: 333 1234567">
+    </div>
+
+    <div class="settings-actions">
+      <button class="btn-cancel" onclick="closeRosaModal()">Annulla</button>
+      <button class="btn-danger" id="rosa-del-btn" onclick="deleteGiocatore()" style="display:none;">Elimina</button>
+      <button class="btn-save" onclick="saveGiocatore()">Salva</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
