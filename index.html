@@ -293,6 +293,34 @@ footer{text-align:center;padding:2rem;font-size:15px;letter-spacing:1px;color:va
 .photo-del-btn{position:absolute;top:5px;right:5px;background:rgba(0,0,0,.7);border:none;border-radius:50%;color:#fff;font-size:13px;width:24px;height:24px;cursor:pointer;display:none;align-items:center;justify-content:center;}
 .photo-thumb:hover .photo-del-btn{display:flex;}
 
+
+/* MODALITA SOLA LETTURA */
+.readonly-badge{position:fixed;bottom:1.2rem;right:1.2rem;background:rgba(10,10,10,0.9);border:1px solid var(--border-red);border-radius:6px;padding:8px 14px;font-family:Rajdhani,sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;color:var(--text-lo);cursor:pointer;z-index:500;transition:all .2s;display:flex;align-items:center;gap:7px;}
+.readonly-badge:hover{border-color:var(--red-bright);color:var(--red-bright);}
+.readonly-badge.unlocked{border-color:rgba(45,122,69,.5);color:#4caf7a;}
+.edit-only{display:none;}
+body.unlocked .edit-only{display:flex;}
+body.unlocked .add-event-btn{display:flex;}
+body:not(.unlocked) .add-event-btn{display:none;}
+body.unlocked .conv-edit-btn{display:inline-block;}
+body:not(.unlocked) .conv-edit-btn{display:none;}
+body.unlocked .com-edit-btn{display:inline-block;}
+body:not(.unlocked) .com-edit-btn{display:none;}
+body.unlocked .settings-btn{display:block;}
+body:not(.unlocked) .settings-btn{display:none;}
+
+/* Password modal */
+.pwd-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:600;align-items:center;justify-content:center;}
+.pwd-overlay.open{display:flex;}
+.pwd-modal{background:#1a1010;border:1px solid var(--border-red);border-radius:8px;padding:2rem;width:320px;max-width:90vw;text-align:center;}
+.pwd-title{font-family:Rajdhani,sans-serif;font-size:20px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:.5rem;}
+.pwd-sub{font-size:14px;color:var(--text-md);margin-bottom:1.5rem;}
+.pwd-input{width:100%;background:#0d0d0d;border:1px solid var(--border-red);border-radius:4px;color:var(--text-hi);font-family:Barlow,sans-serif;font-size:18px;padding:10px 14px;outline:none;text-align:center;letter-spacing:3px;margin-bottom:1rem;}
+.pwd-input:focus{border-color:var(--red-bright);}
+.pwd-error{color:var(--red-bright);font-size:13px;margin-bottom:.75rem;min-height:18px;font-family:Rajdhani,sans-serif;letter-spacing:1px;}
+.pwd-btn{width:100%;background:var(--red);border:none;border-radius:4px;color:#fff;font-family:Rajdhani,sans-serif;font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:11px;cursor:pointer;transition:background .2s;}
+.pwd-btn:hover{background:var(--red-bright);}
+
 /* calendar list items size boost */
 .cal-body { font-size:16px; }
 .cal-result { font-size:14px; }
@@ -1780,8 +1808,8 @@ function saveSettings(){
 function showTab(id){
   document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
   document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
-  document.getElementById(id).classList.add('active');
-  document.querySelector('[data-tab="'+id+'"]').classList.add('active');
+  var sec = document.getElementById(id); if(sec) sec.classList.add('active');
+  var tab = document.querySelector('[data-tab="'+id+'"]'); if(tab) tab.classList.add('active');
   window.scrollTo(0,0);
   if(id==='calendario') renderCalendar();
   if(id==='convocazioni') renderConvList();
@@ -1796,16 +1824,115 @@ function closeAlbum(){
 }
 
 // close modals clicking outside
-['settingsOverlay','eventOverlay','convOverlay','playerOverlay','playerDetailOverlay','comOverlay','albumOverlay'].forEach(function(id){
-  document.getElementById(id).addEventListener('click',function(e){ if(e.target===this) this.classList.remove('open'); });
+window.addEventListener('load', function(){
+  ['settingsOverlay','eventOverlay','convOverlay','playerOverlay','playerDetailOverlay','comOverlay','albumOverlay'].forEach(function(id){
+    var el = document.getElementById(id); if(el) el.addEventListener('click',function(e){ if(e.target===this) this.classList.remove('open'); });
+  });
+});
+
+
+// ═══ PASSWORD & READONLY ═══
+var PWD_HASH = '7c95be74580192f40ea3991aa664f7a56c78c1228a4396345381904236c14276';
+var isUnlocked = sessionStorage.getItem('sg_unlocked') === '1';
+
+function sha256(str){
+  // Simple approach: compare hash stored
+  // We use a pre-computed check via subtle crypto
+  return crypto.subtle.digest('SHA-256', new TextEncoder().encode(str))
+    .then(function(buf){
+      return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+    });
+}
+
+function applyReadonly(){
+  var badge = document.getElementById('readonlyBadge');
+  var icon = document.getElementById('lockIcon');
+  var lbl = document.getElementById('lockLabel');
+  if(isUnlocked){
+    document.body.classList.add('unlocked');
+    badge.classList.add('unlocked');
+    icon.textContent = '🔓';
+    lbl.textContent = 'Modifica attiva';
+  } else {
+    document.body.classList.remove('unlocked');
+    badge.classList.remove('unlocked');
+    icon.textContent = '🔒';
+    lbl.textContent = 'Sola lettura';
+  }
+}
+
+function toggleEdit(){
+  if(isUnlocked){
+    isUnlocked = false;
+    sessionStorage.removeItem('sg_unlocked');
+    applyReadonly();
+  } else {
+    openPwdModal();
+  }
+}
+
+function openPwdModal(){
+  document.getElementById('pwdInput').value = '';
+  document.getElementById('pwdError').textContent = '';
+  document.getElementById('pwdOverlay').classList.add('open');
+  setTimeout(function(){ document.getElementById('pwdInput').focus(); }, 100);
+}
+function closePwdModal(){ document.getElementById('pwdOverlay').classList.remove('open'); }
+
+function checkPassword(){
+  var pwd = document.getElementById('pwdInput').value;
+  sha256(pwd).then(function(hash){
+    if(hash === PWD_HASH){
+      isUnlocked = true;
+      sessionStorage.setItem('sg_unlocked','1');
+      closePwdModal();
+      applyReadonly();
+    } else {
+      document.getElementById('pwdError').textContent = 'Password errata';
+      document.getElementById('pwdInput').value = '';
+      document.getElementById('pwdInput').focus();
+      setTimeout(function(){ document.getElementById('pwdError').textContent=''; }, 2000);
+    }
+  });
+}
+
+// click outside pwd modal - safe
+window.addEventListener('load', function(){
+  var po = document.getElementById('pwdOverlay');
+  if(po) po.addEventListener('click', function(e){ if(e.target===this) closePwdModal(); });
 });
 
 // ═══ INIT ═══
-applyConfig();
-renderHomeEvents();
-renderHomeComunicazioni();
-renderRosa();
-renderGalleria();
+document.addEventListener('DOMContentLoaded', function(){
+  applyConfig();
+  applyReadonly();
+  renderHomeEvents();
+  renderHomeComunicazioni();
+  renderRosa();
+  renderGalleria();
+});
 </script>
+
+<!-- PASSWORD MODAL -->
+<div class="pwd-overlay" id="pwdOverlay">
+  <div class="pwd-modal">
+    <div class="pwd-title">🔐 Accesso Mister</div>
+    <div class="pwd-sub">Inserisci la password per modificare</div>
+    <input class="pwd-input" id="pwdInput" type="password" placeholder="••••••••"
+      onkeydown="if(event.key==='Enter')checkPassword()">
+    <div class="pwd-error" id="pwdError"></div>
+    <button class="pwd-btn" onclick="checkPassword()">Entra</button>
+    <div style="margin-top:1rem;">
+      <button onclick="closePwdModal()" style="background:none;border:none;color:var(--text-lo);font-family:Rajdhani,sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;text-transform:uppercase;">Annulla</button>
+    </div>
+  </div>
+</div>
+
+<!-- BADGE READONLY -->
+<div class="readonly-badge" id="readonlyBadge" onclick="toggleEdit()">
+  <span id="lockIcon">🔒</span>
+  <span id="lockLabel">Sola lettura</span>
+</div>
+
 </body>
 </html>
