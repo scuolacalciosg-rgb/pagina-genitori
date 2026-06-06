@@ -103,43 +103,43 @@ main{max-width:100%;padding:2rem 2rem 4rem;}
 .card-body{font-size:18px;color:var(--text-md);line-height:1.8;}
 
 /* ═══ CALENDARIO GRIGLIA ═══ */
-.cal-layout{display:grid;grid-template-columns:1fr 340px;gap:1.5rem;align-items:start;}
+.cal-layout{display:grid;grid-template-columns:1fr 420px;gap:1.5rem;align-items:start;}
 @media(max-width:900px){.cal-layout{grid-template-columns:1fr;}}
 
 /* Griglia mensile */
 .cal-grid-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
-.cal-nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid var(--border);background:linear-gradient(90deg,rgba(140,10,10,0.3),transparent);}
-.cal-nav-btn{background:none;border:1px solid var(--border-red);border-radius:3px;color:var(--red);font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);background:linear-gradient(90deg,rgba(140,10,10,0.3),transparent);}
+.cal-nav-btn{background:none;border:1px solid var(--border-red);border-radius:3px;color:var(--red);font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;width:42px;height:42px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;}
 .cal-nav-btn:hover{background:var(--red-dim);}
-.cal-month-label{font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-hi);}
+.cal-month-label{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-hi);}
 .cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid var(--border);}
-.cal-wd{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-lo);text-align:center;padding:8px 0;}
+.cal-wd{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-lo);text-align:center;padding:12px 0;}
 .cal-days{display:grid;grid-template-columns:repeat(7,1fr);}
-.cal-cell{min-height:72px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:6px;position:relative;cursor:default;}
+.cal-cell{min-height:110px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:8px;position:relative;cursor:default;}
 .cal-cell:nth-child(7n){border-right:none;}
 .cal-cell.empty{background:rgba(0,0,0,0.1);}
-.cal-cell.today .cal-num{background:var(--red);color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;}
-.cal-num{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:600;color:var(--text-md);margin-bottom:3px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;}
+.cal-cell.today .cal-num{background:var(--red);color:#fff;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;}
+.cal-num{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--text-md);margin-bottom:4px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;}
 .cal-cell.has-event{background:rgba(204,31,31,0.04);}
-.cal-dot{font-size:11px;border-radius:2px;padding:1px 4px;margin-bottom:2px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Rajdhani',sans-serif;font-weight:600;letter-spacing:.5px;cursor:pointer;}
+.cal-dot{font-size:13px;border-radius:3px;padding:2px 6px;margin-bottom:2px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Rajdhani',sans-serif;font-weight:600;letter-spacing:.5px;cursor:pointer;}
 .cal-dot.campionato{background:rgba(204,31,31,0.25);color:var(--red-bright);}
 .cal-dot.torneo{background:rgba(201,147,58,0.25);color:var(--gold);}
 .cal-dot.amichevole{background:rgba(255,255,255,0.08);color:var(--text-md);}
 
 /* Lista eventi laterale */
-.cal-events-panel{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
-.cal-events-header{padding:.9rem 1.25rem;border-bottom:1px solid var(--border);background:rgba(0,0,0,0.2);font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--text-md);}
-.cal-event-item{padding:.9rem 1.25rem;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start;transition:background .15s;}
+.cal-events-panel{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;overflow:hidden;max-height:calc(100vh - 200px);overflow-y:auto;position:sticky;top:90px;}
+.cal-events-header{padding:1rem 1.5rem;border-bottom:1px solid var(--border);background:rgba(0,0,0,0.2);font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--text-md);}
+.cal-event-item{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start;transition:background .15s;}
 .cal-event-item:last-child{border-bottom:none;}
 .cal-event-item:hover{background:var(--bg-hover);}
-.cal-event-strip{width:3px;border-radius:2px;flex-shrink:0;margin-top:3px;align-self:stretch;}
+.cal-event-strip{width:4px;border-radius:2px;flex-shrink:0;margin-top:2px;align-self:stretch;}
 .strip-campionato{background:var(--red);}
 .strip-torneo{background:var(--gold);}
 .strip-amichevole{background:var(--text-lo);}
 .cal-event-info{}
-.cal-event-date{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;color:var(--text-lo);text-transform:uppercase;margin-bottom:2px;}
-.cal-event-name{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--text-hi);margin-bottom:2px;}
-.cal-event-meta{font-size:14px;color:var(--text-md);}
+.cal-event-date{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;color:var(--text-lo);text-transform:uppercase;margin-bottom:2px;}
+.cal-event-name{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--text-hi);margin-bottom:3px;}
+.cal-event-meta{font-size:15px;color:var(--text-md);margin-top:2px;}
 
 /* Pulsante aggiungi evento */
 .add-event-btn{width:100%;background:none;border:1px dashed var(--border-red);border-radius:6px;color:var(--red);font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:14px;cursor:pointer;transition:background .2s,border-color .2s;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:center;gap:8px;}
