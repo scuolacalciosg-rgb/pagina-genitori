@@ -276,6 +276,23 @@ footer{text-align:center;padding:2rem;font-size:15px;letter-spacing:1px;color:va
 .home-com-footer{display:flex;justify-content:space-between;align-items:center;margin-top:6px;}
 .home-com-date{font-size:12px;color:var(--text-lo);}
 
+
+/* GALLERIA */
+.album-grid-wrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
+.album-item{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;overflow:hidden;cursor:pointer;transition:border-color .2s,transform .15s;}
+.album-item:hover{border-color:var(--border-red);transform:translateY(-2px);}
+.album-cover{height:130px;background:linear-gradient(135deg,#1a0505,#2a0808);display:flex;align-items:center;justify-content:center;font-size:48px;position:relative;overflow:hidden;}
+.album-cover img{width:100%;height:100%;object-fit:cover;}
+.album-cover-count{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:12px;padding:2px 8px;border-radius:3px;font-family:Rajdhani,sans-serif;font-weight:600;}
+.album-item-info{padding:10px 14px;}
+.album-item-name{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--text-hi);margin-bottom:2px;}
+.album-item-date{font-size:13px;color:var(--text-lo);}
+.photo-thumb{border-radius:4px;overflow:hidden;aspect-ratio:4/3;background:var(--bg-panel);border:1px solid var(--border);cursor:pointer;transition:border-color .15s;position:relative;}
+.photo-thumb:hover{border-color:var(--border-red);}
+.photo-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.photo-del-btn{position:absolute;top:5px;right:5px;background:rgba(0,0,0,.7);border:none;border-radius:50%;color:#fff;font-size:13px;width:24px;height:24px;cursor:pointer;display:none;align-items:center;justify-content:center;}
+.photo-thumb:hover .photo-del-btn{display:flex;}
+
 /* calendar list items size boost */
 .cal-body { font-size:16px; }
 .cal-result { font-size:14px; }
@@ -673,10 +690,12 @@ footer{text-align:center;padding:2rem;font-size:15px;letter-spacing:1px;color:va
       </div>
       <div class="cal-days" id="calDays"></div>
     </div>
-    <!-- Lista eventi -->
+    <!-- Lista eventi + comunicazioni -->
     <div class="cal-events-panel">
-      <div class="cal-events-header">📋 Tutti gli eventi</div>
+      <div class="cal-events-header">📅 Partite &amp; Tornei</div>
       <div id="calEventsList"></div>
+      <div class="cal-events-header" style="margin-top:2px;">📢 Comunicazioni</div>
+      <div id="calComList"></div>
     </div>
   </div>
 </section>
@@ -685,13 +704,40 @@ footer{text-align:center;padding:2rem;font-size:15px;letter-spacing:1px;color:va
 <section id="galleria" class="section">
   <div class="sec-title">Galleria Foto</div>
   <div id="albums-view">
-    <div class="empty-state"><div class="empty-state-icon">📸</div><div class="empty-state-text">Nessun album presente</div></div>
+    <button class="add-event-btn" onclick="openAlbumModal()">📁 Crea nuovo album</button>
+    <div id="album-grid-list"></div>
   </div>
   <div id="photos-view" style="display:none">
     <button class="back-btn" onclick="closeAlbum()">← Torna agli album</button>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <div class="sec-title" id="album-view-title" style="margin-bottom:0;border:none;"></div>
+      <button class="add-event-btn" onclick="addFotoToAlbum()" style="margin-bottom:0;width:auto;padding:10px 20px;">📷 Aggiungi foto</button>
+    </div>
     <div class="photo-grid" id="photo-grid-ph"></div>
+    <input type="file" id="foto-input" accept="image/*" multiple style="display:none" onchange="handleFotoUpload(this)">
   </div>
 </section>
+
+<!-- ALBUM MODAL -->
+<div class="settings-overlay" id="albumOverlay">
+  <div class="event-modal" style="width:400px;">
+    <div class="event-modal-title">📁 Nuovo Album</div>
+    <input type="hidden" id="alb-id">
+    <div class="settings-field">
+      <label class="settings-label">Nome Album</label>
+      <input class="settings-input" id="alb-nome" placeholder="es. Partita vs FC Riviera">
+    </div>
+    <div class="settings-field">
+      <label class="settings-label">Data</label>
+      <input class="settings-input" id="alb-data" type="date">
+    </div>
+    <div class="settings-actions">
+      <button class="btn-danger" id="albDeleteBtn" onclick="deleteAlbum()" style="display:none">Elimina Album</button>
+      <button class="btn-cancel" onclick="closeAlbumModal()">Annulla</button>
+      <button class="btn-save" onclick="saveAlbum()">Crea Album</button>
+    </div>
+  </div>
+</div>
 
 </main>
 
@@ -770,6 +816,7 @@ function renderCalendar() {
   var cd=document.getElementById('calDays'); if(cd) cd.innerHTML = html;
 
   renderEventsList();
+  renderCalComunicazioni();
   renderConvList();
   renderHomeEvents();
   updateStats();
@@ -801,6 +848,34 @@ function renderEventsList() {
     html += '</div></div>';
   });
   document.getElementById('calEventsList').innerHTML = html;
+}
+
+function renderCalComunicazioni() {
+  var el = document.getElementById('calComList');
+  if(!el) return;
+  var sorted = comunicazioni.slice().sort(function(a,b){ return new Date(b.data)-new Date(a.data); });
+  if(!sorted.length){
+    el.innerHTML = '<div style="padding:1rem 1.25rem;color:var(--text-lo);font-size:13px;letter-spacing:1px;text-align:center;">Nessuna comunicazione</div>';
+    return;
+  }
+  var html = '';
+  sorted.forEach(function(c){
+    var ico = c.tipo==='partite'?'⚽':c.tipo==='visite'?'🏥':'📋';
+    var col = c.tipo==='partite'?'var(--red)':c.tipo==='visite'?'#4caf7a':'var(--gold)';
+    var d = new Date(c.data);
+    var dateStr = d.getDate()+' '+MONTHS_IT[d.getMonth()].substring(0,3);
+    html += '<div class="cal-event-item" style="cursor:pointer;" onclick="showTab(\'comunicazioni\')">';
+    html += '<div class="cal-event-strip" style="background:'+col+'"></div>';
+    html += '<div class="cal-event-info">';
+    html += '<div class="cal-event-date">'+ico+' '+dateStr;
+    if(c.priorita==='urgente') html += ' · <span style="color:var(--red-bright);font-weight:700;">URGENTE</span>';
+    else if(c.priorita==='importante') html += ' · <span style="color:var(--gold);">IMPORTANTE</span>';
+    html += '</div>';
+    html += '<div class="cal-event-name" style="font-size:15px;">'+c.titolo+'</div>';
+    if(c.testo) html += '<div class="cal-event-meta" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">'+c.testo+'</div>';
+    html += '</div></div>';
+  });
+  el.innerHTML = html;
 }
 
 function renderHomeEvents() {
@@ -1474,6 +1549,8 @@ function saveCom(){
   saveComunicazioni();
   closeComModal();
   renderComunicazioni();
+  renderCalComunicazioni();
+  renderHomeComunicazioni();
 }
 
 function deleteCom(){
@@ -1483,6 +1560,186 @@ function deleteCom(){
   saveComunicazioni();
   closeComModal();
   renderComunicazioni();
+  renderCalComunicazioni();
+  renderHomeComunicazioni();
+}
+
+
+// ═══ GALLERIA ═══
+var albums = JSON.parse(localStorage.getItem('sg_albums') || '[]');
+var currentAlbumId = null;
+
+function saveAlbums(){ localStorage.setItem('sg_albums', JSON.stringify(albums)); }
+
+function renderGalleria(){
+  var el = document.getElementById('album-grid-list');
+  if(!el) return;
+  if(!albums.length){
+    el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📸</div><div class="empty-state-text">Nessun album presente</div></div>';
+    return;
+  }
+  var wrap = document.createElement('div');
+  wrap.className = 'album-grid-wrap';
+  albums.forEach(function(a){
+    var fotos = a.fotos || [];
+    var item = document.createElement('div');
+    item.className = 'album-item';
+    item.addEventListener('click', function(){ openAlbum(a.id); });
+    var cover = document.createElement('div');
+    cover.className = 'album-cover';
+    if(fotos.length){
+      var img = document.createElement('img');
+      img.src = fotos[0]; img.alt = '';
+      cover.appendChild(img);
+    } else {
+      cover.textContent = '📸';
+    }
+    var cnt = document.createElement('div');
+    cnt.className = 'album-cover-count';
+    cnt.textContent = fotos.length + ' foto';
+    cover.appendChild(cnt);
+    var info = document.createElement('div');
+    info.className = 'album-item-info';
+    var nameEl = document.createElement('div');
+    nameEl.className = 'album-item-name';
+    nameEl.textContent = a.nome;
+    info.appendChild(nameEl);
+    if(a.data){
+      var dateEl = document.createElement('div');
+      dateEl.className = 'album-item-date';
+      dateEl.textContent = fmtDate(a.data);
+      info.appendChild(dateEl);
+    }
+    item.appendChild(cover);
+    item.appendChild(info);
+    wrap.appendChild(item);
+  });
+  el.appendChild(wrap);
+}
+
+function openAlbum(id){
+  currentAlbumId = id;
+  var a = albums.find(function(x){ return x.id===id; });
+  if(!a) return;
+  document.getElementById('album-view-title').textContent = '📸 '+a.nome;
+  document.getElementById('albums-view').style.display='none';
+  document.getElementById('photos-view').style.display='block';
+  renderFotos(a);
+}
+
+function closeAlbum(){
+  document.getElementById('photos-view').style.display='none';
+  document.getElementById('albums-view').style.display='block';
+  currentAlbumId = null;
+}
+
+function renderFotos(a){
+  var grid = document.getElementById('photo-grid-ph');
+  var fotos = a.fotos || [];
+  if(!fotos.length){
+    grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📷</div><div class="empty-state-text">Nessuna foto — clicca Aggiungi foto</div></div>';
+    return;
+  }
+  grid.innerHTML = '';
+  fotos.forEach(function(src, i){
+    var div = document.createElement('div');
+    div.className = 'photo-thumb';
+    var img = document.createElement('img');
+    img.src = src;
+    img.alt = 'foto ' + (i+1);
+    var btn = document.createElement('button');
+    btn.className = 'photo-del-btn';
+    btn.title = 'Elimina';
+    btn.textContent = 'X';
+    (function(albumId, idx){
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        deleteFoto(albumId, idx, e);
+      });
+    })(a.id, i);
+    div.appendChild(img);
+    div.appendChild(btn);
+    grid.appendChild(div);
+  });
+}
+
+function deleteFoto(albumId, idx, e){
+  e.stopPropagation();
+  if(!confirm('Eliminare questa foto?')) return;
+  var a = albums.find(function(x){ return x.id===albumId; });
+  if(!a) return;
+  a.fotos.splice(idx, 1);
+  saveAlbums();
+  renderFotos(a);
+  renderGalleria();
+}
+
+function addFotoToAlbum(){
+  document.getElementById('foto-input').click();
+}
+
+function handleFotoUpload(input){
+  if(!input.files || !input.files.length) return;
+  var a = albums.find(function(x){ return x.id===currentAlbumId; });
+  if(!a){ alert('Nessun album selezionato.'); return; }
+  if(!a.fotos) a.fotos = [];
+  var files = Array.from(input.files);
+  var loaded = 0;
+  files.forEach(function(file){
+    var reader = new FileReader();
+    reader.onload = function(e){
+      a.fotos.push(e.target.result);
+      loaded++;
+      if(loaded === files.length){
+        saveAlbums();
+        renderFotos(a);
+        renderGalleria();
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+
+// Album modal
+var editingAlbumId = null;
+function openAlbumModal(id){
+  editingAlbumId = id || null;
+  var del = document.getElementById('albDeleteBtn');
+  if(id){
+    var a = albums.find(function(x){ return x.id===id; });
+    if(!a) return;
+    document.getElementById('alb-nome').value = a.nome;
+    document.getElementById('alb-data').value = a.data||'';
+    del.style.display = 'block';
+  } else {
+    document.getElementById('alb-nome').value = '';
+    document.getElementById('alb-data').value = new Date().toISOString().split('T')[0];
+    del.style.display = 'none';
+  }
+  document.getElementById('albumOverlay').classList.add('open');
+}
+function closeAlbumModal(){ document.getElementById('albumOverlay').classList.remove('open'); }
+function saveAlbum(){
+  var nome = document.getElementById('alb-nome').value.trim();
+  if(!nome){ alert("Inserisci il nome dell'album."); return; }
+  if(editingAlbumId){
+    var a = albums.find(function(x){ return x.id===editingAlbumId; });
+    if(a){ a.nome=nome; a.data=document.getElementById('alb-data').value; }
+  } else {
+    albums.unshift({ id:'alb_'+Date.now(), nome:nome, data:document.getElementById('alb-data').value, fotos:[] });
+  }
+  saveAlbums();
+  closeAlbumModal();
+  renderGalleria();
+}
+function deleteAlbum(){
+  if(!editingAlbumId) return;
+  if(!confirm("Eliminare l'album e tutte le foto?")) return;
+  albums = albums.filter(function(a){ return a.id!==editingAlbumId; });
+  saveAlbums();
+  closeAlbumModal();
+  renderGalleria();
 }
 
 // ═══ UTILS ═══
@@ -1527,6 +1784,7 @@ function showTab(id){
   if(id==='home'){ renderHomeEvents(); renderHomeComunicazioni(); }
   if(id==='rosa') renderRosa();
   if(id==='comunicazioni') renderComunicazioni();
+  if(id==='galleria'){ renderGalleria(); document.getElementById('albums-view').style.display='block'; document.getElementById('photos-view').style.display='none'; }
 }
 function closeAlbum(){
   document.getElementById('photos-view').style.display='none';
@@ -1534,7 +1792,7 @@ function closeAlbum(){
 }
 
 // close modals clicking outside
-['settingsOverlay','eventOverlay','convOverlay','playerOverlay','playerDetailOverlay','comOverlay'].forEach(function(id){
+['settingsOverlay','eventOverlay','convOverlay','playerOverlay','playerDetailOverlay','comOverlay','albumOverlay'].forEach(function(id){
   document.getElementById(id).addEventListener('click',function(e){ if(e.target===this) this.classList.remove('open'); });
 });
 
@@ -1543,6 +1801,7 @@ applyConfig();
 renderHomeEvents();
 renderHomeComunicazioni();
 renderRosa();
+renderGalleria();
 </script>
 </body>
 </html>
