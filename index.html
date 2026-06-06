@@ -750,8 +750,10 @@ footer{text-align:center;padding:2rem;font-size:15px;letter-spacing:1px;color:va
 var config = { nome:'SS San Giovanni', stagione:'2026/27', categoria:'Primi Calci' };
 
 // ═══ DATI (persistiti in localStorage) ═══
-var events = JSON.parse(localStorage.getItem('sg_events') || '[]');
-var convocazioni = JSON.parse(localStorage.getItem('sg_conv') || '{}');
+var _def_events = [{"id": "ev_1780518573227", "tipo": "torneo", "titolo": "altipiano", "avversario": "", "data": "2026-06-06", "ora": "10:00", "luogo": "opicina", "ritrovo": "09:30", "risultato": "", "marcatori": "", "squadre": ["opicina", "san luigi", "montebello"], "partite": [{"avv": "opicina", "ris": "", "marc": ""}, {"avv": "san luigi", "ris": "", "marc": ""}, {"avv": "montebello", "ris": "", "marc": ""}], "note": ""}];
+var events = JSON.parse(localStorage.getItem('sg_events') || JSON.stringify(_def_events));
+var _def_conv = {"ev_1780518573227": {"ritrovo": "09:30", "players": [{"id": "pl_1780603341400", "num": "2", "nome": "Nicola Brusadin"}, {"id": "pl_1780603407465", "num": "3", "nome": "Leonardo Topo"}, {"id": "pl_1780603007512", "num": "4", "nome": "Carlos Monaco Henrique"}, {"id": "pl_1780602698633", "num": "6", "nome": "Alessio Krizaj"}, {"id": "pl_1780602599618", "num": "7", "nome": "Alessandro Denaro"}, {"id": "pl_1780602871760", "num": "10", "nome": "Aly Fakih"}, {"id": "pl_1780603150432", "num": "11", "nome": "Giancarlo Cardone"}, {"id": "pl_1780600065468", "num": "13", "nome": "Raffaele Pecchiari"}]}};
+var convocazioni = JSON.parse(localStorage.getItem('sg_conv') || JSON.stringify(_def_conv));
 
 function saveData() {
   localStorage.setItem('sg_events', JSON.stringify(events));
@@ -1267,7 +1269,8 @@ function saveConv(){
 
 
 // ═══ ROSA ═══
-var rosa = JSON.parse(localStorage.getItem('sg_rosa') || '[]');
+var _def_rosa = [{"id": "pl_1780603341400", "nome": "Nicola", "cognome": "Brusadin", "nascita": "", "numero": "2", "ruolo": "", "visita": "", "genitore": "", "telefono": "", "foto": ""}, {"id": "pl_1780603407465", "nome": "Leonardo", "cognome": "Topo", "nascita": "", "numero": "3", "ruolo": "", "visita": "", "genitore": "", "telefono": "", "foto": ""}, {"id": "pl_1780603007512", "nome": "Carlos", "cognome": "Monaco Henrique", "nascita": "", "numero": "4", "ruolo": "", "visita": "", "genitore": "", "telefono": "", "foto": ""}, {"id": "pl_1780602698633", "nome": "Alessio", "cognome": "Krizaj", "nascita": "", "numero": "6", "ruolo": "", "visita": "", "genitore": "", "telefono": "", "foto": ""}, {"id": "pl_1780602599618", "nome": "Alessandro", "cognome": "Denaro", "nascita": "", "numero": "7", "ruolo": "", "visita": "", "genitore": "", "telefono": "", "foto": ""}, {"id": "pl_1780602871760", "nome": "Aly", "cognome": "Fakih", "nascita": "", "numero": "10", "ruolo": "", "visita": "", "genitore": "", "telefono": "", "foto": ""}, {"id": "pl_1780603150432", "nome": "Giancarlo", "cognome": "Cardone", "nascita": "", "numero": "11", "ruolo": "", "visita": "", "genitore": "", "telefono": "", "foto": ""}, {"id": "pl_1780600065468", "nome": "Raffaele", "cognome": "Pecchiari", "nascita": "2019-05-13", "numero": "13", "ruolo": "Difensore", "visita": "2026-08-28", "genitore": "Michele", "telefono": "3475486744", "foto": ""}];
+var rosa = JSON.parse(localStorage.getItem('sg_rosa') || JSON.stringify(_def_rosa));
 
 function saveRosa(){ localStorage.setItem('sg_rosa', JSON.stringify(rosa)); }
 
@@ -1434,7 +1437,8 @@ function closePlayerDetail(){ document.getElementById('playerDetailOverlay').cla
 
 
 // ═══ COMUNICAZIONI ═══
-var comunicazioni = JSON.parse(localStorage.getItem('sg_com') || '[]');
+var _def_com = [{"id": "com_1780604004431", "tipo": "partite", "titolo": "43 torneo Altipiano", "testo": "Nella giornata del 6 giugno giocheremo un torneo sul campo di Opicina contro le seguenti squadre: Opicina, Trieste Academy, Montebello, Altura, San Luigi, San Giusto. Ricordo di controllare le convocazioni e rispondere sul gruppo o in privato ai mister. Grazie mille", "data": "2026-06-04", "priorita": "urgente"}, {"id": "com_1780601241972", "tipo": "generali", "titolo": "Cena fine anno", "testo": "La cena di fine anno si svolge sabato 20 giugno presso il nostro campo. Menu: Pasta al ragu per i bambini 4 euro, Grigliata mista per i genitori 14 euro. Pregasi confermare per messaggio WhatsApp sul gruppo o in privato ai Mister Pecchiari e Mister Denaro. Grazie mille", "data": "2026-06-04", "priorita": "importante"}];
+var comunicazioni = JSON.parse(localStorage.getItem('sg_com') || JSON.stringify(_def_com));
 var comFilter = 'tutti';
 
 function saveComunicazioni(){ localStorage.setItem('sg_com', JSON.stringify(comunicazioni)); }
