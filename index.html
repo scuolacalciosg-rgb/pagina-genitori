@@ -361,6 +361,9 @@ body:not(.unlocked) .settings-btn{display:none;}
 .conf-list-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:15px;color:var(--text-hi);font-family:Rajdhani,sans-serif;font-weight:600;}
 .conf-list-item:last-child{border-bottom:none;}
 
+
+.conv-conferma-bar{padding:.8rem 1.75rem;background:rgba(0,0,0,.15);border-top:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+
 /* calendar list items size boost */
 .cal-body { font-size:16px; }
 .cal-result { font-size:14px; }
@@ -1066,6 +1069,8 @@ function renderConvList() {
       html += '<div class="player-chip">'+fotoHtml+'<div class="player-name">'+p.nome+'</div></div>';
     });
     html += '</div>';
+    var convConfirmed = (convocazioni[ev.id].conferme || []);
+    var userHasConf = convConfirmed.indexOf(getMyNome()) >= 0;
     html += '<div class="conv-footer">';
     if(c.ritrovo) html += '<span>🕐 Ritrovo ore '+c.ritrovo+'</span>';
     if(ev.luogo){
@@ -1073,7 +1078,18 @@ function renderConvList() {
       html += '<span>📍 <a href="'+mapsUrl+'" target="_blank" style="color:var(--text-md);text-decoration:none;">'+ev.luogo+' 🗺️</a></span>';
     }
     html += '<span style="color:var(--text-lo);">'+c.players.length+' convocati</span>';
-    html += '</div></div>';
+    html += '</div>';
+    var past = new Date(ev.data) < new Date();
+    if(!past){
+      html += '<div class="conv-conferma-bar" id="cbar_'+ev.id+'">';
+      html += '<button class="conf-btn'+(userHasConf?' confirmed':'')+'" data-evid="'+ev.id+'" onclick="toggleConvConferma(this.dataset.evid)">';
+      html += userHasConf ? '✅ Presenza confermata' : '☐ Conferma presenza';
+      html += '</button>';
+      if(convConfirmed.length > 0) html += '<span class="conf-count">'+convConfirmed.length+' conferm'+(convConfirmed.length===1?'a':'e')+'</span>';
+      html += '<button class="com-edit-btn edit-only" data-evid="'+ev.id+'" onclick="openConvConfermeList(this.dataset.evid)" style="margin-left:auto;">👥 '+convConfirmed.length+'</button>';
+      html += '</div>';
+    }
+    html += '</div>';
   });
 
   // eventi futuri senza convocazione
@@ -1550,18 +1566,10 @@ function renderComunicazioni(){
     if(prioBadge) html += prioBadge;
     html += '</div></div>';
     if(c.testo) html += '<div class="com-card-body">'+c.testo+'</div>';
-    var confirmCount = (c.conferme || []).length;
-    var userConfirmed = (c.conferme || []).indexOf(userAlias()) >= 0;
-    html += '<div class="com-card-footer">';
+        html += '<div class="com-card-footer">';
     html += '<span class="badge '+(c.tipo==='partite'?'badge-red':c.tipo==='visite'?'badge-green':'badge-gold')+'">'+tipoLabel+'</span>';
-    html += '<div style="display:flex;gap:8px;align-items:center;">';
-    html += '<button class="conf-btn'+(userConfirmed?' confirmed':'')+'" onclick="event.stopPropagation();toggleConferma(\''+c.id+'\')">';
-    html += userConfirmed ? '✅ Confermato' : '☐ Conferma';
-    html += '</button>';
-    if(confirmCount > 0) html += '<span class="conf-count">+'+confirmCount+' conferm'+( confirmCount===1?'a':'e')+'</span>';
-    html += '<button class="com-edit-btn edit-only" onclick="event.stopPropagation();openConfermeList(\''+c.id+'\')">👥 '+((c.conferme||[]).length)+'</button>';
-    html += '<button class="com-edit-btn edit-only" onclick="event.stopPropagation();openComModal(\''+c.id+'\')">✏️</button>';
-    html += '</div></div></div>';
+    html += '<button class="com-edit-btn edit-only" onclick="event.stopPropagation();openComModal(\''+c.id+'\')">✏️ Modifica</button>';
+    html += '</div></div>';
   });
   lista.innerHTML = html;
 
@@ -1913,6 +1921,54 @@ function openConfermeList(comId){
   overlay.classList.add('open');
 }
 function closeConfermeModal(){ document.getElementById('confermeOverlay').classList.remove('open'); }
+
+
+// ═══ CONFERMA CONVOCAZIONE ═══
+function getMyNome(){
+  return localStorage.getItem('sg_alias_nome') || '';
+}
+
+function toggleConvConferma(evId){
+  var nome = localStorage.getItem('sg_alias_nome');
+  if(!nome){
+    nome = prompt('Come ti chiami? (es. Genitore di Marco)');
+    if(!nome || !nome.trim()) return;
+    nome = nome.trim();
+    localStorage.setItem('sg_alias_nome', nome);
+    localStorage.setItem('sg_alias', nome.toLowerCase().replace(/\s+/g,'_'));
+  }
+  if(!convocazioni[evId]) return;
+  if(!convocazioni[evId].conferme) convocazioni[evId].conferme = [];
+  var pos = convocazioni[evId].conferme.indexOf(nome);
+  if(pos >= 0){
+    convocazioni[evId].conferme.splice(pos,1);
+    showToast('Presenza rimossa', 'var(--text-md)');
+  } else {
+    convocazioni[evId].conferme.push(nome);
+    showToast('✅ Presenza confermata!', '#4caf7a');
+  }
+  saveData();
+  renderConvList();
+}
+
+function openConvConfermeList(evId){
+  var ev = events.find(function(e){ return e.id===evId; });
+  var conferme = (convocazioni[evId] && convocazioni[evId].conferme) || [];
+  var html = '<div class="conf-list-modal">';
+  html += '<div class="event-modal-title" style="margin-bottom:1rem;">👥 Presenze — '+(ev?ev.titolo:'')+'</div>';
+  if(!conferme.length){
+    html += '<div style="text-align:center;padding:2rem;color:var(--text-lo);font-family:Rajdhani,sans-serif;font-size:14px;letter-spacing:1px;">Nessuna conferma ancora</div>';
+  } else {
+    conferme.forEach(function(nome,i){
+      html += '<div class="conf-list-item"><span style="color:var(--red);font-size:18px;">'+(i+1)+'.</span>'+nome+'</div>';
+    });
+    html += '<div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);text-align:center;font-family:Rajdhani,sans-serif;font-size:14px;color:var(--text-md);">'+conferme.length+' conferm'+(conferme.length===1?'a':'e')+' totali</div>';
+  }
+  html += '<div style="margin-top:1.25rem;"><button onclick="closeConfermeModal()" class="btn-cancel" style="width:100%;">Chiudi</button></div>';
+  html += '</div>';
+  document.getElementById('confermeContent').innerHTML = html;
+  document.getElementById('confermeOverlay').classList.add('open');
+}
 
 // ═══ UTILS ═══
 function fmtDate(dateStr){
