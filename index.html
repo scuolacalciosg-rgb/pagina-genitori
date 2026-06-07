@@ -1542,7 +1542,7 @@ function renderComunicazioni(){
       : c.priorita==='importante'
         ? '<span class="badge badge-importante">⚠️ Importante</span>'
         : '';
-    html += '<div class="com-card tipo-'+c.tipo+'" onclick="openComModal(\''+c.id+'\')">';
+    html += '<div class="com-card tipo-'+c.tipo+'">';
     html += '<div class="com-card-head">';
     html += '<div class="com-card-title">'+c.titolo+'</div>';
     html += '<div class="com-card-meta">';
@@ -1855,32 +1855,32 @@ function userAlias(){
 
 // Al primo accesso chiede il nome al genitore
 function checkAlias(){
-  if(isUnlocked) return; // il mister non ha bisogno
-  var alias = localStorage.getItem('sg_alias');
-  var nome  = localStorage.getItem('sg_alias_nome');
-  if(!nome){
-    setTimeout(function(){
-      var n = prompt('Benvenuto! Come ti chiami? (es. Genitore di Marco)\nIl tuo nome apparirà nelle conferme.');
-      if(n && n.trim()){
-        localStorage.setItem('sg_alias_nome', n.trim());
-        localStorage.setItem('sg_alias', n.trim().toLowerCase().replace(/\s+/g,'_'));
-      }
-    }, 2000);
-  }
+  // Il nome viene chiesto solo quando il genitore clicca Conferma
 }
 
 function toggleConferma(comId){
+  // Se non ha ancora un nome, chiede prima di confermare
+  var nome = localStorage.getItem('sg_alias_nome');
+  if(!nome){
+    nome = prompt('Come ti chiami? (es. Genitore di Marco)');
+    if(!nome || !nome.trim()) return;
+    nome = nome.trim();
+    localStorage.setItem('sg_alias_nome', nome);
+    localStorage.setItem('sg_alias', nome.toLowerCase().replace(/\s+/g,'_'));
+  }
+  var alias = localStorage.getItem('sg_alias') || nome.toLowerCase().replace(/\s+/g,'_');
+  
   var idx = comunicazioni.findIndex(function(c){ return c.id === comId; });
   if(idx < 0) return;
   if(!comunicazioni[idx].conferme) comunicazioni[idx].conferme = [];
-  var alias = userAlias();
-  var pos = comunicazioni[idx].conferme.indexOf(alias);
+  
+  var pos = comunicazioni[idx].conferme.indexOf(nome);
   if(pos >= 0){
     comunicazioni[idx].conferme.splice(pos, 1);
+    showToast('Conferma rimossa', 'var(--text-md)');
   } else {
-    var nome = localStorage.getItem('sg_alias_nome') || alias;
-    // salva nome invece di alias per leggibilità
-    comunicazioni[idx].conferme.splice(pos, 0, nome || alias);
+    comunicazioni[idx].conferme.push(nome);
+    showToast('✅ Confermato!', '#4caf7a');
   }
   saveComunicazioni();
   renderComunicazioni();
