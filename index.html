@@ -349,6 +349,18 @@ body:not(.unlocked) .settings-btn{display:none;}
 .notif-btn.active{border-color:rgba(45,122,69,.5);color:#4caf7a;background:rgba(45,122,69,.1);}
 .notif-btn:hover{border-color:var(--border-red);color:var(--red);}
 
+
+/* BACHECA CONFERME */
+.conf-btn{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:3px;color:var(--text-md);font-family:Rajdhani,sans-serif;font-size:13px;font-weight:600;letter-spacing:.5px;padding:4px 10px;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.conf-btn:hover{border-color:rgba(45,122,69,.4);color:#4caf7a;}
+.conf-btn.confirmed{background:rgba(45,122,69,.15);border-color:rgba(45,122,69,.5);color:#4caf7a;}
+.conf-count{font-size:12px;color:var(--text-lo);font-family:Rajdhani,sans-serif;white-space:nowrap;}
+
+/* Lista conferme (vista mister) */
+.conf-list-modal{background:#150f0f;border:1px solid var(--border-red);border-radius:6px;padding:1.5rem;width:400px;max-width:94vw;max-height:80vh;overflow-y:auto;}
+.conf-list-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:15px;color:var(--text-hi);font-family:Rajdhani,sans-serif;font-weight:600;}
+.conf-list-item:last-child{border-bottom:none;}
+
 /* calendar list items size boost */
 .cal-body { font-size:16px; }
 .cal-result { font-size:14px; }
@@ -900,7 +912,10 @@ function renderEventsList() {
     html += '<div class="cal-event-info">';
     html += '<div class="cal-event-date">'+tipoico+' '+dateStr+(ev.ora?' · '+ev.ora:'')+'</div>';
     html += '<div class="cal-event-name">'+ev.titolo+'</div>';
-    if(ev.luogo) html += '<div class="cal-event-meta">📍 '+ev.luogo+'</div>';
+    if(ev.luogo){
+      var mapsUrl2 = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(ev.luogo + ' Trieste');
+      html += '<div class="cal-event-meta">📍 <a href="'+mapsUrl2+'" target="_blank" style="color:var(--text-md);text-decoration:none;">'+ev.luogo+' 🗺️</a></div>';
+    }
     if(ev.tipo==='torneo' && ev.partite && ev.partite.length){
       ev.partite.forEach(function(p){
         if(p.ris) html += '<div class="cal-event-meta" style="color:var(--gold);">vs '+p.avv+' <strong>'+p.ris+'</strong>'+(p.marc?' · '+p.marc:'')+'</div>';
@@ -1053,7 +1068,10 @@ function renderConvList() {
     html += '</div>';
     html += '<div class="conv-footer">';
     if(c.ritrovo) html += '<span>🕐 Ritrovo ore '+c.ritrovo+'</span>';
-    if(ev.luogo) html += '<span>📍 '+ev.luogo+'</span>';
+    if(ev.luogo){
+      var mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(ev.luogo + ' Trieste');
+      html += '<span>📍 <a href="'+mapsUrl+'" target="_blank" style="color:var(--text-md);text-decoration:none;">'+ev.luogo+' 🗺️</a></span>';
+    }
     html += '<span style="color:var(--text-lo);">'+c.players.length+' convocati</span>';
     html += '</div></div>';
   });
@@ -1532,10 +1550,18 @@ function renderComunicazioni(){
     if(prioBadge) html += prioBadge;
     html += '</div></div>';
     if(c.testo) html += '<div class="com-card-body">'+c.testo+'</div>';
+    var confirmCount = (c.conferme || []).length;
+    var userConfirmed = (c.conferme || []).indexOf(userAlias()) >= 0;
     html += '<div class="com-card-footer">';
     html += '<span class="badge '+(c.tipo==='partite'?'badge-red':c.tipo==='visite'?'badge-green':'badge-gold')+'">'+tipoLabel+'</span>';
-    html += '<button class="com-edit-btn" onclick="event.stopPropagation();openComModal(\''+c.id+'\')">✏️ Modifica</button>';
-    html += '</div></div>';
+    html += '<div style="display:flex;gap:8px;align-items:center;">';
+    html += '<button class="conf-btn'+(userConfirmed?' confirmed':'')+'" onclick="event.stopPropagation();toggleConferma(\''+c.id+'\')">';
+    html += userConfirmed ? '✅ Confermato' : '☐ Conferma';
+    html += '</button>';
+    if(confirmCount > 0) html += '<span class="conf-count">+'+confirmCount+' conferm'+( confirmCount===1?'a':'e')+'</span>';
+    html += '<button class="com-edit-btn edit-only" onclick="event.stopPropagation();openConfermeList(\''+c.id+'\')">👥 '+((c.conferme||[]).length)+'</button>';
+    html += '<button class="com-edit-btn edit-only" onclick="event.stopPropagation();openComModal(\''+c.id+'\')">✏️</button>';
+    html += '</div></div></div>';
   });
   lista.innerHTML = html;
 
@@ -1814,6 +1840,80 @@ function deleteAlbum(){
   renderGalleria();
 }
 
+
+// ═══ BACHECA CONFERME ═══
+
+// Identifica il genitore con un alias salvato
+function userAlias(){
+  var alias = localStorage.getItem('sg_alias');
+  if(!alias){
+    alias = 'utente_' + Math.random().toString(36).substr(2,6);
+    localStorage.setItem('sg_alias', alias);
+  }
+  return alias;
+}
+
+// Al primo accesso chiede il nome al genitore
+function checkAlias(){
+  if(isUnlocked) return; // il mister non ha bisogno
+  var alias = localStorage.getItem('sg_alias');
+  var nome  = localStorage.getItem('sg_alias_nome');
+  if(!nome){
+    setTimeout(function(){
+      var n = prompt('Benvenuto! Come ti chiami? (es. Genitore di Marco)\nIl tuo nome apparirà nelle conferme.');
+      if(n && n.trim()){
+        localStorage.setItem('sg_alias_nome', n.trim());
+        localStorage.setItem('sg_alias', n.trim().toLowerCase().replace(/\s+/g,'_'));
+      }
+    }, 2000);
+  }
+}
+
+function toggleConferma(comId){
+  var idx = comunicazioni.findIndex(function(c){ return c.id === comId; });
+  if(idx < 0) return;
+  if(!comunicazioni[idx].conferme) comunicazioni[idx].conferme = [];
+  var alias = userAlias();
+  var pos = comunicazioni[idx].conferme.indexOf(alias);
+  if(pos >= 0){
+    comunicazioni[idx].conferme.splice(pos, 1);
+  } else {
+    var nome = localStorage.getItem('sg_alias_nome') || alias;
+    // salva nome invece di alias per leggibilità
+    comunicazioni[idx].conferme.splice(pos, 0, nome || alias);
+  }
+  saveComunicazioni();
+  renderComunicazioni();
+  renderHomeComunicazioni();
+}
+
+// Vista mister: lista di chi ha confermato
+function openConfermeList(comId){
+  if(!isUnlocked) return;
+  var c = comunicazioni.find(function(x){ return x.id===comId; });
+  if(!c) return;
+  var conferme = c.conferme || [];
+  var html = '<div class="conf-list-modal">';
+  html += '<div class="event-modal-title" style="margin-bottom:1rem;">✅ Conferme — ' + c.titolo + '</div>';
+  if(!conferme.length){
+    html += '<div style="text-align:center;padding:2rem;color:var(--text-lo);font-family:Rajdhani,sans-serif;font-size:14px;letter-spacing:1px;">Nessuna conferma ancora</div>';
+  } else {
+    conferme.forEach(function(nome, i){
+      html += '<div class="conf-list-item"><span style="color:var(--red);font-size:18px;">' + (i+1) + '.</span>' + nome + '</div>';
+    });
+    html += '<div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);text-align:center;font-family:Rajdhani,sans-serif;font-size:14px;color:var(--text-md);">' + conferme.length + ' conferm' + (conferme.length===1?'a':'e') + ' totali</div>';
+  }
+  html += '<div style="margin-top:1.25rem;"><button onclick="closeConfermeModal()" class="btn-cancel" style="width:100%;">Chiudi</button></div>';
+  html += '</div>';
+  
+  var overlay = document.getElementById('confermeOverlay');
+  overlay.querySelector('.conf-list-modal') ? overlay.innerHTML = html : overlay.innerHTML = html;
+  // Actually create the modal properly
+  document.getElementById('confermeContent').innerHTML = html;
+  overlay.classList.add('open');
+}
+function closeConfermeModal(){ document.getElementById('confermeOverlay').classList.remove('open'); }
+
 // ═══ UTILS ═══
 function fmtDate(dateStr){
   var d = new Date(dateStr);
@@ -1865,7 +1965,7 @@ function closeAlbum(){
 
 // close modals clicking outside
 window.addEventListener('load', function(){
-  ['settingsOverlay','eventOverlay','convOverlay','playerOverlay','playerDetailOverlay','comOverlay','albumOverlay'].forEach(function(id){
+  ['settingsOverlay','eventOverlay','convOverlay','playerOverlay','playerDetailOverlay','comOverlay','albumOverlay','confermeOverlay'].forEach(function(id){
     var el = document.getElementById(id); if(el) el.addEventListener('click',function(e){ if(e.target===this) this.classList.remove('open'); });
   });
 });
@@ -2166,6 +2266,12 @@ document.addEventListener('DOMContentLoaded', function(){
   </div>
   <button class="pwa-banner-btn" onclick="installPWA()">Installa</button>
   <button class="pwa-banner-close" onclick="dismissBanner()">✕</button>
+</div>
+
+
+<!-- CONFERME OVERLAY -->
+<div class="settings-overlay" id="confermeOverlay">
+  <div id="confermeContent"></div>
 </div>
 
 </body>
