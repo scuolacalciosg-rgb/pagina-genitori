@@ -622,7 +622,10 @@ body:not(.unlocked) .settings-btn{display:none;}
         <span class="logo-sub" id="hdr-sub">Portale Genitori · 2026/27</span>
       </div>
     </div>
-    <button class="settings-btn" onclick="openSettings()">⚙ Impostazioni</button>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="settings-btn edit-only" onclick="exportAndDownload()" style="background:rgba(45,122,69,.15);border-color:rgba(45,122,69,.5);color:#4caf7a;">💾 Esporta</button>
+      <button class="settings-btn" onclick="openSettings()">⚙ Impostazioni</button>
+    </div>
   </div>
 </header>
 
@@ -1901,6 +1904,60 @@ window.addEventListener('load', function(){
   var po = document.getElementById('pwdOverlay');
   if(po) po.addEventListener('click', function(e){ if(e.target===this) closePwdModal(); });
 });
+
+
+// ═══ ESPORTA E SCARICA ═══
+function exportAndDownload(){
+  if(!isUnlocked){ alert("Sblocca prima la modalità modifica."); return; }
+
+  // Leggi tutti i dati dal localStorage (hanno priorità sui default)
+  var exp_events  = JSON.parse(localStorage.getItem('sg_events')  || JSON.stringify(_def_events));
+  var exp_conv    = JSON.parse(localStorage.getItem('sg_conv')    || JSON.stringify(_def_conv));
+  var exp_com     = JSON.parse(localStorage.getItem('sg_com')     || JSON.stringify(_def_com));
+  var exp_rosa    = JSON.parse(localStorage.getItem('sg_rosa')    || JSON.stringify(_def_rosa));
+  var exp_albums  = JSON.parse(localStorage.getItem('sg_albums')  || '[]');
+
+  // Recupera il sorgente della pagina corrente
+  fetch(window.location.href)
+    .then(function(r){ return r.text(); })
+    .then(function(src){
+      // Sostituisci i blocchi _def_ con i dati aggiornati
+      function replaceVar(src, name, data){
+        var re = new RegExp('var ' + name + ' = \\[.*?\\];', 's');
+        var re2 = new RegExp('var ' + name + ' = \\{.*?\\};', 's');
+        var json = JSON.stringify(data, null, 0);
+        if(re.test(src)) return src.replace(re, 'var ' + name + ' = ' + json + ';');
+        if(re2.test(src)) return src.replace(re2, 'var ' + name + ' = ' + json + ';');
+        return src;
+      }
+      src = replaceVar(src, '_def_events', exp_events);
+      src = replaceVar(src, '_def_conv',   exp_conv);
+      src = replaceVar(src, '_def_com',    exp_com);
+      src = replaceVar(src, '_def_rosa',   exp_rosa);
+      src = replaceVar(src, '_def_albums', exp_albums);
+
+      // Scarica il file
+      var blob = new Blob([src], {type:'text/html;charset=utf-8'});
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'index.html';
+      a.click();
+      URL.revokeObjectURL(a.href);
+
+      showExportSuccess();
+    })
+    .catch(function(){
+      alert("Errore nel recupero della pagina. Assicurati di essere su GitHub Pages.");
+    });
+}
+
+function showExportSuccess(){
+  var msg = document.createElement('div');
+  msg.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#0a2a0f;border:1px solid rgba(45,122,69,.6);border-radius:6px;padding:12px 24px;font-family:Rajdhani,sans-serif;font-size:16px;font-weight:600;letter-spacing:1px;color:#4caf7a;z-index:9999;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.5);';
+  msg.innerHTML = '✅ File scaricato!<br><span style="font-size:13px;color:rgba(76,175,122,.7);">Caricalo su GitHub per aggiornare la pagina</span>';
+  document.body.appendChild(msg);
+  setTimeout(function(){ msg.remove(); }, 4000);
+}
 
 // ═══ INIT ═══
 document.addEventListener('DOMContentLoaded', function(){
