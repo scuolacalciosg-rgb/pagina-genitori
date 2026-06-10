@@ -370,7 +370,7 @@ body:not(.unlocked) .settings-btn{display:none;}
 .conf-name-chip{background:rgba(45,122,69,.15);border:1px solid rgba(45,122,69,.3);border-radius:4px;padding:4px 10px;font-family:Rajdhani,sans-serif;font-size:13px;font-weight:600;color:#4caf7a;letter-spacing:.5px;}
 
 /* LANDSCAPE MODE */
-@media (orientation: landscape) and (max-height: 500px) {
+@media (orientation: landscape) and (max-width: 1024px) {
   /* Header compatto */
   header { position:relative; }
   .header-inner { height:48px; padding:0 1rem; }
@@ -417,11 +417,7 @@ body:not(.unlocked) .settings-btn{display:none;}
 }
 
 /* Landscape su schermi più grandi (tablet orizzontale) */
-@media (orientation: landscape) and (min-height: 500px) and (max-width: 1024px) {
-  .hero-title { font-size:72px; }
-  .quick-grid { grid-template-columns:repeat(5,1fr); }
-  .cal-layout { grid-template-columns:1fr 360px; }
-}
+
 
 /* calendar list items size boost */
 .cal-body { font-size:16px; }
@@ -1128,7 +1124,9 @@ function renderConvList() {
       html += '<div class="player-chip">'+fotoHtml+'<div class="player-name">'+p.nome+'</div></div>';
     });
     html += '</div>';
-    var convConfirmed = (convocazioni[ev.id].conferme || []);
+    if(!convocazioni[ev.id]) convocazioni[ev.id] = {ritrovo:'', players:[]};
+    if(!convocazioni[ev.id].conferme) convocazioni[ev.id].conferme = [];
+    var convConfirmed = convocazioni[ev.id].conferme;
     var userHasConf = convConfirmed.indexOf(getMyNome()) >= 0;
     html += '<div class="conv-footer">';
     if(c.ritrovo) html += '<span>🕐 Ritrovo ore '+c.ritrovo+'</span>';
@@ -2352,6 +2350,18 @@ function showExportSuccess(){
 
 // ═══ INIT ═══
 document.addEventListener('DOMContentLoaded', function(){
+  // Ricarica layout quando cambia orientamento
+  window.addEventListener('orientationchange', function(){
+    setTimeout(function(){
+      var activeTab = document.querySelector('.tab.active');
+      if(activeTab) {
+        var tabId = activeTab.dataset.tab;
+        if(tabId === 'calendario') renderCalendar();
+        if(tabId === 'convocazioni') renderConvList();
+        if(tabId === 'rosa') renderRosa();
+      }
+    }, 300);
+  });
   applyConfig();
   applyReadonly();
   renderHomeEvents();
