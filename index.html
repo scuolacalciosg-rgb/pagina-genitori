@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <title>SS San Giovanni — Portale Genitori</title>
 
 <!-- PWA -->
@@ -363,6 +363,65 @@ body:not(.unlocked) .settings-btn{display:none;}
 
 
 .conv-conferma-bar{padding:.8rem 1.75rem;background:rgba(0,0,0,.15);border-top:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+
+
+/* NOMI CONFERME */
+.conf-names-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;width:100%;}
+.conf-name-chip{background:rgba(45,122,69,.15);border:1px solid rgba(45,122,69,.3);border-radius:4px;padding:4px 10px;font-family:Rajdhani,sans-serif;font-size:13px;font-weight:600;color:#4caf7a;letter-spacing:.5px;}
+
+/* LANDSCAPE MODE */
+@media (orientation: landscape) and (max-height: 500px) {
+  /* Header compatto */
+  header { position:relative; }
+  .header-inner { height:48px; padding:0 1rem; }
+  .logo-shield { width:32px; height:32px; font-size:16px; }
+  .logo-text { font-size:16px; }
+  .logo-sub { display:none; }
+
+  /* Nav compatto */
+  .tab { height:38px; padding:0 14px; font-size:13px; }
+
+  /* Main senza troppo padding */
+  main { padding:1rem 1rem 2rem; }
+
+  /* Hero landscape - orizzontale */
+  .hero { padding:1.5rem 2rem; }
+  .hero-title { font-size:52px; margin-bottom:16px; }
+  .hero-stats { gap:2rem; }
+  .stat-num { font-size:36px; }
+
+  /* Layout 2 colonne su landscape */
+  .home-grid { grid-template-columns:1fr 1fr; gap:1rem; }
+
+  /* Calendario landscape */
+  .cal-layout { grid-template-columns:1fr 300px; gap:1rem; }
+  .cal-cell { min-height:70px; }
+  .cal-day { font-size:32px; }
+
+  /* Quick grid 4 colonne */
+  .quick-grid { grid-template-columns:repeat(4,1fr); gap:8px; }
+  .quick-item { padding:.75rem .5rem; }
+  .quick-icon { font-size:24px; margin-bottom:6px; }
+
+  /* Rosa grid più colonne */
+  .rosa-grid { grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); }
+
+  /* Cards più compatte */
+  .card { padding:1rem 1.25rem; }
+  .card-title { font-size:18px; }
+  .card-body { font-size:14px; }
+
+  /* Convocazioni */
+  .players-grid { grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:6px; padding:0.75rem 1rem; }
+  .player-name { font-size:13px; }
+}
+
+/* Landscape su schermi più grandi (tablet orizzontale) */
+@media (orientation: landscape) and (min-height: 500px) and (max-width: 1024px) {
+  .hero-title { font-size:72px; }
+  .quick-grid { grid-template-columns:repeat(5,1fr); }
+  .cal-layout { grid-template-columns:1fr 360px; }
+}
 
 /* calendar list items size boost */
 .cal-body { font-size:16px; }
@@ -1080,11 +1139,23 @@ function renderConvList() {
     html += '<span style="color:var(--text-lo);">'+c.players.length+' convocati</span>';
     html += '</div>';
     html += '<div class="conv-conferma-bar" id="cbar_'+ev.id+'">';
+      html += '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;width:100%;">';
       html += '<button class="conf-btn'+(userHasConf?' confirmed':'')+'" data-evid="'+ev.id+'" onclick="toggleConvConferma(this.dataset.evid)">';
       html += userHasConf ? '✅ Presenza confermata' : '☐ Conferma presenza';
       html += '</button>';
-      if(convConfirmed.length > 0) html += '<span class="conf-count">'+convConfirmed.length+' conferm'+(convConfirmed.length===1?'a':'e')+'</span>';
-      html += '<button class="com-edit-btn edit-only" data-evid="'+ev.id+'" onclick="openConvConfermeList(this.dataset.evid)" style="margin-left:auto;">👥 '+convConfirmed.length+'</button>';
+      if(convConfirmed.length > 0){
+        html += '<span class="conf-count">'+convConfirmed.length+' conferm'+(convConfirmed.length===1?'a':'e')+'</span>';
+      }
+      html += '<button class="com-edit-btn edit-only" data-evid="'+ev.id+'" onclick="openConvConfermeList(this.dataset.evid)" style="margin-left:auto;">👥 Lista</button>';
+      html += '</div>';
+      // Mostra i nomi di chi ha confermato (visibili a tutti)
+      if(convConfirmed.length > 0){
+        html += '<div class="conf-names-list">';
+        convConfirmed.forEach(function(nome){
+          html += '<span class="conf-name-chip">✅ '+nome+'</span>';
+        });
+        html += '</div>';
+      }
       html += '</div>';
     html += '</div>';
   });
@@ -2100,7 +2171,7 @@ window.addEventListener('load', function(){
 // ═══ PWA & SERVICE WORKER ═══
 var deferredPrompt = null;
 
-if('serviceWorker' in navigator) {
+if('serviceWorker' in navigator && window.location.hostname !== 'www.claudeusercontent.com') {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('sw.js')
       .then(function(reg) {
@@ -2109,6 +2180,8 @@ if('serviceWorker' in navigator) {
       })
       .catch(function(err) { console.log('SW errore:', err); });
   });
+} else {
+  window.addEventListener('load', function() { checkNotificationBtn(); });
 }
 
 // Install prompt
