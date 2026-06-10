@@ -1079,16 +1079,13 @@ function renderConvList() {
     }
     html += '<span style="color:var(--text-lo);">'+c.players.length+' convocati</span>';
     html += '</div>';
-    var past = new Date(ev.data) < new Date();
-    if(!past){
-      html += '<div class="conv-conferma-bar" id="cbar_'+ev.id+'">';
+    html += '<div class="conv-conferma-bar" id="cbar_'+ev.id+'">';
       html += '<button class="conf-btn'+(userHasConf?' confirmed':'')+'" data-evid="'+ev.id+'" onclick="toggleConvConferma(this.dataset.evid)">';
       html += userHasConf ? '✅ Presenza confermata' : '☐ Conferma presenza';
       html += '</button>';
       if(convConfirmed.length > 0) html += '<span class="conf-count">'+convConfirmed.length+' conferm'+(convConfirmed.length===1?'a':'e')+'</span>';
       html += '<button class="com-edit-btn edit-only" data-evid="'+ev.id+'" onclick="openConvConfermeList(this.dataset.evid)" style="margin-left:auto;">👥 '+convConfirmed.length+'</button>';
       html += '</div>';
-    }
     html += '</div>';
   });
 
