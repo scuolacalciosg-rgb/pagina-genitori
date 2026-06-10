@@ -370,7 +370,7 @@ body:not(.unlocked) .settings-btn{display:none;}
 .conf-name-chip{background:rgba(45,122,69,.15);border:1px solid rgba(45,122,69,.3);border-radius:4px;padding:4px 10px;font-family:Rajdhani,sans-serif;font-size:13px;font-weight:600;color:#4caf7a;letter-spacing:.5px;}
 
 /* LANDSCAPE MODE */
-@media (orientation: landscape) and (max-width: 1024px) {
+body.landscape {
   /* Header compatto */
   header { position:relative; }
   .header-inner { height:48px; padding:0 1rem; }
@@ -1124,8 +1124,8 @@ function renderConvList() {
       html += '<div class="player-chip">'+fotoHtml+'<div class="player-name">'+p.nome+'</div></div>';
     });
     html += '</div>';
-    if(!convocazioni[ev.id]) convocazioni[ev.id] = {ritrovo:'', players:[]};
-    if(!convocazioni[ev.id].conferme) convocazioni[ev.id].conferme = [];
+    if(!convocazioni[ev.id]) { convocazioni[ev.id] = {ritrovo:'', players:[],conferme:[]}; saveData(); }
+    if(!convocazioni[ev.id].conferme) { convocazioni[ev.id].conferme = []; saveData(); }
     var convConfirmed = convocazioni[ev.id].conferme;
     var userHasConf = convConfirmed.indexOf(getMyNome()) >= 0;
     html += '<div class="conv-footer">';
@@ -2350,18 +2350,30 @@ function showExportSuccess(){
 
 // ═══ INIT ═══
 document.addEventListener('DOMContentLoaded', function(){
-  // Ricarica layout quando cambia orientamento
-  window.addEventListener('orientationchange', function(){
+  // Gestione orientamento con classe JS (più affidabile delle media query su PWA)
+  function applyOrientation(){
+    var isLandscape = window.innerWidth > window.innerHeight;
+    if(isLandscape){
+      document.body.classList.add('landscape');
+      document.body.classList.remove('portrait');
+    } else {
+      document.body.classList.add('portrait');
+      document.body.classList.remove('landscape');
+    }
+    // Re-render sezione attiva
     setTimeout(function(){
       var activeTab = document.querySelector('.tab.active');
-      if(activeTab) {
+      if(activeTab){
         var tabId = activeTab.dataset.tab;
         if(tabId === 'calendario') renderCalendar();
         if(tabId === 'convocazioni') renderConvList();
         if(tabId === 'rosa') renderRosa();
       }
-    }, 300);
-  });
+    }, 200);
+  }
+  window.addEventListener('orientationchange', function(){ setTimeout(applyOrientation, 300); });
+  window.addEventListener('resize', function(){ applyOrientation(); });
+  applyOrientation();
   applyConfig();
   applyReadonly();
   renderHomeEvents();
