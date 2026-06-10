@@ -419,6 +419,25 @@ body.landscape {
 /* Landscape su schermi più grandi (tablet orizzontale) */
 
 
+
+/* CONV PLAYER CARDS */
+.players-grid-conv{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;padding:1.25rem 1.75rem;}
+.conv-player-card{background:var(--bg-panel);border:1px solid var(--border);border-radius:8px;overflow:hidden;text-align:center;padding-bottom:8px;transition:border-color .2s;}
+.conv-player-card.presenza-si{border-color:rgba(45,122,69,.5);background:rgba(45,122,69,.07);}
+.conv-player-card.presenza-no{border-color:rgba(204,31,31,.4);background:rgba(204,31,31,.06);}
+.conv-player-foto{width:100%;height:100px;overflow:hidden;background:linear-gradient(135deg,#1a0505,#2a0808);display:flex;align-items:center;justify-content:center;}
+.conv-player-foto img{width:100%;height:100%;object-fit:cover;object-position:top;}
+.conv-player-num-big{font-family:Rajdhani,sans-serif;font-size:36px;font-weight:700;color:var(--red);}
+.conv-player-nome{font-family:Rajdhani,sans-serif;font-size:13px;font-weight:600;color:var(--text-hi);padding:6px 6px 4px;line-height:1.2;}
+.conv-player-btns{display:flex;gap:4px;padding:0 6px;margin-top:4px;}
+.conv-pres-btn{flex:1;border:none;border-radius:4px;font-family:Rajdhani,sans-serif;font-size:12px;font-weight:700;padding:5px 2px;cursor:pointer;background:rgba(255,255,255,.06);color:var(--text-md);transition:all .2s;}
+.conv-pres-btn.si.active{background:rgba(45,122,69,.3);color:#4caf7a;}
+.conv-pres-btn.no.active{background:rgba(204,31,31,.25);color:var(--red-bright);}
+.conv-pres-btn:hover{opacity:.85;}
+.conv-pres-badge{font-family:Rajdhani,sans-serif;font-size:11px;font-weight:700;letter-spacing:.5px;text-align:center;padding:3px 4px;margin:2px 6px 0;}
+.conv-pres-badge.si{color:#4caf7a;}
+.conv-pres-badge.no{color:var(--red-bright);}
+
 /* calendar list items size boost */
 .cal-body { font-size:16px; }
 .cal-result { font-size:14px; }
@@ -1115,19 +1134,34 @@ function renderConvList() {
     else html += '<span class="badge badge-gold">In programma</span>';
     html += '<button class="conv-edit-btn" onclick="openConvModal(\''+ev.id+'\')">Modifica</button>';
     html += '</div></div>';
-    html += '<div class="players-grid">';
+    html += '<div class="players-grid-conv">';
     c.players.forEach(function(p){
       var rp = rosa.find(function(r){ return r.id === p.id; });
-      var fotoHtml = (rp && rp.foto)
-        ? '<img src="'+rp.foto+'" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;">'
-        : '<div class="player-num">'+(p.num||'?')+'</div>';
-      html += '<div class="player-chip">'+fotoHtml+'<div class="player-name">'+p.nome+'</div></div>';
+      var presenza = (convocazioni[ev.id].presenze && convocazioni[ev.id].presenze[p.id]) || '';
+      var fotoSrc = (rp && rp.foto) ? rp.foto : '';
+      var numLabel = p.num || '?';
+      html += '<div class="conv-player-card presenza-'+presenza+'">';
+      // Foto o numero
+      html += '<div class="conv-player-foto">';
+      if(fotoSrc){
+        html += '<img src="'+fotoSrc+'" alt="'+p.nome+'">';
+      } else {
+        html += '<div class="conv-player-num-big">'+numLabel+'</div>';
+      }
+      html += '</div>';
+      // Nome
+      html += '<div class="conv-player-nome">'+p.nome+'</div>';
+      // Tasti SI / NO (solo mister)
+      html += '<div class="conv-player-btns edit-only">';
+      html += '<button class="conv-pres-btn si'+(presenza==='si'?' active':'')+'" data-evid="'+ev.id+'" data-pid="'+p.id+'" data-val="si" onclick="setPresenza(this)">✅ Sì</button>';
+      html += '<button class="conv-pres-btn no'+(presenza==='no'?' active':'')+'" data-evid="'+ev.id+'" data-pid="'+p.id+'" data-val="no" onclick="setPresenza(this)">❌ No</button>';
+      html += '</div>';
+      // Badge presenza (visibile a tutti)
+      if(presenza === 'si') html += '<div class="conv-pres-badge si">✅ Presente</div>';
+      if(presenza === 'no') html += '<div class="conv-pres-badge no">❌ Assente</div>';
+      html += '</div>';
     });
     html += '</div>';
-    if(!convocazioni[ev.id]) { convocazioni[ev.id] = {ritrovo:'', players:[],conferme:[]}; saveData(); }
-    if(!convocazioni[ev.id].conferme) { convocazioni[ev.id].conferme = []; saveData(); }
-    var convConfirmed = convocazioni[ev.id].conferme;
-    var userHasConf = convConfirmed.indexOf(getMyNome()) >= 0;
     html += '<div class="conv-footer">';
     if(c.ritrovo) html += '<span>🕐 Ritrovo ore '+c.ritrovo+'</span>';
     if(ev.luogo){
@@ -1135,26 +1169,6 @@ function renderConvList() {
       html += '<span>📍 <a href="'+mapsUrl+'" target="_blank" style="color:var(--text-md);text-decoration:none;">'+ev.luogo+' 🗺️</a></span>';
     }
     html += '<span style="color:var(--text-lo);">'+c.players.length+' convocati</span>';
-    html += '</div>';
-    html += '<div class="conv-conferma-bar" id="cbar_'+ev.id+'">';
-      html += '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;width:100%;">';
-      html += '<button class="conf-btn'+(userHasConf?' confirmed':'')+'" data-evid="'+ev.id+'" onclick="toggleConvConferma(this.dataset.evid)">';
-      html += userHasConf ? '✅ Presenza confermata' : '☐ Conferma presenza';
-      html += '</button>';
-      if(convConfirmed.length > 0){
-        html += '<span class="conf-count">'+convConfirmed.length+' conferm'+(convConfirmed.length===1?'a':'e')+'</span>';
-      }
-      html += '<button class="com-edit-btn edit-only" data-evid="'+ev.id+'" onclick="openConvConfermeList(this.dataset.evid)" style="margin-left:auto;">👥 Lista</button>';
-      html += '</div>';
-      // Mostra i nomi di chi ha confermato (visibili a tutti)
-      if(convConfirmed.length > 0){
-        html += '<div class="conf-names-list">';
-        convConfirmed.forEach(function(nome){
-          html += '<span class="conf-name-chip">✅ '+nome+'</span>';
-        });
-        html += '</div>';
-      }
-      html += '</div>';
     html += '</div>';
   });
 
@@ -1988,6 +2002,24 @@ function openConfermeList(comId){
 }
 function closeConfermeModal(){ document.getElementById('confermeOverlay').classList.remove('open'); }
 
+
+
+// ═══ PRESENZE CONVOCAZIONE ═══
+function setPresenza(btn){
+  var evId = btn.dataset.evid;
+  var pid  = btn.dataset.pid;
+  var val  = btn.dataset.val;
+  if(!convocazioni[evId]) return;
+  if(!convocazioni[evId].presenze) convocazioni[evId].presenze = {};
+  // Toggle: se già selezionato rimuovi
+  if(convocazioni[evId].presenze[pid] === val){
+    delete convocazioni[evId].presenze[pid];
+  } else {
+    convocazioni[evId].presenze[pid] = val;
+  }
+  saveData();
+  renderConvList();
+}
 
 // ═══ CONFERMA CONVOCAZIONE ═══
 function getMyNome(){
