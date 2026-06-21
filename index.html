@@ -2629,7 +2629,7 @@ function showExportSuccess(){
 }
 
 // ═══ INIT ═══
-document.addEventListener('DOMContentLoaded', function(){
+window.addEventListener('load', function(){
   // Gestione orientamento con classe JS (più affidabile delle media query su PWA)
   function applyOrientation(){
     var isLandscape = window.innerWidth > window.innerHeight;
