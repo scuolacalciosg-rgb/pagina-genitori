@@ -2083,30 +2083,59 @@ var musicReady = false;
 function toggleMusic(){
   var audio = document.getElementById('bgMusic');
   var btn = document.getElementById('musicBtn');
-  
-  // Controlla se c'è una sorgente audio
-  if(!audio.src || audio.src === window.location.href){
-    showToast('🎵 Canzone non ancora configurata', 'var(--gold)');
-    return;
-  }
-  
+
   if(musicPlaying){
     audio.pause();
     musicPlaying = false;
     btn.textContent = '🎵';
     btn.classList.remove('playing');
     showToast('Musica in pausa', 'var(--text-md)');
-  } else {
-    audio.volume = 0.4; // volume al 40%
-    audio.play().then(function(){
+    return;
+  }
+
+  // Ricarica se necessario
+  if(audio.readyState === 0){
+    audio.load();
+  }
+
+  audio.volume = 0.4;
+  var playPromise = audio.play();
+  if(playPromise !== undefined){
+    playPromise.then(function(){
       musicPlaying = true;
       btn.textContent = '🔊';
       btn.classList.add('playing');
-      showToast('🎵 Musica attivata!', '#4caf7a');
-    }).catch(function(){
-      showToast('Tocca di nuovo per avviare la musica', 'var(--gold)');
+      showToast('🎵 Inno attivato!', '#4caf7a');
+    }).catch(function(err){
+      console.log('Audio error:', err);
+      // Secondo tentativo dopo interazione utente
+      audio.load();
+      setTimeout(function(){
+        audio.play().then(function(){
+          musicPlaying = true;
+          btn.textContent = '🔊';
+          btn.classList.add('playing');
+        }).catch(function(e){
+          showToast('❌ File audio non trovato su GitHub', 'var(--red-bright)');
+          console.log('Audio error 2:', e, audio.src);
+        });
+      }, 500);
     });
   }
+
+  // Evento fine canzone
+  audio.onended = function(){
+    musicPlaying = false;
+    btn.textContent = '🎵';
+    btn.classList.remove('playing');
+  };
+  // Errore caricamento
+  audio.onerror = function(){
+    showToast('❌ File audio non trovato — verifica che sia su GitHub', 'var(--red-bright)');
+    musicPlaying = false;
+    btn.textContent = '🎵';
+    btn.classList.remove('playing');
+  };
 }
 
 // Quando la pagina si chiude, ricorda se stava suonando
@@ -2503,8 +2532,9 @@ document.addEventListener('DOMContentLoaded', function(){
 
 <!-- TASTO MUSICA -->
 <button class="music-btn" id="musicBtn" onclick="toggleMusic()" title="Musica">🎵</button>
-<audio id="bgMusic" loop preload="auto">
+<audio id="bgMusic" loop preload="auto" crossorigin="anonymous">
   <source src="AUD-20260613-WA0043.mp3" type="audio/mpeg">
+  <source src="./AUD-20260613-WA0043.mp3" type="audio/mpeg">
 </audio>
 
 </body>
