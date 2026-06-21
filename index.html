@@ -471,6 +471,9 @@ body.landscape {
 .cal-title { font-size:22px !important; }
 .cal-meta { font-size:14px !important; }
 </style>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -933,6 +936,106 @@ body.landscape {
 </footer>
 
 <script>
+
+// ═══ FIREBASE ═══
+var firebaseConfig = {
+  apiKey: "AIzaSyDTsBFqNLj8CKNtXyQ0nIB2YFqunTC18UU",
+  authDomain: "pagina-genitori.firebaseapp.com",
+  projectId: "pagina-genitori",
+  storageBucket: "pagina-genitori.firebasestorage.app",
+  messagingSenderId: "190304412050",
+  appId: "1:190304412050:web:a2e97785c4e7357bfb614b"
+};
+
+var fbApp = null;
+var db = null;
+var fbReady = false;
+
+function initFirebase(){
+  try {
+    if(typeof firebase === 'undefined') { console.log('Firebase SDK non caricato'); return; }
+    fbApp = firebase.initializeApp(firebaseConfig);
+    db = firebase.firestore();
+    fbReady = true;
+    console.log('✅ Firebase connesso');
+    // Carica dati da Firebase al posto del localStorage
+    loadFromFirebase();
+    // Ascolta aggiornamenti in tempo reale
+    listenFirebase();
+  } catch(e) {
+    console.log('Firebase errore:', e);
+  }
+}
+
+function loadFromFirebase(){
+  if(!db) return;
+  db.collection('ssg').doc('dati').get().then(function(doc){
+    if(doc.exists){
+      var d = doc.data();
+      if(d.events)       { events = d.events;       localStorage.setItem('sg_events', JSON.stringify(events)); }
+      if(d.convocazioni) { convocazioni = d.convocazioni; localStorage.setItem('sg_conv', JSON.stringify(convocazioni)); }
+      if(d.comunicazioni){ comunicazioni = d.comunicazioni; localStorage.setItem('sg_com', JSON.stringify(comunicazioni)); }
+      if(d.rosa)         { rosa = d.rosa;           localStorage.setItem('sg_rosa', JSON.stringify(rosa)); }
+      if(d.albums)       { albums = d.albums;       localStorage.setItem('sg_albums', JSON.stringify(albums)); }
+      console.log('✅ Dati caricati da Firebase');
+      // Aggiorna UI
+      renderHomeEvents();
+      renderHomeComunicazioni();
+      renderConvList();
+      renderComunicazioni();
+      renderRosa();
+      renderGalleria();
+      if(document.querySelector('[data-tab="calendario"]').classList.contains('active')) renderCalendar();
+    } else {
+      // Prima volta: carica i dati locali su Firebase
+      saveToFirebase();
+    }
+  }).catch(function(e){ console.log('Firebase load errore:', e); });
+}
+
+function listenFirebase(){
+  if(!db) return;
+  db.collection('ssg').doc('dati').onSnapshot(function(doc){
+    if(!doc.exists) return;
+    var d = doc.data();
+    // Aggiorna solo se i dati sono cambiati da un altro dispositivo
+    var remoteTs = d._ts || 0;
+    var localTs  = parseInt(localStorage.getItem('sg_ts') || '0');
+    if(remoteTs <= localTs) return; // i nostri dati sono più recenti
+    if(d.events)        events = d.events;
+    if(d.convocazioni)  convocazioni = d.convocazioni;
+    if(d.comunicazioni) comunicazioni = d.comunicazioni;
+    if(d.albums)        albums = d.albums;
+    // NON aggiorna rosa da remoto per evitare di sovrascrivere le foto grandi
+    console.log('🔄 Dati aggiornati da Firebase');
+    renderHomeEvents();
+    renderHomeComunicazioni();
+    renderConvList();
+    renderComunicazioni();
+    if(document.querySelector('[data-tab="calendario"]') && document.querySelector('[data-tab="calendario"]').classList.contains('active')) renderCalendar();
+    showToast('🔄 Contenuti aggiornati', '#4caf7a');
+  });
+}
+
+function saveToFirebase(){
+  if(!db || !fbReady) return;
+  var ts = Date.now();
+  localStorage.setItem('sg_ts', ts.toString());
+  // Non salviamo la rosa su Firebase perché le foto sono troppo grandi (>1MB)
+  // La rosa rimane nel file HTML come default
+  db.collection('ssg').doc('dati').set({
+    events:        events,
+    convocazioni:  convocazioni,
+    comunicazioni: comunicazioni,
+    albums:        albums,
+    _ts:           ts
+  }).then(function(){
+    console.log('✅ Salvato su Firebase');
+  }).catch(function(e){
+    console.log('Firebase save errore:', e);
+  });
+}
+
 // ═══ CONFIG ═══
 var config = { nome:'SS San Giovanni', stagione:'2026/27', categoria:'Primi Calci' };
 
@@ -945,6 +1048,7 @@ var convocazioni = JSON.parse(localStorage.getItem('sg_conv') || JSON.stringify(
 function saveData() {
   localStorage.setItem('sg_events', JSON.stringify(events));
   localStorage.setItem('sg_conv', JSON.stringify(convocazioni));
+  saveToFirebase();
 }
 
 // ═══ CALENDARIO ═══
@@ -1653,7 +1757,10 @@ var _def_com = [{"id": "com_1780604004431", "tipo": "partite", "titolo": "43 tor
 var comunicazioni = JSON.parse(localStorage.getItem('sg_com') || JSON.stringify(_def_com));
 var comFilter = 'tutti';
 
-function saveComunicazioni(){ localStorage.setItem('sg_com', JSON.stringify(comunicazioni)); }
+function saveComunicazioni(){
+  localStorage.setItem('sg_com', JSON.stringify(comunicazioni));
+  saveToFirebase();
+}
 
 function renderComunicazioni(){
   var lista = document.getElementById('com-list');
@@ -1793,7 +1900,10 @@ function deleteCom(){
 var albums = JSON.parse(localStorage.getItem('sg_albums') || '[]');
 var currentAlbumId = null;
 
-function saveAlbums(){ localStorage.setItem('sg_albums', JSON.stringify(albums)); }
+function saveAlbums(){
+  localStorage.setItem('sg_albums', JSON.stringify(albums));
+  saveToFirebase();
+}
 
 function renderGalleria(){
   var el = document.getElementById('album-grid-list');
