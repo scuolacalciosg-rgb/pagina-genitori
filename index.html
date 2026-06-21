@@ -953,11 +953,12 @@ var fbReady = false;
 
 function initFirebase(){
   try {
-    if(typeof firebase === 'undefined') { console.log('Firebase SDK non caricato'); return; }
+    console.log('Inizializzo Firebase...');
+    if(typeof firebase === 'undefined') { console.log('❌ Firebase SDK non caricato'); return; }
     fbApp = firebase.initializeApp(firebaseConfig);
     db = firebase.firestore();
     fbReady = true;
-    console.log('✅ Firebase connesso');
+    console.log('✅ Firebase connesso al progetto:', firebaseConfig.projectId);
     // Carica dati da Firebase al posto del localStorage
     loadFromFirebase();
     // Ascolta aggiornamenti in tempo reale
@@ -1018,7 +1019,8 @@ function listenFirebase(){
 }
 
 function saveToFirebase(){
-  if(!db || !fbReady) return;
+  if(!db || !fbReady){ console.log('Firebase non pronto, salvo solo in locale'); return; }
+  console.log('Salvo su Firebase...');
   var ts = Date.now();
   localStorage.setItem('sg_ts', ts.toString());
   // Non salviamo la rosa su Firebase perché le foto sono troppo grandi (>1MB)
