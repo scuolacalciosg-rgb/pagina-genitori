@@ -445,6 +445,22 @@ body.landscape {
 .music-btn.playing{border-color:rgba(45,122,69,.6);background:rgba(45,122,69,.15);animation:pulse-music 2s infinite;}
 @keyframes pulse-music{0%,100%{box-shadow:0 2px 12px rgba(0,0,0,.4);}50%{box-shadow:0 2px 20px rgba(45,122,69,.4);}}
 
+
+/* SCHERMATA LOGIN */
+.login-overlay{position:fixed;inset:0;background:#0a0a0a;z-index:1000;display:flex;align-items:center;justify-content:center;flex-direction:column;}
+.login-overlay.hidden{display:none;}
+.login-box{background:#161616;border:1px solid var(--border-red);border-radius:10px;padding:2.5rem 2rem;width:340px;max-width:90vw;text-align:center;box-shadow:0 8px 40px rgba(204,31,31,0.2);}
+.login-logo{width:90px;height:90px;margin:0 auto 1.25rem;border-radius:12px 12px 28px 28px;overflow:hidden;box-shadow:0 0 24px rgba(204,31,31,0.4);}
+.login-logo img{width:100%;height:100%;object-fit:cover;}
+.login-club{font-family:Rajdhani,sans-serif;font-size:22px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-hi);margin-bottom:4px;}
+.login-sub{font-size:13px;color:var(--text-lo);letter-spacing:1px;margin-bottom:2rem;}
+.login-input{width:100%;background:#0d0d0d;border:1px solid var(--border-red);border-radius:4px;color:var(--text-hi);font-family:Barlow,sans-serif;font-size:22px;padding:12px 16px;outline:none;text-align:center;letter-spacing:6px;margin-bottom:.75rem;}
+.login-input:focus{border-color:var(--red-bright);}
+.login-error{color:var(--red-bright);font-family:Rajdhani,sans-serif;font-size:13px;letter-spacing:1px;min-height:18px;margin-bottom:.75rem;}
+.login-btn{width:100%;background:var(--red);border:none;border-radius:4px;color:#fff;font-family:Rajdhani,sans-serif;font-size:16px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:13px;cursor:pointer;transition:background .2s;}
+.login-btn:hover{background:var(--red-bright);}
+.login-year{font-size:11px;color:var(--text-lo);margin-top:1.5rem;letter-spacing:1px;}
+
 /* calendar list items size boost */
 .cal-body { font-size:16px; }
 .cal-result { font-size:14px; }
@@ -734,6 +750,21 @@ body.landscape {
       <button class="btn-cancel" onclick="closeConvModal()">Annulla</button>
       <button class="btn-save" onclick="saveConv()">Salva Convocazione</button>
     </div>
+  </div>
+</div>
+
+
+<!-- SCHERMATA LOGIN -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-box">
+    <div class="login-logo"><img src="icon-192.png" alt="SS San Giovanni"></div>
+    <div class="login-club">SS San Giovanni</div>
+    <div class="login-sub">Portale Genitori · Trieste 1941</div>
+    <input class="login-input" id="loginInput" type="password" placeholder="••••"
+      maxlength="10" onkeydown="if(event.key==='Enter') checkLogin()">
+    <div class="login-error" id="loginError"></div>
+    <button class="login-btn" onclick="checkLogin()">Entra</button>
+    <div class="login-year">⚽ Stagione 2026/27</div>
   </div>
 </div>
 
@@ -2199,6 +2230,39 @@ window.addEventListener('load', function(){
   });
 });
 
+
+
+// ═══ LOGIN ═══
+var LOGIN_HASH = '023e33504ab909cf87a6f4e4e545090e40bdc0a2153e5b68b19f7fad2b737904';
+var isLoggedIn = sessionStorage.getItem('sg_logged') === '1';
+
+function checkLogin(){
+  var val = document.getElementById('loginInput').value;
+  crypto.subtle.digest('SHA-256', new TextEncoder().encode(val)).then(function(buf){
+    var hash = Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+    if(hash === LOGIN_HASH){
+      isLoggedIn = true;
+      sessionStorage.setItem('sg_logged','1');
+      document.getElementById('loginOverlay').classList.add('hidden');
+      document.getElementById('loginInput').value = '';
+    } else {
+      var err = document.getElementById('loginError');
+      err.textContent = 'Password errata';
+      document.getElementById('loginInput').value = '';
+      document.getElementById('loginInput').focus();
+      setTimeout(function(){ err.textContent=''; }, 2000);
+    }
+  });
+}
+
+function initLogin(){
+  if(isLoggedIn){
+    document.getElementById('loginOverlay').classList.add('hidden');
+  } else {
+    document.getElementById('loginOverlay').classList.remove('hidden');
+    setTimeout(function(){ document.getElementById('loginInput').focus(); }, 300);
+  }
+}
 
 // ═══ PASSWORD & READONLY ═══
 var PWD_HASH = '7c95be74580192f40ea3991aa664f7a56c78c1228a4396345381904236c14276';
