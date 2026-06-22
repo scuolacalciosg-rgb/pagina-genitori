@@ -135,6 +135,7 @@ main{max-width:100%;padding:2rem 2rem 4rem;}
 .cal-dot.campionato{background:rgba(204,31,31,0.25);color:var(--red-bright);}
 .cal-dot.torneo{background:rgba(201,147,58,0.25);color:var(--gold);}
 .cal-dot.amichevole{background:rgba(255,255,255,0.08);color:var(--text-md);}
+.cal-dot.allenamento{background:rgba(30,80,180,0.2);color:#5b9bd5;}
 
 /* Lista eventi laterale */
 .cal-events-panel{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;overflow:hidden;max-height:calc(100vh - 200px);overflow-y:auto;position:sticky;top:90px;}
@@ -146,6 +147,7 @@ main{max-width:100%;padding:2rem 2rem 4rem;}
 .strip-campionato{background:var(--red);}
 .strip-torneo{background:var(--gold);}
 .strip-amichevole{background:var(--text-lo);}
+.strip-allenamento{background:#5b9bd5;}
 .cal-event-info{}
 .cal-event-date{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;color:var(--text-lo);text-transform:uppercase;margin-bottom:2px;}
 .cal-event-name{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--text-hi);margin-bottom:3px;}
@@ -519,6 +521,7 @@ body.landscape {
         <option value="campionato">⚽ Campionato</option>
         <option value="torneo">🏆 Torneo</option>
         <option value="amichevole">🤝 Amichevole</option>
+        <option value="allenamento">🏋️ Allenamento</option>
       </select>
     </div>
 
@@ -1149,7 +1152,7 @@ function renderEventsList() {
   sorted.forEach(function(ev){
     var d = new Date(ev.data);
     var dateStr = d.getDate()+' '+MONTHS_IT[d.getMonth()].substring(0,3)+' '+d.getFullYear();
-    var tipoico = ev.tipo==='campionato'?'⚽':ev.tipo==='torneo'?'🏆':'🤝';
+    var tipoico = ev.tipo==='campionato'?'⚽':ev.tipo==='torneo'?'🏆':ev.tipo==='allenamento'?'🏋️':'🤝';
     html += '<div class="cal-event-item">';
     html += '<div class="cal-event-strip strip-'+ev.tipo+'"></div>';
     html += '<div class="cal-event-info">';
@@ -1387,10 +1390,10 @@ var editingId = null;
 function onTipoChange(){
   var tipo = document.getElementById('ev-tipo').value;
   var isTorneo = tipo === 'torneo';
-  document.getElementById('ev-block-singolo').style.display = isTorneo ? 'none' : 'block';
+  var isAllenamento = tipo === 'allenamento';
+  document.getElementById('ev-block-singolo').style.display = (isTorneo || isAllenamento) ? 'none' : 'block';
   document.getElementById('ev-block-torneo').style.display = isTorneo ? 'block' : 'none';
-  document.getElementById('ev-block-risultato').style.display = isTorneo ? 'none' : 'block';
-  document.getElementById('ev-avv-label').textContent = tipo === 'amichevole' ? 'Squadra avversaria' : 'Squadra avversaria';
+  document.getElementById('ev-block-risultato').style.display = (isTorneo || isAllenamento) ? 'none' : 'block';
 }
 
 function addSquadraRow(val){
@@ -1471,7 +1474,11 @@ function saveEvent(){
 
   var titolo, avversario, risultato, marcatori, squadre, partite;
 
-  if(tipo === 'torneo'){
+  if(tipo === 'allenamento'){
+    titolo = 'Allenamento';
+    var noteAl = document.getElementById('ev-note').value.trim();
+    if(noteAl) titolo = 'Allenamento — ' + noteAl;
+  } else if(tipo === 'torneo'){
     titolo = document.getElementById('ev-torneo-nome').value.trim();
     if(!titolo){ alert('Inserisci il nome del torneo.'); return; }
     squadre = [];
